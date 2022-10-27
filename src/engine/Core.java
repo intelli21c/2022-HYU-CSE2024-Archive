@@ -156,7 +156,7 @@ public final class Core {
 	private static final Item Test4 =
 			new Item(2000, "Default BGM", 0);
 	private static final Item Test5 =
-			new Item(2001, "Store BGM 1", 100;
+			new Item(2001, "Store BGM 1", 100);
 	private static final Item Test6 =
 			new Item(2002, "Store BGM 2", 1000);
 
