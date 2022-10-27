@@ -158,17 +158,10 @@ public class Ship extends Entity {
 			this.spriteType = SpriteType.Ship;
 		}
 	}
-<<<<<<< HEAD
-	public final void setBaseColor(Color newColor) {
-		baseColor=newColor;
-	}
-
-=======
 
 	public final void setBaseColor(Color newColor){
 		baseColor=newColor;
 	}
->>>>>>> 9f8327718415e7ac6013bc747abe29e579ec058b
 	public final void getItem() {
 		this.getItem = true;
 	}
