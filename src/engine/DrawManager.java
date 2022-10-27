@@ -11,8 +11,19 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
+
+
+import screen.Screen;
+import screen.GameScreen;
+
 import screen.*;
 import screen.ShopScreen.shopstates;
+
+import screen.*;
+import screen.Screen;
+import screen.GameScreen;
+import screen.ShopScreen.shopstates;
+
 import entity.Entity;
 import entity.Ship;
 
@@ -80,8 +91,10 @@ public final class DrawManager {
 		ShipDestroyed,
 		/** Player bullet. */
 		Bullet,
-		/** Enemy bullet. */
+		/** Enemy bullets. */
 		EnemyBullet,
+		EnemyBulletN,
+		EnemyBulletH,
 		/** First enemy ship - first form. */
 		EnemyShipA1,
 		/** First enemy ship - second form. */
@@ -96,8 +109,14 @@ public final class DrawManager {
 		EnemyShipC2,
 		/** Bonus ship. */
 		EnemyShipSpecial,
-		/** Destroyed enemy ship. */
+		/** Destroyed enemy ship - first form. */
 		Explosion,
+		/** Destroyed enemy ship - second form. */
+		Explosion2,
+		/** Destroyed enemy ship - third form. */
+		Explosion3,
+		/** Destroyed enemy ship - fourth form. */
+		Explosion4,
 		/** Custom Ship Image */
 		ShipCustom,
 		/** Custom Ship Image */
@@ -120,6 +139,8 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.ShipDestroyed, new boolean[13][8]);
 			spriteMap.put(SpriteType.Bullet, new boolean[3][5]);
 			spriteMap.put(SpriteType.EnemyBullet, new boolean[3][5]);
+			spriteMap.put(SpriteType.EnemyBulletN, new boolean[5][5]);
+			spriteMap.put(SpriteType.EnemyBulletH, new boolean[7][5]);
 			spriteMap.put(SpriteType.EnemyShipA1, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipA2, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipB1, new boolean[12][8]);
@@ -128,6 +149,9 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.EnemyShipC2, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipSpecial, new boolean[16][7]);
 			spriteMap.put(SpriteType.Explosion, new boolean[13][7]);
+			spriteMap.put(SpriteType.Explosion2, new boolean[13][7]);
+			spriteMap.put(SpriteType.Explosion3, new boolean[13][7]);
+			spriteMap.put(SpriteType.Explosion4, new boolean[13][9]);
 			spriteMap.put(SpriteType.Item, new boolean[9][8]);
 			fileManager.loadSprite(spriteMap);
 			logger.info("Finished loading the sprites.");
@@ -150,6 +174,10 @@ public final class DrawManager {
 			imagemap.put("bgm1", fileManager.loadImage("bgm_1.png"));
 			imagemap.put("bgm2", fileManager.loadImage("bgm_2.png"));
 			imagemap.put("bgm3", fileManager.loadImage("bgm_3.png"));
+			imagemap.put("item_heart", fileManager.loadImage("heart.png"));
+			imagemap.put("item_bulletspeed", fileManager.loadImage("bulspeed.png"));
+			imagemap.put("item_movespeed", fileManager.loadImage("movspeed.png"));
+
 
 		} catch (IOException e) {
 			logger.warning("Loading failed.");
@@ -169,6 +197,7 @@ public final class DrawManager {
 		return instance;
 	}
 
+
 	/**
 	 * Sets the frame to draw the image on.
 	 * 
@@ -186,6 +215,7 @@ public final class DrawManager {
 	 * @param screen
 	 *               Screen to draw in.
 	 */
+	Color[] bg_colors = {Color.LIGHT_GRAY, Color.GRAY, Color.DARK_GRAY};
 	public void initDrawing(final Screen screen) {
 		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(),
 				BufferedImage.TYPE_INT_RGB);
@@ -193,7 +223,13 @@ public final class DrawManager {
 		graphics = frame.getGraphics();
 		backBufferGraphics = backBuffer.getGraphics();
 
-		backBufferGraphics.setColor(Color.BLACK);
+		if(GameScreen.lives > 0 && GameScreen.lives <= 3){
+			backBufferGraphics.setColor(bg_colors[3 - GameScreen.lives]);
+		}
+		else{
+			backBufferGraphics.setColor(Color.BLACK);
+		}
+
 		backBufferGraphics
 				.fillRect(0, 0, screen.getWidth(), screen.getHeight());
 
@@ -311,10 +347,22 @@ public final class DrawManager {
 	public void drawLives(final Screen screen, final int lives) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
-		Ship dummyShip = new Ship(0, 0);
-		for (int i = 0; i < lives; i++)
-			drawEntity(dummyShip, 40 + 35 * i, 10);
+		
+		Ship dummyShip = null;
+		switch (Inventory.getcurrentship()) {
+			case 1000 -> dummyShip = new Ship(0, 0, Color.GREEN);
+			case 1001 -> dummyShip = new Ship(0, 0, Color.RED);
+			case 1002 -> dummyShip = new Ship(0, 0, Color.BLUE);
+		}
+		
+		if(lives == -99) {
+			backBufferGraphics.drawString("Infin.", 20, 25);	
+			drawEntity(dummyShip, 40 + 35, 10);
+		} else {
+			backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
+			for (int i = 0; i < lives; i++)
+				drawEntity(dummyShip, 40 + 35 * i, 10);
+		}
 	}
 
 	/**
@@ -1077,17 +1125,17 @@ public final class DrawManager {
 			drawimg("bgm3", screen.getWidth() / 2 - 40, screen.getHeight() / 2 - 60, 80, 80);
 		}
 		drawCenteredRegularString(screen, "Price :" + item_price, winxbase + 80);
-		drawCenteredBigString(screen, "Purchase?", winybase + winh * 7);
+		drawCenteredBigString(screen, "Purchase?", winybase * 7);
 		if (modaloption == 0)
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("YES", winxbase + (winxbase / 5) * 3, winybase + winh * 8);
+		backBufferGraphics.drawString("YES", winxbase + (winw / 4) - fontRegularMetrics.stringWidth("YES") / 2, winybase * 8);
 		if (modaloption == 1)
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("NO", winxbase + (winw / 10) * 7, winybase + winh * 8);
+		backBufferGraphics.drawString("NO", winxbase + (winw / 10) * 7 - fontRegularMetrics.stringWidth("NO") / 2, winybase * 8);
 	}
 
 	public void drawShopCheck(Screen screen, String text) {
@@ -1101,10 +1149,9 @@ public final class DrawManager {
 		backBufferGraphics.setColor((Color.WHITE));
 		backBufferGraphics.drawRect(winxbase, winybase, winw, winh);
 		backBufferGraphics.drawRect(winxbase + 5, winybase + 5, winw - 10, winh - 10);
-		drawCenteredBigString(screen, text, winybase + 100);
+		drawCenteredBigString(screen, text, winybase * 3 / 2) ;
 		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredRegularString(screen, "OK", winybase + 150);
-		;
+		drawCenteredRegularString(screen, "OK", winybase * 2); ;
 	}
 
 	public void drawSelectIcon_ship(Screen screen, int x, int y) {
