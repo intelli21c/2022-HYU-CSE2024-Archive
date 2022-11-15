@@ -7,11 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import engine.*;
-import engine.DrawManager.SpriteType;
 import entity.*;
-
-
-
+import scripts.*;
 
 /**
  * Implements the game screen, where the action happens.
@@ -73,7 +70,7 @@ public class GameScreen extends Screen {
 	/**
 	 * Player's ship width.
 	 */
-	private int shipWidth = 13*2;
+	private int shipWidth = 13 * 2;
 	/**
 	 * Bonus enemy ship that appears sometimes.
 	 */
@@ -98,7 +95,6 @@ public class GameScreen extends Screen {
 	private Set<BulletN> bulletsN;
 
 	private Set<BulletH> bulletsH;
-
 
 	/** Current score. */
 	private int score;
@@ -133,6 +129,11 @@ public class GameScreen extends Screen {
 	 */
 
 	private Set<entity.Item> items;
+
+	/**
+	 * Currently loaded script
+	 */
+	Script stage;
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -172,10 +173,11 @@ public class GameScreen extends Screen {
 	 */
 	public final void initialize() {
 		super.initialize();
+
+		this.stage = new stage1();
+		stage.prep(null);
 		enemyShipFormation = new EnemyShipFormation(this.gameSettings);
 		enemyShipFormation.attach(this);
-		/** You can add your Ship to the code below. */
-
 		switch (Inventory.getcurrentship()) {
 			case 1000 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
 			case 1001 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.RED);
@@ -208,6 +210,7 @@ public class GameScreen extends Screen {
 	public final int run() {
 		super.run();
 
+		// after program cleanup
 		this.score += LIFE_SCORE * (this.lives - 1);
 		this.logger.info("Screen cleared with a score of " + this.score);
 
@@ -219,6 +222,12 @@ public class GameScreen extends Screen {
 	 */
 	protected final void update() {
 		super.update();
+
+		if(stage.run(null)==1)
+		{
+			this.isRunning=false;
+			return;
+		}
 
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
 			if (!this.ship.isDestroyed()) {
@@ -272,7 +281,7 @@ public class GameScreen extends Screen {
 			this.ship.update();
 			this.enemyShipFormation.update();
 
-			switch (Core.getDiff()){
+			switch (Core.getDiff()) {
 				case 1:
 					this.enemyShipFormation.shoot(this.bullets);
 					break;
@@ -300,7 +309,8 @@ public class GameScreen extends Screen {
 				&& !this.levelFinished) {
 			this.levelFinished = true;
 			this.screenFinishedCooldown.reset();
-			if(this.lives==0) this.ship.gameOver();
+			if (this.lives == 0)
+				this.ship.gameOver();
 		}
 
 		if (this.levelFinished && this.screenFinishedCooldown.checkFinished())
@@ -314,14 +324,13 @@ public class GameScreen extends Screen {
 	private void draw() {
 		drawManager.initDrawing(this);
 		drawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
-		if (this.ship.item_number == 1){
-			drawManager.drawimg("item_heart", this.ship.getPositionX()+15, this.ship.getPositionY()-25, 33, 33);
-		}
-		else if (this.ship.item_number == 2){
-			drawManager.drawimg("item_bulletspeed", this.ship.getPositionX()+15, this.ship.getPositionY()-25, 33, 33);
-		}
-		else if (this.ship.item_number == 3){
-			drawManager.drawimg("item_movespeed", this.ship.getPositionX()+15, this.ship.getPositionY()-25, 33, 33);
+		if (this.ship.item_number == 1) {
+			drawManager.drawimg("item_heart", this.ship.getPositionX() + 15, this.ship.getPositionY() - 25, 33, 33);
+		} else if (this.ship.item_number == 2) {
+			drawManager.drawimg("item_bulletspeed", this.ship.getPositionX() + 15, this.ship.getPositionY() - 25, 33,
+					33);
+		} else if (this.ship.item_number == 3) {
+			drawManager.drawimg("item_movespeed", this.ship.getPositionX() + 15, this.ship.getPositionY() - 25, 33, 33);
 		}
 		if (this.enemyShipSpecial != null)
 			drawManager.drawEntity(this.enemyShipSpecial,
@@ -454,8 +463,7 @@ public class GameScreen extends Screen {
 							this.coin += enemyShip.getPointValue() / 10;
 							Coin.balance += enemyShip.getPointValue() / 10;
 							recyclable.add(bullet);
-						}
-						else {
+						} else {
 							enemyLives--;
 							enemyShip.setenemyLives(enemyLives);
 							recyclable.add(bullet);
@@ -498,7 +506,7 @@ public class GameScreen extends Screen {
 						this.shipsDestroyed++;
 						Random random = new Random();
 						int per = random.nextInt(2);
-						if(per == 0){
+						if (per == 0) {
 							items.add(ItemPool.getItem(enemyShip.getPositionX() + enemyShip.getWidth() / 2,
 									enemyShip.getPositionY(), ITEM_SPEED));
 						}
@@ -589,56 +597,54 @@ public class GameScreen extends Screen {
 						this.logger.info("Acquire a item_lifePoint," + this.lives + " lives remaining.");
 						this.ship.item_number = 1;
 						this.ship.itemimgGet();
-					}
-					else {
+					} else {
 						if (ship.getSHOOTING_INTERVAL() > 300) {
-							int shootingSpeed = (int) (ship.getSHOOTING_INTERVAL() -100);
+							int shootingSpeed = (int) (ship.getSHOOTING_INTERVAL() - 100);
 							ship.setSHOOTING_INTERVAL(shootingSpeed);
 							ship.setSHOOTING_COOLDOWN(shootingSpeed);
-							this.logger.info("Acquire a item_shootingSpeedUp," + shootingSpeed + " Time between shots.");
-						}
-						else {
+							this.logger
+									.info("Acquire a item_shootingSpeedUp," + shootingSpeed + " Time between shots.");
+						} else {
 							this.logger.info("Acquire a item_shootingSpeedUp, MAX SHOOTING SPEED!");
 						}
 						this.ship.item_number = 2;
 						this.ship.itemimgGet();
 					}
-				}else if (per == 1) {
+				} else if (per == 1) {
 					if (ship.getSHOOTING_INTERVAL() > 300) {
-						int shootingSpeed = (int) (ship.getSHOOTING_INTERVAL() -100);
+						int shootingSpeed = (int) (ship.getSHOOTING_INTERVAL() - 100);
 						ship.setSHOOTING_INTERVAL(shootingSpeed);
 						ship.setSHOOTING_COOLDOWN(shootingSpeed);
 						this.logger.info("Acquire a item_shootingSpeedUp," + shootingSpeed + " Time between shots.");
-					}
-					else {
+					} else {
 						this.logger.info("Acquire a item_shootingSpeedUp, MAX SHOOTING SPEED!");
 					}
 					this.ship.item_number = 2;
 					this.ship.itemimgGet();
-				}
-				else if (per == 2) {
+				} else if (per == 2) {
 					int shipSpeed = (int) (ship.getSPEED() + 1);
 					ship.setSPEED(shipSpeed);
-					this.logger.info("Acquire a item_shipSpeedUp," + shipSpeed + " Movement of the ship for each unit of time.");
+					this.logger.info(
+							"Acquire a item_shipSpeedUp," + shipSpeed + " Movement of the ship for each unit of time.");
 					this.ship.item_number = 3;
 					this.ship.itemimgGet();
-				}else if (per == 3) {
+				} else if (per == 3) {
 					bullets.add(BulletPool.getBullet(ship.getPositionX(),
 							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth/2,
+					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
 							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
 					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth,
 							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
 					this.logger.info("Three bullets");
-				}else if (per == 4) {
-					bullets.add(BulletPool.getBullet(ship.getPositionX()+shipWidth/2,
+				} else if (per == 4) {
+					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
 							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth/2,
-							ship.getPositionY()+shipWidth/2, ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth/2,
-							ship.getPositionY()+shipWidth, ship.getBULLET_SPEED(), 0));
+					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
+							ship.getPositionY() + shipWidth / 2, ship.getBULLET_SPEED(), 0));
+					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
+							ship.getPositionY() + shipWidth, ship.getBULLET_SPEED(), 0));
 					this.logger.info("Three bullets");
-				}else {
+				} else {
 					bullets.add(BulletPool.getBullet(ship.getPositionX() - shipWidth / 2,
 							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
 					bullets.add(BulletPool.getBullet(ship.getPositionX(),
