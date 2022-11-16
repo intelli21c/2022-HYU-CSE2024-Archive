@@ -1,15 +1,16 @@
 package engine;
 
-import entity.Bullet;
-import entity.Ship;
+import entity.*;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class GameContext {
-    java.awt.Graphics graphics;
-    Ship player;
-    Set<Bullet> bullets;
-    GameSettings gsettings;
+    public Ship player;
+    public ArrayList<EnemyShip> enemys;
+    public Set<Bullet> bullets;
+    public java.awt.Graphics canvas;
 
     public GameContext() {
+        enemys = new ArrayList<EnemyShip>();
     }
 }
