@@ -246,6 +246,10 @@ public final class DrawManager {
 	 */
 	public void setFrame(final Frame currentFrame) {
 		frame = currentFrame;
+		graphics = frame.getGraphics();
+		fontRegularMetrics = graphics.getFontMetrics(fontRegular);
+		fontRegular2Metrics = graphics.getFontMetrics(fontRegular2);
+		fontBigMetrics = graphics.getFontMetrics(fontBig);
 	}
 
 	/**
@@ -254,30 +258,19 @@ public final class DrawManager {
 	 *
 	 * @param screen Screen to draw in.
 	 */
-	Color[] bg_colors = { Color.LIGHT_GRAY, Color.GRAY, Color.DARK_GRAY };
-
-	public void initDrawing(final Screen screen) {
+	public Graphics initDrawing(final Screen screen) {
 		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(),
 				BufferedImage.TYPE_INT_RGB);
-
-		graphics = frame.getGraphics();
 		backBufferGraphics = backBuffer.getGraphics();
 
-		if (GameScreen.lives > 0 && GameScreen.lives <= 3) {
-			backBufferGraphics.setColor(bg_colors[3 - GameScreen.lives]);
-		} else {
-			backBufferGraphics.setColor(Color.BLACK);
-		}
-
-		backBufferGraphics
-				.fillRect(0, 0, screen.getWidth(), screen.getHeight());
+		backBufferGraphics.setColor(Color.BLACK);
 
 		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
 		fontRegular2Metrics = backBufferGraphics.getFontMetrics(fontRegular2);
 		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
-
-		// drawBorders(screen);
-		// drawGrid(screen);
+		backBufferGraphics
+				.fillRect(0, 0, screen.getWidth(), screen.getHeight());
+		return backBufferGraphics;
 	}
 
 	/**
