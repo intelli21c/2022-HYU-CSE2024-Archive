@@ -214,6 +214,9 @@ public final class DrawManager {
 			imagemap.put("shipr", fileManager.loadImage("shipred.png"));
 			imagemap.put("shipg", fileManager.loadImage("shipgreen.png"));
 			imagemap.put("shipb", fileManager.loadImage("shipblue.png"));
+			imagemap.put("tempf", fileManager.loadImage("ship0-0.png"));
+			imagemap.put("templ", fileManager.loadImage("ship0-1.png"));
+			imagemap.put("tempr", fileManager.loadImage("ship0-2.png"));
 			imagemap.put("bgm1", fileManager.loadImage("bgm_1.png"));
 			imagemap.put("bgm2", fileManager.loadImage("bgm_2.png"));
 			imagemap.put("bgm3", fileManager.loadImage("bgm_3.png"));

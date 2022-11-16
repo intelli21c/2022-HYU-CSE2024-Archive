@@ -248,7 +248,7 @@ public class GameScreen extends Screen {
 
 			if (this.enemyShipSpecial != null) {
 				if (!this.enemyShipSpecial.isDestroyed())
-					this.enemyShipSpecial.move(2, 0);
+					this.enemyShipSpecial.moverel(2, 0);
 				else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
 					this.enemyShipSpecial = null;
 
@@ -295,9 +295,9 @@ public class GameScreen extends Screen {
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
-		drawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
-
+		//drawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
 		// TODO this is temporary!!!
+		drawManager.drawimg("tempf", ship.getPositionX()-20, ship.getPositionY()-20-20, ship.getWidth()+40, ship.getHeight()+40);
 		for (EnemyShip e : context.enemys) {
 			drawManager.drawEntity(e, e.getPositionX(), e.getPositionY());
 		}

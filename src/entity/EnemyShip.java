@@ -50,13 +50,6 @@ public class EnemyShip extends Entity {
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
 		this.isDestroyed = false;
-		float livesRate = (float)(Math.round(Math.random()*10)/10.0);
-		if (livesRate <= 0.3) {
-			this.enemyLives = 2;
-			changeColor_G(enemyLives);
-		}
-		else	this.enemyLives = 1;
-
 		switch (this.spriteType) {
 		case EnemyShipA1:
 		case EnemyShipA2:
@@ -101,19 +94,6 @@ public class EnemyShip extends Entity {
 	public void setenemyLives(int life) { this.enemyLives = life;}
 	/** Getter enemyLives. */
 	public int getEnemyLives() {return enemyLives;}
-
-	/**
-	 * Moves the ship the specified distance.
-	 * 
-	 * @param distanceX
-	 *            Distance to move in the X axis.
-	 * @param distanceY
-	 *            Distance to move in the Y axis.
-	 */
-	public final void move(final int distanceX, final int distanceY) {
-		this.positionX += distanceX;
-		this.positionY += distanceY;
-	}
 
 	/**
 	 * Updates attributes, mainly used for animation purposes.
