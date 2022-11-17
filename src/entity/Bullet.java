@@ -16,25 +16,36 @@ public class Bullet extends Entity {
 	 * Speed of the bullet, positive or negative depending on direction -
 	 * positive is down.
 	 */
-	private int speed;
-	private int shooting_pattern;
+	public Boolean auto = true;
+	public Boolean deleteoob = true;
+	public int shooter;
+
+	public int speedx;
+	public int speedy;
 
 	/**
 	 * Constructor, establishes the bullet's properties.
 	 * 
 	 * @param positionX
-	 *            Initial position of the bullet in the X axis.
+	 *                  Initial position of the bullet in the X axis.
 	 * @param positionY
-	 *            Initial position of the bullet in the Y axis.
+	 *                  Initial position of the bullet in the Y axis.
 	 * @param speed
-	 *            Speed of the bullet, positive or negative depending on
-	 *            direction - positive is down.
+	 *                  Speed of the bullet, positive or negative depending on
+	 *                  direction - positive is down.
 	 */
-	public Bullet(final int positionX, final int positionY, final int speed, int shotPattern) {
+	public Bullet(final int positionX, final int positionY, final int speed) {
+		super(positionX, positionY, 3 * 2, 5 * 3, Color.RED);
+		this.speedx = 0;
+		this.speedy = speed;
+		setSprite();
+	}
+
+	public Bullet(final int positionX, final int positionY, int spdx, int spdy) {
 		super(positionX, positionY, 3 * 2, 5 * 3, Color.RED);
 
-		this.speed = speed;
-		this.shooting_pattern = shotPattern;
+		this.speedx = spdx;
+		this.speedy = spdy;
 		setSprite();
 	}
 
@@ -42,7 +53,7 @@ public class Bullet extends Entity {
 	 * Sets correct sprite for the bullet, based on speed.
 	 */
 	public final void setSprite() {
-		if (speed < 0)
+		if (speedy < 0)
 			this.spriteType = SpriteType.Bullet;
 		else
 			this.spriteType = SpriteType.EnemyBullet;
@@ -52,27 +63,19 @@ public class Bullet extends Entity {
 	 * Updates the bullet's position.
 	 */
 	public final void update() {
-		this.positionY += this.speed;
-		if(speed > 0 && this.shooting_pattern != 0) {
-			movePosX();
+		if (this.auto) {
+			this.moverel(speedx, speedy);
 		}
-	}
-
-	public final void movePosX() {
-		if (this.shooting_pattern == 1)
-			this.positionX += (this.speed%2+1);
-		else if (this.shooting_pattern == 2)
-			this.positionX -= (this.speed%2+1);
 	}
 
 	/**
 	 * Setter of the speed of the bullet.
 	 * 
 	 * @param speed
-	 *            New speed of the bullet.
+	 *              New speed of the bullet.
 	 */
 	public final void setSpeed(final int speed) {
-		this.speed = speed;
+		this.speedy = speed;
 	}
 
 	/**
@@ -81,10 +84,6 @@ public class Bullet extends Entity {
 	 * @return Speed of the bullet.
 	 */
 	public final int getSpeed() {
-		return this.speed;
-	}
-
-	public final void setMovingPattern(final int shooting_pattern){
-		this.shooting_pattern = shooting_pattern;
+		return speedy;
 	}
 }

@@ -1,8 +1,8 @@
 package screen;
 
-import java.util.Random;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -109,10 +109,6 @@ public class GameScreen extends Screen {
 	 */
 	private long gameStartTime;
 	/**
-	 * Checks if the level is finished.
-	 */
-	private boolean levelFinished;
-	/**
 	 * Checks if a bonus life is received.
 	 */
 	private boolean bonusLife;
@@ -168,6 +164,7 @@ public class GameScreen extends Screen {
 		super.initialize();
 
 		this.context = new GameContext();
+
 		this.stage = new stage1();
 		stage.prep(null);
 		switch (Inventory.getcurrentship()) {
@@ -175,13 +172,8 @@ public class GameScreen extends Screen {
 			case 1001 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.RED);
 			case 1002 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.BLUE);
 		}
-
+		context.player = ship;
 		// Appears each 10-30 seconds.
-		this.enemyShipSpecialCooldown = Core.getVariableCooldown(
-				BONUS_SHIP_INTERVAL, BONUS_SHIP_VARIANCE);
-		this.enemyShipSpecialCooldown.reset();
-		this.enemyShipSpecialExplosionCooldown = Core
-				.getCooldown(BONUS_SHIP_EXPLOSION);
 		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
 		this.bullets = new HashSet<Bullet>();
 		this.items = new HashSet<entity.Item>();
@@ -219,7 +211,7 @@ public class GameScreen extends Screen {
 			return;
 		}
 
-		if (this.inputDelay.checkFinished() && !this.levelFinished) {
+		if (this.inputDelay.checkFinished()) {
 			if (!this.ship.isDestroyed()) {
 
 				boolean moveSlow = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
@@ -260,11 +252,23 @@ public class GameScreen extends Screen {
 					ship.animctr = 1;
 			}
 		}
-		stage.run(context);
-
 		// TODO blah
 		for (EnemyShip e : context.enemys) {
 			e.update();
+		}
+		ArrayList<Bullet> oobs = new ArrayList<Bullet>();
+		for (Bullet bullet : context.bullets) {
+			bullet.update();
+			if (bullet.checkoob(this.getWidth(), this.getHeight()) && bullet.deleteoob) {
+				oobs.add(bullet);
+			}
+		}
+		context.bullets.removeAll(oobs);
+		for (Bullet bullet : context.bullets) {
+			if (checkCollision(this.ship, bullet)) {
+				this.lives--;
+				ship.destroy();
+			}
 		}
 
 		this.ship.update();
@@ -282,8 +286,10 @@ public class GameScreen extends Screen {
 		 * }
 		 */
 
-		if (this.levelFinished && this.screenFinishedCooldown.checkFinished())
+		if (this.lives < 0) {
 			this.isRunning = false;
+			return;
+		}
 
 	}
 
@@ -297,6 +303,10 @@ public class GameScreen extends Screen {
 		// TODO this is temporary!!!
 		drawManager.drawimg("tempf", ship.getPositionX() - 20, ship.getPositionY() - 20 - 20, ship.getWidth() + 40,
 				ship.getHeight() + 40);
+		for (Bullet bullet : context.bullets) {
+			drawManager.drawEntity(bullet, bullet.getPositionX(), bullet.getPositionY());
+		}
+
 		for (EnemyShip e : context.enemys) {
 			drawManager.drawEntity(e, e.getPositionX(), e.getPositionY());
 		}
@@ -366,7 +376,7 @@ public class GameScreen extends Screen {
 		Set<Bullet> recyclable = new HashSet<Bullet>();
 		for (Bullet bullet : this.bullets)
 			if (bullet.getSpeed() > 0) {
-				if (checkCollision(bullet, this.ship) && !this.levelFinished) {
+				if (checkCollision(bullet, this.ship)) {
 					recyclable.add(bullet);
 					if (!this.ship.isDestroyed()) {
 						this.ship.destroy();

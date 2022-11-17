@@ -82,8 +82,9 @@ public class Ship extends Entity {
 		if (this.shootingCooldown.checkFinished()) {
 			new Sound().bulletsound();
 			this.shootingCooldown.reset();
-			bullets.add(BulletPool.getBullet(positionX + this.width / 2,
-					positionY, BULLET_SPEED, 0));
+			bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+			// bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY,
+			// BULLET_SPEED, 0));
 			return true;
 		}
 		return false;
@@ -98,15 +99,6 @@ public class Ship extends Entity {
 				this.spriteType = SpriteType.Ship;
 			}
 		}
-	}
-
-	public final void setBaseColor(Color newColor) {
-		baseColor = newColor;
-	}
-
-	public final void gameOver() {
-		this.setSpriteType(SpriteType.Explosion);
-		this.setColor(Color.MAGENTA);
 	}
 
 	/**

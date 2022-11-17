@@ -122,7 +122,7 @@ public class Entity {
 	 * 
 	 */
 	public final Boolean checkoob(int boundx, int boundy) {
-		return (positionX < 0 || positionX > boundx || positionY < 0 || positionY < boundy);
+		return ((positionX < 0) || (positionX > boundx) || (positionY < 0) || (positionY > boundy));
 	}
 
 	/**
