@@ -24,7 +24,7 @@ public class Ship extends Entity {
 	private int BULLET_SPEED = -6;
 
 	/** Movement of the ship for each unit of time. */
-	private int SPEED;
+	private float SPEED;
 	public int animctr = 1;
 
 	private boolean imagep;
@@ -211,7 +211,7 @@ public class Ship extends Entity {
 	 *
 	 * @return Speed of the ship.
 	 */
-	public final int getSpeed() {
+	public final float getSpeed() {
 		return SPEED;
 	}
 
@@ -227,11 +227,11 @@ public class Ship extends Entity {
 		return this.SHOOTING_INTERVAL;
 	}
 
-	public void setSPEED(int SPEED) {
+	public void setSPEED(float SPEED) {
 		this.SPEED = SPEED;
 	}
 
-	public int getSPEED() {
+	public float getSPEED() {
 		return SPEED;
 	}
 	public int getBULLET_SPEED() {return BULLET_SPEED;}

@@ -123,6 +123,8 @@ public class GameScreen extends Screen {
 	 */
 
 	private Set<entity.Item> items;
+	
+	private float originSpeed;
 
 	/**
 	 * Currently loaded script
@@ -188,6 +190,7 @@ public class GameScreen extends Screen {
 		this.gameStartTime = System.currentTimeMillis();
 		this.inputDelay = Core.getCooldown(INPUT_DELAY);
 		this.inputDelay.reset();
+		originSpeed = this.ship.getSpeed();
 	}
 
 	/**
@@ -218,6 +221,9 @@ public class GameScreen extends Screen {
 
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
 			if (!this.ship.isDestroyed()) {
+				
+				boolean moveSlow = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
+				
 				boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT)
 						|| inputManager.isKeyDown(KeyEvent.VK_D);
 				boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT)
@@ -234,6 +240,14 @@ public class GameScreen extends Screen {
 				if (moveLeft && !isLeftBorder_ship) {
 					this.ship.moveLeft();
 				}
+				if (moveSlow) {
+					this.ship.setSPEED(1);
+				}
+				if (!moveSlow) {
+					this.ship.setSPEED(originSpeed);
+
+				}
+				
 				if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
 					if (this.ship.shoot(this.bullets))
 						this.bulletsShot++;
