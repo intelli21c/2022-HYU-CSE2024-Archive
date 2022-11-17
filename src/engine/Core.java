@@ -27,11 +27,6 @@ import engine.Inventory.InventoryEntry;
  */
 public final class Core {
 
-	/**
-	 * difficulty of game
-	 */
-	public static int diff;
-
 	/** Bgm player */
 	private static Clip clip;
 
@@ -355,9 +350,5 @@ public final class Core {
 	public static void setSize(int width, int height) {
 		WIDTH = width;
 		HEIGHT = height;
-	}
-
-	public static int getDiff() {
-		return diff;
 	}
 }

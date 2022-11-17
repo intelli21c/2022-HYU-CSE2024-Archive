@@ -70,7 +70,7 @@ public class stage1 extends Script {
     private int field2(GameContext context) {
         if (e.isDestroyed() == false)
             return 0;
-        e2 = new EnemyShip(500, 300, SpriteType.EnemyShipA1);
+        e2 = new EnemyShip(500, 300, SpriteType.EnemyShipC1);
         e3 = new EnemyShip(800, 200, SpriteType.EnemyShipA1);
         context.enemys.add(e2);
         context.enemys.add(e3);
@@ -81,7 +81,9 @@ public class stage1 extends Script {
     double t=0;
     private int field3(GameContext context) {
         e2.moverel((int)(10*Math.sin(t)), (int)(-10*Math.cos(t)));
-        t+=0.1;
+        t+=0.05;
+        if (((int)(t/0.05))%60==0) e3.setSpriteType(SpriteType.EnemyShipA2);
+        if (((int)(t/0.05))%60==30) e3.setSpriteType(SpriteType.EnemyShipA1);
         if (e2.isDestroyed() && e3.isDestroyed())
             return 1;
         return 0;

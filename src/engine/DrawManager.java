@@ -13,14 +13,10 @@ import java.util.ArrayList;
 
 import screen.*;
 import screen.Screen;
-import screen.GameScreen;
 import screen.ShopScreen.shopstates;
 
 import entity.Entity;
 import entity.Ship;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
 
 import static screen.ShopScreen.selecteditem;
 

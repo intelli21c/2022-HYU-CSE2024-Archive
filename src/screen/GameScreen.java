@@ -241,7 +241,7 @@ public class GameScreen extends Screen {
 					this.ship.moveLeft();
 				}
 				if (moveSlow) {
-					this.ship.setSPEED(1);
+					this.ship.setSPEED(4);
 				}
 				if (!moveSlow) {
 					this.ship.setSPEED(originSpeed);
@@ -283,6 +283,12 @@ public class GameScreen extends Screen {
 
 		}
 		stage.run(context);
+
+		//TODO blah
+		for (EnemyShip e : context.enemys) {
+			e.update();
+		}
+
 		manageCollisions();
 		cleanBullets();
 		manageCollisionsItem();

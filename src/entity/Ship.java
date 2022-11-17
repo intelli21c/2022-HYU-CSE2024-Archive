@@ -42,7 +42,7 @@ public class Ship extends Entity {
 
 	private int frameCnt = 0;
 
-	private boolean getItem=false;
+	private boolean getItem = false;
 	/**
 	 * Constructor, establishes the ship's properties.
 	 *
@@ -52,7 +52,7 @@ public class Ship extends Entity {
 	 *                  Initial position of the ship in the Y axis.
 	 */
 
-	private Color baseColor=Color.green;
+	private Color baseColor = Color.green;
 
 	public Ship(final int positionX, final int positionY, Color color) {
 		super(positionX, positionY, 13 * 2, 8 * 2, color);
@@ -64,20 +64,8 @@ public class Ship extends Entity {
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.itemCooldown = Core.getCooldown(300);
 		this.destructionCooldown = Core.getCooldown(destructCool);
-		switch (Core.getDiff()) {
-			case 0:
-				this.SPEED = 2;
-				break;
-			case 1:
-				this.SPEED = 1;
-				break;
-			case 2:
-				this.SPEED = 5;
-				break;
-			case 3:
-				this.SPEED = 10;
-				break;
-		}
+		this.SPEED = 10;
+
 	}
 
 	/**
@@ -117,7 +105,9 @@ public class Ship extends Entity {
 	/**
 	 * Updates status of the ship.
 	 */
-	private Color[] rainbowEffect = {Color.RED, Color.ORANGE, Color.YELLOW, Color.green, Color.blue, new Color(0, 0, 128), new Color(139, 0, 255)};
+	private Color[] rainbowEffect = { Color.RED, Color.ORANGE, Color.YELLOW, Color.green, Color.blue,
+			new Color(0, 0, 128), new Color(139, 0, 255) };
+
 	public final void update() {
 
 		switch (Inventory.getcurrentship()) {
@@ -127,7 +117,7 @@ public class Ship extends Entity {
 		}
 
 		// Item acquired additional image
-		if (this.itemCooldown.checkFinished()){
+		if (this.itemCooldown.checkFinished()) {
 			this.item_number = 0;
 		}
 		if (this.isDestroyed()) {
@@ -159,9 +149,10 @@ public class Ship extends Entity {
 		}
 	}
 
-	public final void setBaseColor(Color newColor){
-		baseColor=newColor;
+	public final void setBaseColor(Color newColor) {
+		baseColor = newColor;
 	}
+
 	public final void getItem() {
 		this.getItem = true;
 	}
@@ -193,7 +184,7 @@ public class Ship extends Entity {
 	/**
 	 * Switches the ship to its item acquired state.
 	 */
-	public final void itemimgGet(){
+	public final void itemimgGet() {
 		this.itemCooldown.reset();
 	}
 
@@ -202,7 +193,7 @@ public class Ship extends Entity {
 	 *
 	 * @return True if the ship acquired an item.
 	 */
-	public final boolean isItemimgGet(){
+	public final boolean isItemimgGet() {
 		return !this.itemCooldown.checkFinished();
 	}
 
@@ -234,5 +225,8 @@ public class Ship extends Entity {
 	public float getSPEED() {
 		return SPEED;
 	}
-	public int getBULLET_SPEED() {return BULLET_SPEED;}
+
+	public int getBULLET_SPEED() {
+		return BULLET_SPEED;
+	}
 }
