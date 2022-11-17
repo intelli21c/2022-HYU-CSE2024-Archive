@@ -123,7 +123,7 @@ public class GameScreen extends Screen {
 	 */
 
 	private Set<entity.Item> items;
-	
+
 	private float originSpeed;
 
 	/**
@@ -221,9 +221,9 @@ public class GameScreen extends Screen {
 
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
 			if (!this.ship.isDestroyed()) {
-				
+
 				boolean moveSlow = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
-				
+
 				boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT)
 						|| inputManager.isKeyDown(KeyEvent.VK_D);
 				boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT)
@@ -247,7 +247,7 @@ public class GameScreen extends Screen {
 					this.ship.setSPEED(originSpeed);
 
 				}
-				
+
 				if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
 					if (this.ship.shoot(this.bullets))
 						this.bulletsShot++;
@@ -259,40 +259,17 @@ public class GameScreen extends Screen {
 				else
 					ship.animctr = 1;
 			}
-
-			if (this.enemyShipSpecial != null) {
-				if (!this.enemyShipSpecial.isDestroyed())
-					this.enemyShipSpecial.moverel(2, 0);
-				else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
-					this.enemyShipSpecial = null;
-
-			}
-			if (this.enemyShipSpecial == null
-					&& this.enemyShipSpecialCooldown.checkFinished()) {
-				this.enemyShipSpecial = new EnemyShip();
-				this.enemyShipSpecialCooldown.reset();
-				this.logger.info("A special ship appears");
-			}
-			if (this.enemyShipSpecial != null
-					&& this.enemyShipSpecial.getPositionX() > this.width) {
-				this.enemyShipSpecial = null;
-				this.logger.info("The special ship has escaped");
-			}
-
-			this.ship.update();
-
 		}
 		stage.run(context);
 
-		//TODO blah
+		// TODO blah
 		for (EnemyShip e : context.enemys) {
 			e.update();
 		}
 
+		this.ship.update();
 		manageCollisions();
 		cleanBullets();
-		manageCollisionsItem();
-		cleanItems();
 		draw();
 
 		/*
@@ -315,26 +292,14 @@ public class GameScreen extends Screen {
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
-		//drawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
+		// drawManager.drawEntity(this.ship, this.ship.getPositionX(),
+		// this.ship.getPositionY());
 		// TODO this is temporary!!!
-		drawManager.drawimg("tempf", ship.getPositionX()-20, ship.getPositionY()-20-20, ship.getWidth()+40, ship.getHeight()+40);
+		drawManager.drawimg("tempf", ship.getPositionX() - 20, ship.getPositionY() - 20 - 20, ship.getWidth() + 40,
+				ship.getHeight() + 40);
 		for (EnemyShip e : context.enemys) {
 			drawManager.drawEntity(e, e.getPositionX(), e.getPositionY());
 		}
-
-		if (this.ship.item_number == 1) {
-			drawManager.drawimg("item_heart", this.ship.getPositionX() + 15, this.ship.getPositionY() - 25, 33, 33);
-		} else if (this.ship.item_number == 2) {
-			drawManager.drawimg("item_bulletspeed", this.ship.getPositionX() + 15, this.ship.getPositionY() - 25, 33,
-					33);
-		} else if (this.ship.item_number == 3) {
-			drawManager.drawimg("item_movespeed", this.ship.getPositionX() + 15, this.ship.getPositionY() - 25, 33, 33);
-		}
-		if (this.enemyShipSpecial != null)
-			drawManager.drawEntity(this.enemyShipSpecial,
-					this.enemyShipSpecial.getPositionX(),
-					this.enemyShipSpecial.getPositionY());
-
 		for (Bullet bullet : this.bullets)
 			drawManager.drawEntity(bullet, bullet.getPositionX(),
 					bullet.getPositionY());
@@ -381,16 +346,18 @@ public class GameScreen extends Screen {
 		BulletPool.recycle(recyclable);
 	}
 
-	private void cleanItems() {
-		Set<entity.Item> recyclable = new HashSet<entity.Item>();
-		for (entity.Item item : this.items) {
-			item.update();
-			if (item.getPositionY() > this.height)
-				recyclable.add(item);
-		}
-		this.items.removeAll(recyclable);
-		ItemPool.recycle(recyclable);
-	}
+	/*
+	 * private void cleanItems() {
+	 * Set<entity.Item> recyclable = new HashSet<entity.Item>();
+	 * for (entity.Item item : this.items) {
+	 * item.update();
+	 * if (item.getPositionY() > this.height)
+	 * recyclable.add(item);
+	 * }
+	 * this.items.removeAll(recyclable);
+	 * ItemPool.recycle(recyclable);
+	 * }
+	 */
 
 	/**
 	 * Manages collisions between bullets and ships.
@@ -472,86 +439,93 @@ public class GameScreen extends Screen {
 	 * Manages collisions between items and ships.
 	 */
 
-	private void manageCollisionsItem() {
-		Set<entity.Item> recyclable = new HashSet<entity.Item>(); // ItemPool
-		for (entity.Item item : this.items) {
-			if (checkCollision(item, this.ship) && !this.levelFinished) {
-				recyclable.add(item);
-				Random random = new Random();
-				int per = random.nextInt(6);
-
-				if (per == 0) {
-					if (this.lives < 3) {
-						this.lives++;
-						this.logger.info("Acquire a item_lifePoint," + this.lives + " lives remaining.");
-						this.ship.item_number = 1;
-						this.ship.itemimgGet();
-					} else {
-						if (ship.getSHOOTING_INTERVAL() > 300) {
-							int shootingSpeed = (int) (ship.getSHOOTING_INTERVAL() - 100);
-							ship.setSHOOTING_INTERVAL(shootingSpeed);
-							ship.setSHOOTING_COOLDOWN(shootingSpeed);
-							this.logger
-									.info("Acquire a item_shootingSpeedUp," + shootingSpeed + " Time between shots.");
-						} else {
-							this.logger.info("Acquire a item_shootingSpeedUp, MAX SHOOTING SPEED!");
-						}
-						this.ship.item_number = 2;
-						this.ship.itemimgGet();
-					}
-				} else if (per == 1) {
-					if (ship.getSHOOTING_INTERVAL() > 300) {
-						int shootingSpeed = (int) (ship.getSHOOTING_INTERVAL() - 100);
-						ship.setSHOOTING_INTERVAL(shootingSpeed);
-						ship.setSHOOTING_COOLDOWN(shootingSpeed);
-						this.logger.info("Acquire a item_shootingSpeedUp," + shootingSpeed + " Time between shots.");
-					} else {
-						this.logger.info("Acquire a item_shootingSpeedUp, MAX SHOOTING SPEED!");
-					}
-					this.ship.item_number = 2;
-					this.ship.itemimgGet();
-				} else if (per == 2) {
-					int shipSpeed = (int) (ship.getSPEED() + 1);
-					ship.setSPEED(shipSpeed);
-					this.logger.info(
-							"Acquire a item_shipSpeedUp," + shipSpeed + " Movement of the ship for each unit of time.");
-					this.ship.item_number = 3;
-					this.ship.itemimgGet();
-				} else if (per == 3) {
-					bullets.add(BulletPool.getBullet(ship.getPositionX(),
-							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
-							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth,
-							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
-					this.logger.info("Three bullets");
-				} else if (per == 4) {
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
-							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
-							ship.getPositionY() + shipWidth / 2, ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
-							ship.getPositionY() + shipWidth, ship.getBULLET_SPEED(), 0));
-					this.logger.info("Three bullets");
-				} else {
-					bullets.add(BulletPool.getBullet(ship.getPositionX() - shipWidth / 2,
-							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX(),
-							ship.getPositionY() - shipWidth / 3, ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
-							ship.getPositionY() - shipWidth / 2, ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth,
-							ship.getPositionY() - shipWidth / 3, ship.getBULLET_SPEED(), 0));
-					bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth + shipWidth / 2,
-							ship.getPositionY(), ship.getBULLET_SPEED(), 0));
-					this.logger.info("Five bullets");
-				}
-				this.ship.getItem();
-			}
-		}
-		this.items.removeAll(recyclable);
-		ItemPool.recycle(recyclable);
-	}
+	/*
+	 * private void manageCollisionsItem() {
+	 * Set<entity.Item> recyclable = new HashSet<entity.Item>(); // ItemPool
+	 * for (entity.Item item : this.items) {
+	 * if (checkCollision(item, this.ship) && !this.levelFinished) {
+	 * recyclable.add(item);
+	 * Random random = new Random();
+	 * int per = random.nextInt(6);
+	 * 
+	 * if (per == 0) {
+	 * if (this.lives < 3) {
+	 * this.lives++;
+	 * this.logger.info("Acquire a item_lifePoint," + this.lives +
+	 * " lives remaining.");
+	 * this.ship.item_number = 1;
+	 * this.ship.itemimgGet();
+	 * } else {
+	 * if (ship.getSHOOTING_INTERVAL() > 300) {
+	 * int shootingSpeed = (int) (ship.getSHOOTING_INTERVAL() - 100);
+	 * ship.setSHOOTING_INTERVAL(shootingSpeed);
+	 * ship.setSHOOTING_COOLDOWN(shootingSpeed);
+	 * this.logger
+	 * .info("Acquire a item_shootingSpeedUp," + shootingSpeed +
+	 * " Time between shots.");
+	 * } else {
+	 * this.logger.info("Acquire a item_shootingSpeedUp, MAX SHOOTING SPEED!");
+	 * }
+	 * this.ship.item_number = 2;
+	 * this.ship.itemimgGet();
+	 * }
+	 * } else if (per == 1) {
+	 * if (ship.getSHOOTING_INTERVAL() > 300) {
+	 * int shootingSpeed = (int) (ship.getSHOOTING_INTERVAL() - 100);
+	 * ship.setSHOOTING_INTERVAL(shootingSpeed);
+	 * ship.setSHOOTING_COOLDOWN(shootingSpeed);
+	 * this.logger.info("Acquire a item_shootingSpeedUp," + shootingSpeed +
+	 * " Time between shots.");
+	 * } else {
+	 * this.logger.info("Acquire a item_shootingSpeedUp, MAX SHOOTING SPEED!");
+	 * }
+	 * this.ship.item_number = 2;
+	 * this.ship.itemimgGet();
+	 * } else if (per == 2) {
+	 * int shipSpeed = (int) (ship.getSPEED() + 1);
+	 * ship.setSPEED(shipSpeed);
+	 * this.logger.info(
+	 * "Acquire a item_shipSpeedUp," + shipSpeed +
+	 * " Movement of the ship for each unit of time.");
+	 * this.ship.item_number = 3;
+	 * this.ship.itemimgGet();
+	 * } else if (per == 3) {
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX(),
+	 * ship.getPositionY(), ship.getBULLET_SPEED(), 0));
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
+	 * ship.getPositionY(), ship.getBULLET_SPEED(), 0));
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth,
+	 * ship.getPositionY(), ship.getBULLET_SPEED(), 0));
+	 * this.logger.info("Three bullets");
+	 * } else if (per == 4) {
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
+	 * ship.getPositionY(), ship.getBULLET_SPEED(), 0));
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
+	 * ship.getPositionY() + shipWidth / 2, ship.getBULLET_SPEED(), 0));
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
+	 * ship.getPositionY() + shipWidth, ship.getBULLET_SPEED(), 0));
+	 * this.logger.info("Three bullets");
+	 * } else {
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() - shipWidth / 2,
+	 * ship.getPositionY(), ship.getBULLET_SPEED(), 0));
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX(),
+	 * ship.getPositionY() - shipWidth / 3, ship.getBULLET_SPEED(), 0));
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth / 2,
+	 * ship.getPositionY() - shipWidth / 2, ship.getBULLET_SPEED(), 0));
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth,
+	 * ship.getPositionY() - shipWidth / 3, ship.getBULLET_SPEED(), 0));
+	 * bullets.add(BulletPool.getBullet(ship.getPositionX() + shipWidth + shipWidth
+	 * / 2,
+	 * ship.getPositionY(), ship.getBULLET_SPEED(), 0));
+	 * this.logger.info("Five bullets");
+	 * }
+	 * this.ship.getItem();
+	 * }
+	 * }
+	 * this.items.removeAll(recyclable);
+	 * ItemPool.recycle(recyclable);
+	 * }
+	 */
 
 	/**
 	 * Checks if two entities are colliding.
