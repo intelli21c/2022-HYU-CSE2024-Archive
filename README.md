@@ -33,3 +33,7 @@ Title Screen               |  Game Screen              | Score Screen
 
 ## System Requirements
 Requires Java 7 or better.
+
+
+## COPYRIGHT NOTICES
+This repository uses https://github.com/mauricioaniche/ck for CI metrics checking.

@@ -13,14 +13,10 @@ import java.util.ArrayList;
 
 import screen.*;
 import screen.Screen;
-import screen.GameScreen;
 import screen.ShopScreen.shopstates;
 
 import entity.Entity;
 import entity.Ship;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
 
 import static screen.ShopScreen.selecteditem;
 
@@ -214,6 +210,9 @@ public final class DrawManager {
 			imagemap.put("shipr", fileManager.loadImage("shipred.png"));
 			imagemap.put("shipg", fileManager.loadImage("shipgreen.png"));
 			imagemap.put("shipb", fileManager.loadImage("shipblue.png"));
+			imagemap.put("tempf", fileManager.loadImage("ship0-0.png"));
+			imagemap.put("templ", fileManager.loadImage("ship0-1.png"));
+			imagemap.put("tempr", fileManager.loadImage("ship0-2.png"));
 			imagemap.put("bgm1", fileManager.loadImage("bgm_1.png"));
 			imagemap.put("bgm2", fileManager.loadImage("bgm_2.png"));
 			imagemap.put("bgm3", fileManager.loadImage("bgm_3.png"));
@@ -246,6 +245,10 @@ public final class DrawManager {
 	 */
 	public void setFrame(final Frame currentFrame) {
 		frame = currentFrame;
+		graphics = frame.getGraphics();
+		fontRegularMetrics = graphics.getFontMetrics(fontRegular);
+		fontRegular2Metrics = graphics.getFontMetrics(fontRegular2);
+		fontBigMetrics = graphics.getFontMetrics(fontBig);
 	}
 
 	/**
@@ -254,30 +257,19 @@ public final class DrawManager {
 	 *
 	 * @param screen Screen to draw in.
 	 */
-	Color[] bg_colors = { Color.LIGHT_GRAY, Color.GRAY, Color.DARK_GRAY };
-
-	public void initDrawing(final Screen screen) {
+	public Graphics initDrawing(final Screen screen) {
 		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(),
 				BufferedImage.TYPE_INT_RGB);
-
-		graphics = frame.getGraphics();
 		backBufferGraphics = backBuffer.getGraphics();
 
-		if (GameScreen.lives > 0 && GameScreen.lives <= 3) {
-			backBufferGraphics.setColor(bg_colors[3 - GameScreen.lives]);
-		} else {
-			backBufferGraphics.setColor(Color.BLACK);
-		}
-
-		backBufferGraphics
-				.fillRect(0, 0, screen.getWidth(), screen.getHeight());
+		backBufferGraphics.setColor(Color.BLACK);
 
 		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
 		fontRegular2Metrics = backBufferGraphics.getFontMetrics(fontRegular2);
 		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
-
-		// drawBorders(screen);
-		// drawGrid(screen);
+		backBufferGraphics
+				.fillRect(0, 0, screen.getWidth(), screen.getHeight());
+		return backBufferGraphics;
 	}
 
 	/**

@@ -29,15 +29,15 @@ public class Entity {
 	 * Constructor, establishes the entity's generic properties.
 	 * 
 	 * @param positionX
-	 *            Initial position of the entity in the X axis.
+	 *                  Initial position of the entity in the X axis.
 	 * @param positionY
-	 *            Initial position of the entity in the Y axis.
+	 *                  Initial position of the entity in the Y axis.
 	 * @param width
-	 *            Width of the entity.
+	 *                  Width of the entity.
 	 * @param height
-	 *            Height of the entity.
+	 *                  Height of the entity.
 	 * @param color
-	 *            Color of the entity.
+	 *                  Color of the entity.
 	 */
 	public Entity(final int positionX, final int positionY, final int width,
 			final int height, final Color color) {
@@ -57,12 +57,12 @@ public class Entity {
 		return color;
 	}
 
-	// 아이템 먹었을 때 색깔 변할 수 있게 메서드 추가 
+	// 아이템 먹었을 때 색깔 변할 수 있게 메서드 추가
 	// Add a method so that the color changes when you eat an item
 	public final void setColor(Color color) {
 		this.color = color;
 	}
-	
+
 	/**
 	 * Getter for the X axis position of the entity.
 	 * 
@@ -85,7 +85,7 @@ public class Entity {
 	 * Setter for the X axis position of the entity.
 	 * 
 	 * @param positionX
-	 *            New position of the entity in the X axis.
+	 *                  New position of the entity in the X axis.
 	 */
 	public final void setPositionX(final int positionX) {
 		this.positionX = positionX;
@@ -95,10 +95,34 @@ public class Entity {
 	 * Setter for the Y axis position of the entity.
 	 * 
 	 * @param positionY
-	 *            New position of the entity in the Y axis.
+	 *                  New position of the entity in the Y axis.
 	 */
 	public final void setPositionY(final int positionY) {
 		this.positionY = positionY;
+	}
+
+	/**
+	 * Setter for the Y axis position of the entity.
+	 * 
+	 * @param positionY
+	 *                  New position of the entity in the Y axis.
+	 */
+	public final void moverel(final int delX, final int delY) {
+		this.positionX += delX;
+		this.positionY += delY;
+	}
+
+	/**
+	 * check out of bound
+	 * 
+	 * @param boundx
+	 *                  New position of the entity in the Y axis.
+	 * @param boundy
+	 *                  New position of the entity in the Y axis.
+	 * 
+	 */
+	public final Boolean checkoob(int boundx, int boundy) {
+		return ((positionX < 0) || (positionX > boundx) || (positionY < 0) || (positionY > boundy));
 	}
 
 	/**
@@ -110,7 +134,10 @@ public class Entity {
 		return this.spriteType;
 	}
 
-	public final void setSpriteType(SpriteType newSprite) { this.spriteType=newSprite; }
+	public final void setSpriteType(SpriteType newSprite) {
+		this.spriteType = newSprite;
+	}
+
 	/**
 	 * Getter for the width of the image associated to the entity.
 	 * 
@@ -130,10 +157,7 @@ public class Entity {
 	}
 
 	public final void changeColor() {
-		if (this.color == Color.WHITE) setColor(Color.BLACK);
-	}
-
-	public final void changeColor_G(int enemyLives) {
-		if (this.color == Color.WHITE && enemyLives == 2) setColor(Color.GRAY);
+		if (this.color == Color.WHITE)
+			setColor(Color.BLACK);
 	}
 }
