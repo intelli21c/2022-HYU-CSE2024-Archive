@@ -24,25 +24,15 @@ public class Ship extends Entity {
 	private int BULLET_SPEED = -6;
 
 	/** Movement of the ship for each unit of time. */
-	private int SPEED;
+	private float SPEED;
 	public int animctr = 1;
-
-	private boolean imagep;
-	public int imageid;
-	public int item_number = 0;
 
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
 	/** Time spent inactive between hits. */
 	private Cooldown destructionCooldown;
-	/** Item acquire effect duration time. */
-	private Cooldown itemCooldown;
 	/** Movement of the ship for each unit of time. */
 	private int destructCool = 300;
-
-	private int frameCnt = 0;
-
-	private boolean getItem=false;
 	/**
 	 * Constructor, establishes the ship's properties.
 	 *
@@ -52,32 +42,17 @@ public class Ship extends Entity {
 	 *                  Initial position of the ship in the Y axis.
 	 */
 
-	private Color baseColor=Color.green;
+	private Color baseColor = Color.green;
 
 	public Ship(final int positionX, final int positionY, Color color) {
 		super(positionX, positionY, 13 * 2, 8 * 2, color);
-		imagep = false;
 		this.spriteType = SpriteType.Ship;
 		if (positionY == 0) {
 			this.spriteType = SpriteType.ShipLive;
 		}
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
-		this.itemCooldown = Core.getCooldown(300);
 		this.destructionCooldown = Core.getCooldown(destructCool);
-		switch (Core.getDiff()) {
-			case 0:
-				this.SPEED = 2;
-				break;
-			case 1:
-				this.SPEED = 1;
-				break;
-			case 2:
-				this.SPEED = 5;
-				break;
-			case 3:
-				this.SPEED = 10;
-				break;
-		}
+		this.SPEED = 10;
 	}
 
 	/**
@@ -107,8 +82,9 @@ public class Ship extends Entity {
 		if (this.shootingCooldown.checkFinished()) {
 			new Sound().bulletsound();
 			this.shootingCooldown.reset();
-			bullets.add(BulletPool.getBullet(positionX + this.width / 2,
-					positionY, BULLET_SPEED, 0));
+			bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+			// bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY,
+			// BULLET_SPEED, 0));
 			return true;
 		}
 		return false;
@@ -117,58 +93,12 @@ public class Ship extends Entity {
 	/**
 	 * Updates status of the ship.
 	 */
-	private Color[] rainbowEffect = {Color.RED, Color.ORANGE, Color.YELLOW, Color.green, Color.blue, new Color(0, 0, 128), new Color(139, 0, 255)};
 	public final void update() {
-
-		switch (Inventory.getcurrentship()) {
-			case 1000 -> setBaseColor(Color.GREEN);
-			case 1001 -> setBaseColor(Color.RED);
-			case 1002 -> setBaseColor(Color.BLUE);
-		}
-
-		// Item acquired additional image
-		if (this.itemCooldown.checkFinished()){
-			this.item_number = 0;
-		}
 		if (this.isDestroyed()) {
-			frameCnt++;
-			if (frameCnt % (destructCool * 0.01) == 0) {
-				if (getColor() == baseColor) {
-					this.spriteType = SpriteType.ShipDestroyed;
-					setColor(Color.red);
-				} else {
-					setColor(baseColor);
-					this.spriteType = SpriteType.Ship;
-				}
+			if (this.destructionCooldown.checkFinished()) {
+				this.spriteType = SpriteType.Ship;
 			}
-		} else if (getItem) {
-			if (frameCnt >= 30) {
-				getItem = false;
-			} else {
-				try {
-					this.setColor(rainbowEffect[Arrays.asList(rainbowEffect).indexOf(this.getColor()) + 1]);
-				} catch (ArrayIndexOutOfBoundsException e) {
-					this.setColor(rainbowEffect[0]);
-				}
-				frameCnt++;
-			}
-		} else {
-			frameCnt = 0;
-			setColor(baseColor);
-			this.spriteType = SpriteType.Ship;
 		}
-	}
-
-	public final void setBaseColor(Color newColor){
-		baseColor=newColor;
-	}
-	public final void getItem() {
-		this.getItem = true;
-	}
-
-	public final void gameOver() {
-		this.setSpriteType(SpriteType.Explosion);
-		this.setColor(Color.MAGENTA);
 	}
 
 	/**
@@ -191,27 +121,11 @@ public class Ship extends Entity {
 	}
 
 	/**
-	 * Switches the ship to its item acquired state.
-	 */
-	public final void itemimgGet(){
-		this.itemCooldown.reset();
-	}
-
-	/**
-	 * Checks if the ship acquired an item.
-	 *
-	 * @return True if the ship acquired an item.
-	 */
-	public final boolean isItemimgGet(){
-		return !this.itemCooldown.checkFinished();
-	}
-
-	/**
 	 * Getter for the ship's speed.
 	 *
 	 * @return Speed of the ship.
 	 */
-	public final int getSpeed() {
+	public final float getSpeed() {
 		return SPEED;
 	}
 
@@ -227,12 +141,15 @@ public class Ship extends Entity {
 		return this.SHOOTING_INTERVAL;
 	}
 
-	public void setSPEED(int SPEED) {
+	public void setSPEED(float SPEED) {
 		this.SPEED = SPEED;
 	}
 
-	public int getSPEED() {
+	public float getSPEED() {
 		return SPEED;
 	}
-	public int getBULLET_SPEED() {return BULLET_SPEED;}
+
+	public int getBULLET_SPEED() {
+		return BULLET_SPEED;
+	}
 }
