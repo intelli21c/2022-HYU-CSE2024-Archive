@@ -66,10 +66,6 @@ public class GameScreen extends Screen {
 	 */
 	private Ship ship;
 	/**
-	 * Player's ship width.
-	 */
-	private int shipWidth = 13 * 2;
-	/**
 	 * Bonus enemy ship that appears sometimes.
 	 */
 	private EnemyShip enemyShipSpecial;
@@ -95,7 +91,7 @@ public class GameScreen extends Screen {
 	/** Current coin. */
 	private int coin;
 	/** Player lives left. */
-	public static int lives;
+	public int lives;
 	/**
 	 * Total bullets shot by the player.
 	 */
@@ -211,59 +207,56 @@ public class GameScreen extends Screen {
 			return;
 		}
 
-		if (this.inputDelay.checkFinished()) {
-			if (!this.ship.isDestroyed()) {
+		boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT)
+				|| inputManager.isKeyDown(KeyEvent.VK_D);
+		boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT)
+				|| inputManager.isKeyDown(KeyEvent.VK_A);
 
-				boolean moveSlow = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
+		boolean moveUp = inputManager.isKeyDown(KeyEvent.VK_UP);
+		boolean moveDown = inputManager.isKeyDown(KeyEvent.VK_DOWN);
+		boolean moveSlow = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
+		boolean openfire = (inputManager.isKeyDown(KeyEvent.VK_SPACE) || inputManager.isKeyDown(KeyEvent.VK_Z));
 
-				boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT)
-						|| inputManager.isKeyDown(KeyEvent.VK_D);
-				boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT)
-						|| inputManager.isKeyDown(KeyEvent.VK_A);
-				boolean moveUp = inputManager.isKeyDown(KeyEvent.VK_UP);
-				boolean moveDown = inputManager.isKeyDown(KeyEvent.VK_DOWN);
+		boolean isRightBorder_ship = this.ship.getPositionX()
+				+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
+		boolean isLeftBorder_ship = this.ship.getPositionX()
+				- this.ship.getSpeed() < 1;
+		boolean isUpBorder_ship = this.ship.getPositionY()
+				- this.ship.getSpeed() < SEPARATION_LINE_HEIGHT - 1;
+		boolean isDownBorder_ship = this.ship.getPositionY()
+				+ this.ship.getHeight() + this.ship.getSpeed() > this.height - 10;
 
-				boolean isRightBorder_ship = this.ship.getPositionX()
-						+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
-				boolean isLeftBorder_ship = this.ship.getPositionX()
-						- this.ship.getSpeed() < 1;
-				boolean isUpBorder_ship = this.ship.getPositionY()
-						- this.ship.getSpeed() < SEPARATION_LINE_HEIGHT - 1;
-				boolean isDownBorder_ship = this.ship.getPositionY()
-						+ this.ship.getHeight() + this.ship.getSpeed() > this.height - 10;
-
-				if (moveRight && !isRightBorder_ship) {
-					this.ship.moveRight();
-				}
-				if (moveLeft && !isLeftBorder_ship) {
-					this.ship.moveLeft();
-				}
-				if (moveUp && !isUpBorder_ship) {
-					this.ship.moveUp();
-				}
-				if (moveDown && !isDownBorder_ship) {
-					this.ship.moveDown();
-				}
-				if (moveSlow) {
-					this.ship.setSPEED(4);
-				}
-				if (!moveSlow) {
-					this.ship.setSPEED(originSpeed);
-
-				}
-
-				if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
-					if (this.ship.shoot(this.bullets))
-						this.bulletsShot++;
-
-				if (moveLeft)
-					ship.animctr = 2;
-				else if (moveRight)
-					ship.animctr = 3;
-				else
-					ship.animctr = 1;
-			}
+		if (moveRight && !isRightBorder_ship) {
+			this.ship.moveRight();
 		}
+		if (moveLeft && !isLeftBorder_ship) {
+			this.ship.moveLeft();
+		}
+		if (moveUp && !isUpBorder_ship) {
+			this.ship.moveUp();
+		}
+		if (moveDown && !isDownBorder_ship) {
+			this.ship.moveDown();
+		}
+		if (moveSlow) {
+			this.ship.setSPEED(4);
+		}
+		if (!moveSlow) {
+			this.ship.setSPEED(originSpeed);
+
+		}
+
+		if (openfire)
+			if (this.ship.shoot(this.bullets))
+				this.bulletsShot++;
+
+		if (moveLeft)
+			ship.animctr = 2;
+		else if (moveRight)
+			ship.animctr = 3;
+		else
+			ship.animctr = 1;
+
 		// TODO blah
 		for (EnemyShip e : context.enemys) {
 			e.update();
@@ -277,15 +270,18 @@ public class GameScreen extends Screen {
 		}
 		context.bullets.removeAll(oobs);
 		for (Bullet bullet : context.bullets) {
-			if (checkCollision(this.ship, bullet)) {
+			if (checkCollision(this.ship, bullet) && !this.ship.isDestroyed()) {
 				this.lives--;
 				ship.destroy();
 			}
 		}
 
 		this.ship.update();
+
 		manageCollisions();
+
 		cleanBullets();
+
 		draw();
 
 		/*
@@ -298,12 +294,16 @@ public class GameScreen extends Screen {
 		 * }
 		 */
 
-		if (this.lives < 0) {
+		if (this.lives <= 0)
+
+		{
 			this.isRunning = false;
 			return;
 		}
 
 	}
+
+	Cooldown tempblinkinner = Core.getCooldown(100);
 
 	/**
 	 * Draws the elements associated with the screen.
@@ -313,8 +313,32 @@ public class GameScreen extends Screen {
 		// drawManager.drawEntity(this.ship, this.ship.getPositionX(),
 		// this.ship.getPositionY());
 		// TODO this is temporary!!!
-		drawManager.drawimg("tempf", ship.getPositionX() - 20, ship.getPositionY() - 20 - 20, ship.getWidth() + 40,
-				ship.getHeight() + 40);
+		String shn = "";
+		switch (ship.animctr) {
+			case 1:
+				shn = "tempf";
+				break;
+			case 2:
+				shn = "templ";
+				break;
+			case 3:
+				shn = "tempr";
+				break;
+		}
+		if (ship.isDestroyed()) {
+			if (tempblinkinner.checkFinished()) {
+				drawManager.drawimgtrans(shn, ship.getPositionX() - 20, ship.getPositionY() - 20 - 20,
+						ship.getWidth() + 40,
+						ship.getHeight() + 40, 0.5f);
+				tempblinkinner.reset();
+			} else {
+				drawManager.drawimg(shn, ship.getPositionX() - 20, ship.getPositionY() - 20 - 20,
+						ship.getWidth() + 40,
+						ship.getHeight() + 40);
+			}
+		} else
+			drawManager.drawimg(shn, ship.getPositionX() - 20, ship.getPositionY() - 20 - 20, ship.getWidth() + 40,
+					ship.getHeight() + 40);
 		for (Bullet bullet : context.bullets) {
 			drawManager.drawEntity(bullet, bullet.getPositionX(), bullet.getPositionY());
 		}
@@ -338,11 +362,11 @@ public class GameScreen extends Screen {
 
 		// Countdown to game start.
 		if (!this.inputDelay.checkFinished()) {
-			int countdown = (int) ((INPUT_DELAY
-					- (System.currentTimeMillis()
-							- this.gameStartTime))
-					/ 1000);
-			drawManager.drawCountDown(this, this.level, countdown,
+			// int countdown = (int) ((INPUT_DELAY
+			// - (System.currentTimeMillis()
+			// - this.gameStartTime))
+			// / 1000);
+			drawManager.drawCountDown(this, this.level, 4,
 					this.bonusLife);
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
 					/ 12);
