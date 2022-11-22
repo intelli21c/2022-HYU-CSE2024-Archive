@@ -1,6 +1,8 @@
 package engine;
 
 import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -211,8 +213,8 @@ public final class DrawManager {
 			imagemap.put("shipg", fileManager.loadImage("shipgreen.png"));
 			imagemap.put("shipb", fileManager.loadImage("shipblue.png"));
 			imagemap.put("tempf", fileManager.loadImage("ship0-0.png"));
-			imagemap.put("templ", fileManager.loadImage("ship0-1.png"));
-			imagemap.put("tempr", fileManager.loadImage("ship0-2.png"));
+			imagemap.put("tempr", fileManager.loadImage("ship0-1.png"));
+			imagemap.put("templ", fileManager.loadImage("ship0-2.png"));
 			imagemap.put("bgm1", fileManager.loadImage("bgm_1.png"));
 			imagemap.put("bgm2", fileManager.loadImage("bgm_2.png"));
 			imagemap.put("bgm3", fileManager.loadImage("bgm_3.png"));
@@ -305,7 +307,23 @@ public final class DrawManager {
 			backBufferGraphics.drawImage(imagemap.get(name), positionX, positionY, sizex, sizey, observer);
 		} catch (Exception e) {
 		}
+	}
 
+	public void drawimgtrans(String name, int positionX, int positionY, int sizex, int sizey, float alpha) {
+		BufferedImage source = imagemap.get(name);
+		BufferedImage target = new BufferedImage(source.getWidth(),
+				source.getHeight(), java.awt.Transparency.TRANSLUCENT);
+		// Get the images graphics
+		Graphics2D g = target.createGraphics();
+		// Set the Graphics composite to Alpha
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+				(float) alpha));
+		// Draw the image into the prepared reciver image
+		g.drawImage(source, null, 0, 0);
+		// let go of all system resources in this Graphics
+		g.dispose();
+		// Return the image
+		backBufferGraphics.drawImage(target, positionX, positionY, sizex, sizey, observer);
 	}
 
 	/**
@@ -1105,12 +1123,12 @@ public final class DrawManager {
 		else if (selecteditem().itemid == 2001)
 			drawmultiline(screen, bgminfo_2, 45, 390, 3);
 		else if (selecteditem().itemid == 2002)
-			drawmultiline(screen, bgminfo_3, 45, 390, 3);
-		/**
-		 * for (int i = 0; i < Inventory.inventory.size(); i++) {
-		 * backBufferGraphics.drawString(Item.itemregistry.get(i).name, x, y);
-		 * }
-		 */
+			drawmultiline(screen, bgminfo_3, 45, 390, 3);/**
+															 * for (int i = 0; i < Inventory.inventory.size(); i++) {
+															 * backBufferGraphics.drawString(Item.itemregistry.get(i).name,
+															 * x, y);
+															 * }
+															 */
 
 	}
 

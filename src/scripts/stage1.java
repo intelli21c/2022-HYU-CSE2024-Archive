@@ -1,5 +1,6 @@
 package scripts;
 
+import java.util.ArrayList;
 import engine.GameContext;
 import engine.BulletUtil;
 import engine.Cooldown;
@@ -14,7 +15,7 @@ public class stage1 extends Script {
      * switch-case instead.
      */
     private enum states {
-        init, field1, field2, field3, boss
+        init, field1, field2, field3, field4, boss
     }
 
     states state = states.init;
@@ -35,6 +36,9 @@ public class stage1 extends Script {
             case field3:
                 ret = field3(context);
                 break;
+            case field4:
+                ret = field4(context);
+                break;
             default:
                 ret = fallback(context);
         }
@@ -43,7 +47,7 @@ public class stage1 extends Script {
 
     @Override
     public void prep(GameContext context) {
-
+        new BulletUtil();
     }
 
     Cooldown entrycount;
@@ -64,9 +68,12 @@ public class stage1 extends Script {
     EnemyShip e;
     EnemyShip e2;
     EnemyShip e3;
+    EnemyShip e4;
 
     Cooldown c;
     Cooldown d;
+    Cooldown f;
+    int fctr = 0;
 
     private int field1(GameContext context) {
         if (!entrycount.checkFinished())
@@ -77,6 +84,8 @@ public class stage1 extends Script {
         c.reset();
         d = Core.getCooldown(500);
         d.reset();
+        f = Core.getCooldown(50);
+        f.reset();
         state = states.field2;
         return 0;
     }
@@ -105,20 +114,61 @@ public class stage1 extends Script {
         t += 0.05;
         if (!e3.isDestroyed()) {
             if (c.checkFinished()) {
-                context.bullets.addAll(BulletUtil.circularadial(e3.getPositionX(),
-                        e3.getPositionY(), 70, 70));
-                c.reset();
+                if (f.checkFinished() && fctr < 5) {
+                    context.bullets.addAll(BulletUtil.circularadial(e3.getPositionX(),
+                            e3.getPositionY(), 70, 70));
+                    fctr++;
+                    f.reset();
+                }
+                if (fctr == 5) {
+                    context.bullets.addAll(BulletUtil.circularadial(e3.getPositionX(),
+                            e3.getPositionY(), 70, 70));
+                    fctr = 0;
+                    f.reset();
+                    c.reset();
+                }
             }
         }
         if (!e2.isDestroyed()) {
             if (d.checkFinished()) {
                 context.bullets.add(BulletUtil.aimto(e2.getPositionX(), e2.getPositionY(),
-                        context.player.getPositionX(), context.player.getPositionY()));
+                        context.player.getPositionX(), context.player.getPositionY(), 5));
                 d.reset();
             }
         }
-        if (e2.isDestroyed() && e3.isDestroyed())
+        if (e2.isDestroyed() && e3.isDestroyed()) {
+            e4 = new EnemyShip(500, 500, SpriteType.EnemyShipSpecial);
+            cirs = new ArrayList<BulletUtil.BulletController>();
+            cirdels = new ArrayList<BulletUtil.BulletController>();
+            context.enemys.add(e4);
+            this.state = states.field4;
+            c.reset();
+        }
+
+        return 0;
+    }
+
+    ArrayList<BulletUtil.BulletController> cirs;
+    ArrayList<BulletUtil.BulletController> cirdels;
+
+    private int field4(GameContext context) {
+
+        if (e4.isDestroyed())
             return 1;
+        if (c.checkFinished()) {
+            context.bullets.addAll(
+                    BulletUtil.varyingspeedline(e4.getPositionX(), e4.getPositionY(), context.player.getPositionX(),
+                            context.player.getPositionY(), 5, 2, 5));
+            cirs.add(BulletUtil.BUTIL.new PolarRProp(e4.getPositionX(), e4.getPositionY(), 10,
+                    20, 0.005, 0.001));
+            context.bullets.addAll(cirs.get(cirs.size() - 1).list);
+            c.reset();
+        }
+        for (BulletUtil.BulletController bc : cirs) {
+            if (((BulletUtil.PolarRProp) bc).update() == 1)
+                cirdels.add(bc);
+        }
+        cirs.removeAll(cirdels);
         return 0;
     }
 }

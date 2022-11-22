@@ -32,7 +32,7 @@ public class Ship extends Entity {
 	/** Time spent inactive between hits. */
 	private Cooldown destructionCooldown;
 	/** Movement of the ship for each unit of time. */
-	private int destructCool = 300;
+	private int destructCool = 500;
 	/**
 	 * Constructor, establishes the ship's properties.
 	 *
