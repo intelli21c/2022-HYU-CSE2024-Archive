@@ -11,6 +11,8 @@ import engine.DrawManager.SpriteType;
  * 
  */
 public class Bullet extends Entity {
+	private double accuposX;
+	private double accuposY;
 
 	/**
 	 * Speed of the bullet, positive or negative depending on direction -
@@ -20,8 +22,8 @@ public class Bullet extends Entity {
 	public Boolean deleteoob = true;
 	public int shooter;
 
-	public int speedx;
-	public int speedy;
+	public double speedx;
+	public double speedy;
 
 	/**
 	 * Constructor, establishes the bullet's properties.
@@ -41,9 +43,10 @@ public class Bullet extends Entity {
 		setSprite();
 	}
 
-	public Bullet(final int positionX, final int positionY, int spdx, int spdy) {
+	public Bullet(final int positionX, final int positionY, double spdx, double spdy) {
 		super(positionX, positionY, 3 * 2, 5 * 3, Color.RED);
-
+		this.accuposX=positionX;
+		this.accuposY=positionY;
 		this.speedx = spdx;
 		this.speedy = spdy;
 		setSprite();
@@ -57,6 +60,13 @@ public class Bullet extends Entity {
 			this.spriteType = SpriteType.Bullet;
 		else
 			this.spriteType = SpriteType.EnemyBullet;
+	}
+
+	public void moverel(double vx, double vy) {
+		this.accuposX += vx;
+		this.accuposY += vy;
+		this.positionX = (int) accuposX;
+		this.positionY = (int) accuposY;
 	}
 
 	/**
@@ -84,6 +94,6 @@ public class Bullet extends Entity {
 	 * @return Speed of the bullet.
 	 */
 	public final int getSpeed() {
-		return speedy;
+		return (int) speedy;
 	}
 }

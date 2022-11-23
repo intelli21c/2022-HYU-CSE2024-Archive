@@ -1111,24 +1111,25 @@ public final class DrawManager {
 				"<BGM 2>\n: GOOD MUSIC\n>>> 100 COIN");
 		String bgminfo_3 = new String(
 				"<BGM 3>\n: AWESOME MUSIC\n>>> 1000 COIN");
-
-		if (selecteditem().itemid == 1000)
-			drawmultiline(screen, shipinfo_1, 45, 390, 3);
-		else if (selecteditem().itemid == 1001)
-			drawmultiline(screen, shipinfo_2, 45, 390, 3);
-		else if (selecteditem().itemid == 1002)
-			drawmultiline(screen, shipinfo_3, 45, 390, 3);
-		else if (selecteditem().itemid == 2000)
-			drawmultiline(screen, bgminfo_1, 45, 390, 3);
-		else if (selecteditem().itemid == 2001)
-			drawmultiline(screen, bgminfo_2, 45, 390, 3);
-		else if (selecteditem().itemid == 2002)
-			drawmultiline(screen, bgminfo_3, 45, 390, 3);/**
-															 * for (int i = 0; i < Inventory.inventory.size(); i++) {
-															 * backBufferGraphics.drawString(Item.itemregistry.get(i).name,
-															 * x, y);
-															 * }
-															 */
+		/*
+		 * if (selecteditem().itemid == 1000)
+		 * drawmultiline(screen, shipinfo_1, 45, 390, 3);
+		 * else if (selecteditem().itemid == 1001)
+		 * drawmultiline(screen, shipinfo_2, 45, 390, 3);
+		 * else if (selecteditem().itemid == 1002)
+		 * drawmultiline(screen, shipinfo_3, 45, 390, 3);
+		 * else if (selecteditem().itemid == 2000)
+		 * drawmultiline(screen, bgminfo_1, 45, 390, 3);
+		 * else if (selecteditem().itemid == 2001)
+		 * drawmultiline(screen, bgminfo_2, 45, 390, 3);
+		 * else if (selecteditem().itemid == 2002)
+		 * drawmultiline(screen, bgminfo_3, 45, 390, 3);
+		 * /**
+		 * for (int i = 0; i < Inventory.inventory.size(); i++) {
+		 * backBufferGraphics.drawString(Item.itemregistry.get(i).name,
+		 * x, y);
+		 * }
+		 */
 
 	}
 
@@ -1223,6 +1224,7 @@ public final class DrawManager {
 		return x;
 	}
 
+	@SuppressWarnings("unused")
 	private void drawmultiline(Screen scr, String input, int x, int y, int maxlines) {
 		int offset = 0;
 		int c = 1;

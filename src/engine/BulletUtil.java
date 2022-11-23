@@ -2,9 +2,6 @@ package engine;
 
 import java.util.ArrayList;
 import entity.Bullet;
-import java.math.*;
-import java.time.OffsetDateTime;
-import java.lang.Math.*;
 
 public class BulletUtil {
     public static BulletUtil BUTIL;
@@ -99,15 +96,16 @@ public class BulletUtil {
         return b;
     }
 
-    public static ArrayList<Bullet> circularadial(int positionX, int positionY, int radius, int count) {
+    public static ArrayList<Bullet> circularadial(int positionX, int positionY, int radius, int count, double ang,
+            double v) {
         ArrayList<Bullet> b = new ArrayList<Bullet>();
-        double theta = 0;
+        double theta = ang;
         double intv = (2 * Math.PI) / count;
         for (int i = 0; i < count; i++) {
             int posx = positionX + (int) (radius * Math.cos(theta));
             int posy = positionY + (int) (radius * Math.sin(theta));
-            int velx = (int) (5 * Math.cos(theta));
-            int vely = (int) (5 * Math.sin(theta));
+            double velx = (v * Math.cos(theta));
+            double vely = (v * Math.sin(theta));
             Bullet a = new Bullet(posx, posy, velx, vely);
             b.add(a);
             theta += intv;
@@ -121,7 +119,7 @@ public class BulletUtil {
         double l = Math.sqrt(Math.pow(velx, 2) + Math.pow(vely, 2)) / speed;
         velx = velx / l;
         vely = vely / l;
-        Bullet b = new Bullet(PositionX, positionY, (int) velx, (int) vely);
+        Bullet b = new Bullet(PositionX, positionY, velx, vely);
         return b;
     }
 }

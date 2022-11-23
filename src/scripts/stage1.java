@@ -94,7 +94,7 @@ public class stage1 extends Script {
         if (e.isDestroyed() == false) {
             if (c.checkFinished()) {
                 // Core.getLogger().info("fired");
-                context.bullets.addAll(BulletUtil.circularadial(600, 100, 70, 100));
+                context.bullets.addAll(BulletUtil.circularadial(600, 100, 200, 100, 0, 5));
                 c.reset();
             }
             return 0;
@@ -116,13 +116,13 @@ public class stage1 extends Script {
             if (c.checkFinished()) {
                 if (f.checkFinished() && fctr < 5) {
                     context.bullets.addAll(BulletUtil.circularadial(e3.getPositionX(),
-                            e3.getPositionY(), 70, 70));
+                            e3.getPositionY(), 150, 30, (40*3.14/ 180) * fctr, 5));
                     fctr++;
                     f.reset();
                 }
                 if (fctr == 5) {
                     context.bullets.addAll(BulletUtil.circularadial(e3.getPositionX(),
-                            e3.getPositionY(), 70, 70));
+                            e3.getPositionY(), 150, 30, (40*3.14/ 180) * fctr, 5));
                     fctr = 0;
                     f.reset();
                     c.reset();

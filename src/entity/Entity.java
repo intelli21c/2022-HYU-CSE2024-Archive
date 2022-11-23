@@ -82,6 +82,24 @@ public class Entity {
 	}
 
 	/**
+	 * Getter for the Centre X axis position of the entity.
+	 * 
+	 * @return Centre position of the entity in the X axis.
+	 */
+	public final int getCPositionX() {
+		return this.positionX + this.width / 2;
+	}
+
+	/**
+	 * Getter for the Centre Y axis position of the entity.
+	 * 
+	 * @return Centre position of the entity in the Y axis.
+	 */
+	public final int getCPositionY() {
+		return this.positionY + this.height / 2;
+	}
+
+	/**
 	 * Setter for the X axis position of the entity.
 	 * 
 	 * @param positionX
@@ -116,9 +134,9 @@ public class Entity {
 	 * check out of bound
 	 * 
 	 * @param boundx
-	 *                  New position of the entity in the Y axis.
+	 *               New position of the entity in the Y axis.
 	 * @param boundy
-	 *                  New position of the entity in the Y axis.
+	 *               New position of the entity in the Y axis.
 	 * 
 	 */
 	public final Boolean checkoob(int boundx, int boundy) {
@@ -154,10 +172,5 @@ public class Entity {
 	 */
 	public final int getHeight() {
 		return this.height;
-	}
-
-	public final void changeColor() {
-		if (this.color == Color.WHITE)
-			setColor(Color.BLACK);
 	}
 }
