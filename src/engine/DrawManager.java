@@ -226,6 +226,15 @@ public final class DrawManager {
 			imagemap.put("item_movespeed", fileManager.loadImage("movspeed.png"));
 			imagemap.put("background1", fileManager.loadImage("background1.png"));
 			imagemap.put("background2", fileManager.loadImage("background2.png"));
+			imagemap.put("BlueStar", fileManager.loadImage("BlueStar.png"));
+			imagemap.put("GreenHeart", fileManager.loadImage("GreenHeart.png"));
+			imagemap.put("RedLunar", fileManager.loadImage("RedLunar.png"));
+			imagemap.put("PinkDoll",fileManager.loadImage("PinkDoll.png"));
+			imagemap.put("playerBullet",fileManager.loadImage("playerBullet.png"));
+			imagemap.put("enemyBullet",fileManager.loadImage("enemyBullet.png"));
+			imagemap.put("bombIcon",fileManager.loadImage("bombIcon.png"));
+			imagemap.put("powerItem",fileManager.loadImage("powerItem.png"));
+			imagemap.put("bombItem",fileManager.loadImage("bombItem.png"));
 
 		} catch (IOException e) {
 			logger.warning("Loading failed.");
