@@ -163,7 +163,17 @@ public class GameScreen extends Screen {
 
 		this.context = new GameContext();
 
-		this.stage = new stage1();
+		switch (this.level) {
+			case 1:
+				this.stage = new stage2();
+				break;
+			case 2:
+				this.stage = new stage2();
+				break;
+			default:
+				this.stage = new stage1();
+				break;
+		}
 		stage.prep(null);
 		this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
 		context.player = ship;

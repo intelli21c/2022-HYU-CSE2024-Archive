@@ -154,7 +154,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, 10, 0, 0, Coin.balance);
+			gameState = new GameState(1, 0, 20, 0, 0, Coin.balance);
 
 			switch (returnCode) {
 
@@ -178,7 +178,7 @@ public final class Core {
 				case 2:
 					// Game & score
 					ArrayList<Integer> pass_score = new ArrayList<Integer>();
-					pass_score.add(1000);
+					pass_score.add(500);
 					pass_score.add(2000);
 					pass_score.add(3000);
 					pass_score.add(4000);
@@ -210,7 +210,8 @@ public final class Core {
 
 					} while (gameState.getLivesRemaining() > 0
 							&& gameState.getLevel() % NUM_LEVELS != 0
-							&& ((GameScreen)currentScreen).accumulated_score >= pass_score.get(((GameScreen)currentScreen).level));
+							&& ((GameScreen) currentScreen).accumulated_score >= pass_score
+									.get(((GameScreen) currentScreen).level-1));
 
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "
