@@ -60,7 +60,7 @@ public class GameScreen extends Screen {
 	/**
 	 * Current difficulty level number.
 	 */
-	private int level;
+	public int level;
 	/**
 	 * Player's ship.
 	 */
@@ -113,6 +113,8 @@ public class GameScreen extends Screen {
 	/**
 	 * Set of all items dropped by on screen enemyships.
 	 */
+
+	public int accumulated_score;
 
 	private Set<entity.Item> items;
 
@@ -188,6 +190,7 @@ public class GameScreen extends Screen {
 		// after program cleanup
 		this.score += LIFE_SCORE * (this.lives - 1);
 		this.logger.info("Screen cleared with a score of " + this.score);
+		this.accumulated_score += this.score;
 
 		return this.returnCode;
 	}
@@ -429,6 +432,7 @@ public class GameScreen extends Screen {
 				// TODO this is temp!!
 				for (EnemyShip e : context.enemys) {
 					if (!e.isDestroyed() && checkCollision(bullet, e)) {
+						score += e.getPointValue();
 						e.destroy();
 					}
 				}
