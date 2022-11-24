@@ -163,13 +163,19 @@ public class GameScreen extends Screen {
 
 		this.context = new GameContext();
 
-		this.stage = new stage1();
-		stage.prep(null);
-		switch (Inventory.getcurrentship()) {
-			case 1000 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
-			case 1001 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.RED);
-			case 1002 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.BLUE);
+		switch (this.level) {
+			case 1:
+				this.stage = new stage2();
+				break;
+			case 2:
+				this.stage = new stage2();
+				break;
+			default:
+				this.stage = new stage1();
+				break;
 		}
+		stage.prep(null);
+		this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
 		context.player = ship;
 		// Appears each 10-30 seconds.
 		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
@@ -413,6 +419,13 @@ public class GameScreen extends Screen {
 	 */
 	private void manageCollisions() {
 		Set<Bullet> recyclable = new HashSet<Bullet>();
+		for (EnemyShip e : context.enemys) {
+			if (checkCollision(e, this.ship))
+				if (!this.ship.isDestroyed()) {
+					this.ship.destroy();
+					this.lives--;
+				}
+		}
 		for (Bullet bullet : this.bullets)
 			if (bullet.getSpeed() > 0) {
 				if (checkCollision(bullet, this.ship)) {

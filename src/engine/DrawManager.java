@@ -20,6 +20,7 @@ import screen.ShopScreen.shopstates;
 import entity.Entity;
 import entity.Ship;
 
+import static engine.Core.pass_score;
 import static screen.ShopScreen.selecteditem;
 
 /**

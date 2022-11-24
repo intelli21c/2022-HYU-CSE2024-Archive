@@ -179,11 +179,11 @@ public final class Core {
 					// Game & score
 					ArrayList<Integer> pass_score = new ArrayList<Integer>();
 					pass_score.add(200);
-					pass_score.add(200);
-					pass_score.add(200);
-					pass_score.add(200);
-					pass_score.add(200);
-					pass_score.add(200);
+					pass_score.add(400);
+					pass_score.add(600);
+					pass_score.add(800);
+					pass_score.add(1000);
+					pass_score.add(1200);
 
 					do {
 						new Sound().backroundmusic();
@@ -210,7 +210,8 @@ public final class Core {
 
 					} while (gameState.getLivesRemaining() > 0
 							&& gameState.getLevel() % NUM_LEVELS != 0
-							&& ((GameScreen)currentScreen).accumulated_score >= pass_score.get(((GameScreen)currentScreen).level));
+							&& ((GameScreen) currentScreen).accumulated_score >= pass_score
+									.get(((GameScreen) currentScreen).level-1));
 
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "
