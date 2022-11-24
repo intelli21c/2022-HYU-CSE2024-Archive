@@ -267,7 +267,7 @@ public final class DrawManager {
 			drawimg("background1", 0, position1, width, height * 3);
 			drawimg("background2", 0, position1 + height, width, height * 3);
 			position1 -= 5;
-		} else if (position1 <= - height && position2 > -height) {
+		} else if (position1 <= -height && position2 > -height) {
 			drawimg("background2", 0, position2, width, height * 3);
 			drawimg("background1", 0, position2 + height, width, height * 3);
 			position2 -= 5;
@@ -418,7 +418,8 @@ public final class DrawManager {
 			scoreString = "score : ";
 			scoreString += String.format("%04d", score);
 		}
-
+		if (score < pass_score.get(((GameScreen) screen).level))
+			backBufferGraphics.setColor(Color.RED);
 		backBufferGraphics.drawString(scoreString, screen.getWidth() - 167, 25);
 	}
 

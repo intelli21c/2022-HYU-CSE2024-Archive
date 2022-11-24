@@ -94,6 +94,9 @@ public final class Core {
 	private static final Item Test5 = new Item(2001, "Store BGM 1", 100);
 	private static final Item Test6 = new Item(2002, "Store BGM 2", 1000);
 
+
+	public static ArrayList<Integer> pass_score;
+
 	/**
 	 * Test implementation.
 	 *
@@ -177,7 +180,7 @@ public final class Core {
 
 				case 2:
 					// Game & score
-					ArrayList<Integer> pass_score = new ArrayList<Integer>();
+					pass_score = new ArrayList<Integer>();
 					pass_score.add(200);
 					pass_score.add(400);
 					pass_score.add(600);
