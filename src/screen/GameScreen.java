@@ -60,7 +60,7 @@ public class GameScreen extends Screen {
 	/**
 	 * Current difficulty level number.
 	 */
-	private int level;
+	public int level;
 	/**
 	 * Player's ship.
 	 */
@@ -114,6 +114,8 @@ public class GameScreen extends Screen {
 	 * Set of all items dropped by on screen enemyships.
 	 */
 
+	public int accumulated_score;
+
 	private Set<entity.Item> items;
 
 	private float originSpeed;
@@ -161,13 +163,19 @@ public class GameScreen extends Screen {
 
 		this.context = new GameContext();
 
-		this.stage = new stage1();
-		stage.prep(null);
-		switch (Inventory.getcurrentship()) {
-			case 1000 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
-			case 1001 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.RED);
-			case 1002 -> this.ship = new Ship(this.width / 2, this.height - 30, Color.BLUE);
+		switch (this.level) {
+			case 1:
+				this.stage = new stage2();
+				break;
+			case 2:
+				this.stage = new stage2();
+				break;
+			default:
+				this.stage = new stage1();
+				break;
 		}
+		stage.prep(null);
+		this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
 		context.player = ship;
 		// Appears each 10-30 seconds.
 		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
@@ -190,8 +198,9 @@ public class GameScreen extends Screen {
 		super.run();
 
 		// after program cleanup
-		this.score += LIFE_SCORE * (this.lives - 1);
+		// this.score += LIFE_SCORE * (this.lives - 1);
 		this.logger.info("Screen cleared with a score of " + this.score);
+		this.accumulated_score += this.score;
 
 		return this.returnCode;
 	}
@@ -309,7 +318,7 @@ public class GameScreen extends Screen {
 	 * Draws the elements associated with the screen.
 	 */
 	private void draw() {
-		drawManager.initDrawing(this);
+		drawManager.backgroundDrawing(this);
 		// drawManager.drawEntity(this.ship, this.ship.getPositionX(),
 		// this.ship.getPositionY());
 		// TODO this is temporary!!!
@@ -410,6 +419,13 @@ public class GameScreen extends Screen {
 	 */
 	private void manageCollisions() {
 		Set<Bullet> recyclable = new HashSet<Bullet>();
+		for (EnemyShip e : context.enemys) {
+			if (checkCollision(e, this.ship))
+				if (!this.ship.isDestroyed()) {
+					this.ship.destroy();
+					this.lives--;
+				}
+		}
 		for (Bullet bullet : this.bullets)
 			if (bullet.getSpeed() > 0) {
 				if (checkCollision(bullet, this.ship)) {
@@ -426,6 +442,7 @@ public class GameScreen extends Screen {
 				// TODO this is temp!!
 				for (EnemyShip e : context.enemys) {
 					if (!e.isDestroyed() && checkCollision(bullet, e)) {
+						score += e.getPointValue();
 						e.destroy();
 					}
 				}

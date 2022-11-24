@@ -94,6 +94,9 @@ public final class Core {
 	private static final Item Test5 = new Item(2001, "Store BGM 1", 100);
 	private static final Item Test6 = new Item(2002, "Store BGM 2", 1000);
 
+
+	public static ArrayList<Integer> pass_score;
+
 	/**
 	 * Test implementation.
 	 *
@@ -154,7 +157,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, 100, 0, 0, Coin.balance);
+			gameState = new GameState(1, 0, 50, 0, 0, Coin.balance);
 
 			switch (returnCode) {
 
@@ -177,6 +180,13 @@ public final class Core {
 
 				case 2:
 					// Game & score
+					pass_score = new ArrayList<Integer>();
+					pass_score.add(200);
+					pass_score.add(400);
+					pass_score.add(600);
+					pass_score.add(800);
+					pass_score.add(1000);
+					pass_score.add(1200);
 
 					do {
 						new Sound().backroundmusic();
@@ -202,7 +212,9 @@ public final class Core {
 								gameState.getCoin());
 
 					} while (gameState.getLivesRemaining() > 0
-							&& gameState.getLevel() % NUM_LEVELS != 0);
+							&& gameState.getLevel() % NUM_LEVELS != 0
+							&& ((GameScreen) currentScreen).accumulated_score >= pass_score
+									.get(((GameScreen) currentScreen).level-1));
 
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "
