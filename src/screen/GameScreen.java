@@ -309,7 +309,7 @@ public class GameScreen extends Screen {
 	 * Draws the elements associated with the screen.
 	 */
 	private void draw() {
-		drawManager.initDrawing(this);
+		drawManager.backgroundDrawing(this);
 		// drawManager.drawEntity(this.ship, this.ship.getPositionX(),
 		// this.ship.getPositionY());
 		// TODO this is temporary!!!

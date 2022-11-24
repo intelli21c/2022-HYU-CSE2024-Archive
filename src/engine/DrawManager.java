@@ -92,6 +92,8 @@ public final class DrawManager {
 	BufferedImage bgm_2;
 	BufferedImage bgm_3;
 	ImageObserver observer;
+	int position1 = 0;
+	int position2 = 0;
 
 	/**
 	 * Sprite types mapped to their images.
@@ -221,6 +223,8 @@ public final class DrawManager {
 			imagemap.put("item_heart", fileManager.loadImage("heart.png"));
 			imagemap.put("item_bulletspeed", fileManager.loadImage("bulspeed.png"));
 			imagemap.put("item_movespeed", fileManager.loadImage("movspeed.png"));
+			imagemap.put("background1", fileManager.loadImage("background1.png"));
+			imagemap.put("background2", fileManager.loadImage("background2.png"));
 
 		} catch (IOException e) {
 			logger.warning("Loading failed.");
@@ -251,6 +255,25 @@ public final class DrawManager {
 		fontRegularMetrics = graphics.getFontMetrics(fontRegular);
 		fontRegular2Metrics = graphics.getFontMetrics(fontRegular2);
 		fontBigMetrics = graphics.getFontMetrics(fontBig);
+	}
+
+	// scrolling background
+	public void backgroundDrawing(Screen screen) {
+		int width = screen.getWidth();
+		int height = screen.getHeight();
+		backBufferGraphics.clearRect(0, 0, width, height);
+		if (position1 > -height) {
+			drawimg("background1", 0, position1, width, height * 3);
+			drawimg("background2", 0, position1 + height, width, height * 3);
+			position1 -= 5;
+		} else if (position1 <= - height && position2 > -height) {
+			drawimg("background2", 0, position2, width, height * 3);
+			drawimg("background1", 0, position2 + height, width, height * 3);
+			position2 -= 5;
+		} else {
+			position1 = 0;
+			position2 = 0;
+		}
 	}
 
 	/**
