@@ -15,11 +15,11 @@ import engine.DrawManager.SpriteType;
 public class EnemyShip extends Entity {
 
 	/** Point value of a type A enemy. */
-	private static final int A_TYPE_POINTS = 10;
+	private static final int A_TYPE_POINTS = 50;
 	/** Point value of a type B enemy. */
-	private static final int B_TYPE_POINTS = 20;
+	private static final int B_TYPE_POINTS = 50;
 	/** Point value of a type C enemy. */
-	private static final int C_TYPE_POINTS = 30;
+	private static final int C_TYPE_POINTS = 100;
 	/** Point value of a bonus enemy. */
 	private static final int BONUS_TYPE_POINTS = 100;
 
@@ -61,6 +61,9 @@ public class EnemyShip extends Entity {
 				break;
 			case EnemyShipC1:
 			case EnemyShipC2:
+				this.pointValue = C_TYPE_POINTS;
+				break;
+			case EnemyShipSpecial:
 				this.pointValue = C_TYPE_POINTS;
 				break;
 			default:

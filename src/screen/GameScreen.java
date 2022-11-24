@@ -192,7 +192,7 @@ public class GameScreen extends Screen {
 		super.run();
 
 		// after program cleanup
-		this.score += LIFE_SCORE * (this.lives - 1);
+		// this.score += LIFE_SCORE * (this.lives - 1);
 		this.logger.info("Screen cleared with a score of " + this.score);
 		this.accumulated_score += this.score;
 

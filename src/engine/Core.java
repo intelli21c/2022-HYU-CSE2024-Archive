@@ -154,7 +154,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, 10, 0, 0, Coin.balance);
+			gameState = new GameState(1, 0, 50, 0, 0, Coin.balance);
 
 			switch (returnCode) {
 
@@ -178,12 +178,12 @@ public final class Core {
 				case 2:
 					// Game & score
 					ArrayList<Integer> pass_score = new ArrayList<Integer>();
-					pass_score.add(1000);
-					pass_score.add(2000);
-					pass_score.add(3000);
-					pass_score.add(4000);
-					pass_score.add(5000);
-					pass_score.add(6000);
+					pass_score.add(200);
+					pass_score.add(200);
+					pass_score.add(200);
+					pass_score.add(200);
+					pass_score.add(200);
+					pass_score.add(200);
 
 					do {
 						new Sound().backroundmusic();
