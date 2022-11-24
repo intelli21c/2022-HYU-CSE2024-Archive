@@ -429,6 +429,7 @@ public class GameScreen extends Screen {
 				// TODO this is temp!!
 				for (EnemyShip e : context.enemys) {
 					if (!e.isDestroyed() && checkCollision(bullet, e)) {
+						score += e.getPointValue();
 						e.destroy();
 					}
 				}

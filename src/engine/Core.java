@@ -154,7 +154,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, 100, 0, 0, Coin.balance);
+			gameState = new GameState(1, 0, 10, 0, 0, Coin.balance);
 
 			switch (returnCode) {
 
