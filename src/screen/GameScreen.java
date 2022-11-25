@@ -8,6 +8,7 @@ import java.util.Set;
 
 import engine.*;
 import entity.*;
+import entity.Item;
 import scripts.*;
 
 /**
@@ -29,34 +30,9 @@ public class GameScreen extends Screen {
 	 */
 	private static final int LIFE_SCORE = 100;
 	/**
-	 * Movement speed of the item.
-	 */
-	private static final int ITEM_SPEED = 3;
-	/**
-	 * Minimum time between bonus ship's appearances.
-	 */
-	private static final int BONUS_SHIP_INTERVAL = 20000;
-	/**
-	 * Maximum variance in the time between bonus ship's appearances.
-	 */
-	private static final int BONUS_SHIP_VARIANCE = 10000;
-	/**
-	 * Time until bonus ship explosion disappears.
-	 */
-	private static final int BONUS_SHIP_EXPLOSION = 500;
-	/**
-	 * Time from finishing the level to screen change.
-	 */
-	private static final int SCREEN_CHANGE_INTERVAL = 1500;
-	/**
 	 * Height of the interface separation line.
 	 */
 	private static final int SEPARATION_LINE_HEIGHT = 40;
-
-	/**
-	 * Current game difficulty settings.
-	 */
-	private GameSettings gameSettings;
 	/**
 	 * Current difficulty level number.
 	 */
@@ -65,22 +41,6 @@ public class GameScreen extends Screen {
 	 * Player's ship.
 	 */
 	private Ship ship;
-	/**
-	 * Bonus enemy ship that appears sometimes.
-	 */
-	private EnemyShip enemyShipSpecial;
-	/**
-	 * Minimum time between bonus ship appearances.
-	 */
-	private Cooldown enemyShipSpecialCooldown;
-	/**
-	 * Time until bonus ship explosion disappears.
-	 */
-	private Cooldown enemyShipSpecialExplosionCooldown;
-	/**
-	 * Time from finishing the level to screen change.
-	 */
-	private Cooldown screenFinishedCooldown;
 	/**
 	 * Set of all bullets fired by on screen ships.
 	 */
@@ -116,9 +76,13 @@ public class GameScreen extends Screen {
 
 	public int accumulated_score;
 
-	private Set<entity.Item> items;
+	private ArrayList<entity.Item> items;
 
 	private float originSpeed;
+
+	private final int itemcolborder = 500;
+
+	private boolean bordercrossed = false;
 
 	/**
 	 * Currently loaded script
@@ -178,9 +142,8 @@ public class GameScreen extends Screen {
 		this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
 		context.player = ship;
 		// Appears each 10-30 seconds.
-		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
 		this.bullets = new HashSet<Bullet>();
-		this.items = new HashSet<entity.Item>();
+		this.items = new ArrayList<entity.Item>();
 
 		// Special input delay / countdown.
 		this.gameStartTime = System.currentTimeMillis();
@@ -288,7 +251,28 @@ public class GameScreen extends Screen {
 		this.ship.update();
 
 		manageCollisions();
-
+		// TODO functionise
+		if (ship.getPositionY() < itemcolborder && !bordercrossed) {
+			bordercrossed = true;
+			for (Item itm : this.items) {
+				itm.hometgt=ship;
+			}
+		}
+		if (ship.getPositionY() > itemcolborder && bordercrossed) {
+			bordercrossed = false;
+		}
+		ArrayList<Item> delitm = new ArrayList<Item>();
+		for (entity.Item itm : this.items) {
+			itm.update();
+			if (itm.checkoob(width, height))
+				delitm.add(itm);
+			if (checkCollision(ship, itm)) {
+				itm.use();
+				delitm.add(itm);
+			}
+		}
+		items.removeAll(delitm);
+		delitm = null;
 		cleanBullets();
 
 		draw();
@@ -427,24 +411,14 @@ public class GameScreen extends Screen {
 				}
 		}
 		for (Bullet bullet : this.bullets)
-			if (bullet.getSpeed() > 0) {
-				if (checkCollision(bullet, this.ship)) {
-					recyclable.add(bullet);
-					if (!this.ship.isDestroyed()) {
-						this.ship.destroy();
-						this.lives--;
-						this.logger.info("Hit on player ship, " + this.lives
-								+ " lives remaining.");
-					}
-				}
+			// TODO this is temp!!
+			for (EnemyShip e : context.enemys) {
+				if (!e.isDestroyed() && checkCollision(bullet, e)) {
+					score += e.getPointValue();
+					e.destroy();
+					if (e.droptype != null)
+						items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
 
-			} else {
-				// TODO this is temp!!
-				for (EnemyShip e : context.enemys) {
-					if (!e.isDestroyed() && checkCollision(bullet, e)) {
-						score += e.getPointValue();
-						e.destroy();
-					}
 				}
 				/*
 				 * for (EnemyShip enemyShip : this.enemyShipFormation)

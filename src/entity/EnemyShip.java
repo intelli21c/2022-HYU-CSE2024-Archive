@@ -5,6 +5,7 @@ import java.awt.Color;
 import engine.Cooldown;
 import engine.Core;
 import engine.DrawManager.SpriteType;
+import entity.Item.itemtype;
 
 /**
  * Implements a enemy ship, to be destroyed by the player.
@@ -29,6 +30,7 @@ public class EnemyShip extends Entity {
 	private boolean isDestroyed;
 	/** Values of the ship, in points, when destroyed. */
 	private int pointValue;
+	public itemtype droptype;
 
 	/** lives of the enemyship. */
 	public int enemyLives;
