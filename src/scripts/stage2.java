@@ -8,6 +8,7 @@ import engine.Core;
 import engine.Script;
 import engine.DrawManager.SpriteType;
 import entity.EnemyShip;
+import entity.Item.itemtype;
 
 public class stage2 extends Script {
     /**
@@ -86,6 +87,9 @@ public class stage2 extends Script {
         p1six.add(new EnemyShip(1000, 200, SpriteType.EnemyShipA1));
         p1six.add(new EnemyShip(1100, 300, SpriteType.EnemyShipA1));
         context.enemys.addAll(p1six);
+        for (EnemyShip e : p1six) {
+            e.droptype=itemtype.power;
+        }
         c = Core.getCooldown(1000);
         c.reset();
         d = Core.getCooldown(10000);
