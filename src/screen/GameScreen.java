@@ -52,6 +52,8 @@ public class GameScreen extends Screen {
 	private int coin;
 	/** Current Number of bomb. */
 	private int bombNumber;
+	/** Current power */
+	public int power;
 	/** Player lives left. */
 	public int lives;
 	/**
@@ -120,6 +122,7 @@ public class GameScreen extends Screen {
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
 		this.bombNumber = gameState.getBombNumber();
+		this.power = gameState.getPower();
 	}
 
 	/**
@@ -237,8 +240,9 @@ public class GameScreen extends Screen {
 		}
 
 		if (openfire)
-			if (this.ship.shoot(this.bullets))
+			if (this.ship.shoot(this.bullets)) {
 				this.bulletsShot++;
+			}
 
 		if (moveLeft)
 			ship.animctr = 2;
@@ -266,9 +270,11 @@ public class GameScreen extends Screen {
 			}
 		}
 
+
 		this.ship.update();
 
 		manageCollisions();
+		manageCollisionsItem();
 		// TODO functionise
 		if (ship.getPositionY() < itemcolborder && !bordercrossed) {
 			bordercrossed = true;
@@ -434,7 +440,6 @@ public class GameScreen extends Screen {
 				if (!e.isDestroyed() && checkCollision(bullet, e)) {
 					score += e.getPointValue();
 					e.destroy();
-
 					if (e.droptype != null)
 						items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
 
@@ -488,13 +493,35 @@ public class GameScreen extends Screen {
 	 */
 	public final GameState getGameState() {
 		return new GameState(this.level, this.score, this.lives,
-				this.bulletsShot, this.shipsDestroyed, this.coin, this.bombNumber);
+				this.bulletsShot, this.shipsDestroyed, this.coin, this.bombNumber, this.power);
 	}
 
 	/**
 	 * Manages collisions between items and ships.
 	 */
-
+	private void manageCollisionsItem() {
+		for (Item item : this.items) {
+			if (!this.ship.isDestroyed() && checkCollision(item, this.ship)) {
+				switch (item.getItemType()) {
+					case power ->  {
+						if (ship.BULLET_POWER == 128)
+							score += 30;
+						else {
+							ship.BULLET_POWER += 10;
+						}
+					}
+					case bomb -> {
+						if (bombNumber == 5) {
+							score += 70;
+						}
+						else
+							bombNumber++;
+					}
+					case score -> score += item.getScore();
+				}
+			}
+		}
+	}
 	/*
 	 * private void manageCollisionsItem() {
 	 * Set<entity.Item> recyclable = new HashSet<entity.Item>(); // ItemPool

@@ -350,8 +350,8 @@ public final class DrawManager {
 	public void drawBullet(final Entity entity, final int positionX,
 						   final int positionY) {
 		switch (entity.getSpriteType()) {
-			case Bullet -> drawimg("playerBullet", positionX, positionY, 12, 14);
-			case EnemyBullet -> drawimg("enemyBullet", positionX, positionY, 16, 16);
+			case Bullet -> drawimg("playerBullet", positionX, positionY, 20, 20);
+			case EnemyBullet -> drawimg("enemyBullet", positionX, positionY, 20, 20);
 		}
 	}
 
@@ -368,9 +368,9 @@ public final class DrawManager {
 	public void drawItem(final Entity entity, final int positionX,
 						 final int positionY) {
 		switch (Item.type) {
-			case power -> drawimg("powerItem", positionX, positionY, 12, 12);
-			case bomb -> drawimg("bombItem", positionX, positionY, 12, 12);
-			case score -> drawimg("scoreItem", positionX, positionY, 12, 12);
+			case power -> drawimg("powerItem", positionX, positionY, 20, 20);
+			case bomb -> drawimg("bombItem", positionX, positionY, 20, 20);
+			case score -> drawimg("scoreItem", positionX, positionY, 20, 20);
 		}
 	}
 

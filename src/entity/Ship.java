@@ -4,11 +4,8 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.Set;
 
-import engine.Cooldown;
-import engine.Core;
-import engine.Inventory;
+import engine.*;
 import engine.DrawManager.SpriteType;
-import engine.Sound;
 
 /**
  * Implements a ship, to be controlled by the player.
@@ -24,13 +21,14 @@ public class Ship extends Entity {
 	private int BOMB_INTERVAL = 1000;
 	/** Speed of the bullets shot by the ship. */
 	private int BULLET_SPEED = -15;
+	public int BULLET_POWER = 0;
 
 	/** Movement of the ship for each unit of time. */
 	private float SPEED;
 	public int animctr = 1;
 
 	/** Minimum time between shots. */
-	private Cooldown shootingCooldown;
+	public Cooldown shootingCooldown;
 	/** Minimum time between shots. */
 	private Cooldown bombCooldown;
 	/** Time spent inactive between hits. */
@@ -101,13 +99,59 @@ public class Ship extends Entity {
 	 */
 	public final boolean shoot(final Set<Bullet> bullets) {
 		if (this.shootingCooldown.checkFinished()) {
-			new Sound().bulletsound();
-			this.shootingCooldown.reset();
-			bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
-			bullets.add(new Bullet(positionX + this.width / 2 - 7, positionY, 0, BULLET_SPEED));
-			bullets.add(new Bullet(positionX + this.width / 2 - 14, positionY, 0, BULLET_SPEED));
-			bullets.add(new Bullet(positionX + this.width / 2 + 7, positionY, 0, BULLET_SPEED));
-			bullets.add(new Bullet(positionX + this.width / 2 + 14, positionY, 0, BULLET_SPEED));
+			if (BULLET_POWER < 8) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+			}
+			else if (BULLET_POWER < 24) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
+			}
+			else if (BULLET_POWER < 48) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
+			}
+			else if (BULLET_POWER < 80) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
+			}
+			else if (BULLET_POWER == 128) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -3, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 3, BULLET_SPEED));
+			}
 			// bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY,
 			// BULLET_SPEED, 0));
 			return true;
