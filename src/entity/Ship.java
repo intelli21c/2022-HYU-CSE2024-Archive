@@ -20,6 +20,8 @@ public class Ship extends Entity {
 
 	/** Time between shots. */
 	private int SHOOTING_INTERVAL = 750;
+	/** Time between shots. */
+	private int BOBM_INTERVAL = 1000;
 	/** Speed of the bullets shot by the ship. */
 	private int BULLET_SPEED = -6;
 
@@ -29,6 +31,8 @@ public class Ship extends Entity {
 
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
+	/** Minimum time between shots. */
+	private Cooldown bombCooldown;
 	/** Time spent inactive between hits. */
 	private Cooldown destructionCooldown;
 	/** Movement of the ship for each unit of time. */
@@ -53,6 +57,7 @@ public class Ship extends Entity {
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.destructionCooldown = Core.getCooldown(destructCool);
 		this.SPEED = 10;
+		this.bombCooldown = Core.getCooldown(BOBM_INTERVAL);
 	}
 
 	/**
@@ -96,6 +101,15 @@ public class Ship extends Entity {
 			bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
 			// bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY,
 			// BULLET_SPEED, 0));
+			return true;
+		}
+		return false;
+	}
+
+	public final boolean bomb() {
+		if (this.bombCooldown.checkFinished()) {
+			new Sound().bombSound();
+			this.bombCooldown.reset();
 			return true;
 		}
 		return false;

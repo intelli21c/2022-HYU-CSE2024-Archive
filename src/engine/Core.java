@@ -157,7 +157,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, 50, 0, 0, Coin.balance);
+			gameState = new GameState(1, 0, 50, 0, 0, Coin.balance, 3);
 
 			switch (returnCode) {
 
@@ -209,7 +209,8 @@ public final class Core {
 								gameState.getLivesRemaining(),
 								gameState.getBulletsShot(),
 								gameState.getShipsDestroyed(),
-								gameState.getCoin());
+								gameState.getCoin(),
+								gameState.getBombNumber());
 
 					} while (gameState.getLivesRemaining() > 0
 							&& gameState.getLevel() % NUM_LEVELS != 0

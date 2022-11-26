@@ -90,6 +90,8 @@ public class GameScreen extends Screen {
 	private int score;
 	/** Current coin. */
 	private int coin;
+	/** Current Number of bomb. */
+	private int bombNumber;
 	/** Player lives left. */
 	public int lives;
 	/**
@@ -153,6 +155,7 @@ public class GameScreen extends Screen {
 			this.lives++;
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
+		this.bombNumber = gameState.getBombNumber();
 	}
 
 	/**
@@ -225,6 +228,7 @@ public class GameScreen extends Screen {
 		boolean moveDown = inputManager.isKeyDown(KeyEvent.VK_DOWN);
 		boolean moveSlow = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
 		boolean openfire = (inputManager.isKeyDown(KeyEvent.VK_SPACE) || inputManager.isKeyDown(KeyEvent.VK_Z));
+		boolean bomb = inputManager.isKeyDown(KeyEvent.VK_C);
 
 		boolean isRightBorder_ship = this.ship.getPositionX()
 				+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
@@ -253,6 +257,17 @@ public class GameScreen extends Screen {
 		if (!moveSlow) {
 			this.ship.setSPEED(originSpeed);
 
+		}
+		if (bomb) {
+			if (this.ship.bomb()) {
+				for (EnemyShip e : context.enemys) {
+					if (bombNumber > 0 && !e.isDestroyed()) {
+						e.destroy();
+						score += e.getPointValue();
+					}
+				}
+				bombNumber--;
+			}
 		}
 
 		if (openfire)
@@ -495,7 +510,7 @@ public class GameScreen extends Screen {
 	 */
 	public final GameState getGameState() {
 		return new GameState(this.level, this.score, this.lives,
-				this.bulletsShot, this.shipsDestroyed, this.coin);
+				this.bulletsShot, this.shipsDestroyed, this.coin, this.bombNumber);
 	}
 
 	/**

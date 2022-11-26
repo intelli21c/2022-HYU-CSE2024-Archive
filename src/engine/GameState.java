@@ -20,6 +20,8 @@ public class GameState {
 	private int shipsDestroyed;
 	/** Current coin. */
 	private int coin;
+	/** Current number of bomb. */
+	private int bombNumber;
 
 	/**
 	 * Constructor.
@@ -37,13 +39,14 @@ public class GameState {
 	 */
 	public GameState(final int level, final int score,
 			final int livesRemaining, final int bulletsShot,
-			final int shipsDestroyed, final int coin) {
+			final int shipsDestroyed, final int coin, final int bombNumber) {
 		this.level = level;
 		this.score = score;
 		this.livesRemaining = livesRemaining;
 		this.bulletsShot = bulletsShot;
 		this.shipsDestroyed = shipsDestroyed;
 		this.coin = coin;
+		this.bombNumber = bombNumber;
 	}
 
 	/**
@@ -85,5 +88,10 @@ public class GameState {
 	 * @return the coin
 	 */
 	public final int getCoin() { return coin;}
+
+	/**
+	 * @return the number of bomb
+	 */
+	public final int getBombNumber() { return bombNumber;}
 
 }
