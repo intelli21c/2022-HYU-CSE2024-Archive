@@ -19,11 +19,11 @@ import engine.Sound;
 public class Ship extends Entity {
 
 	/** Time between shots. */
-	private int SHOOTING_INTERVAL = 750;
+	private int SHOOTING_INTERVAL = 200;
 	/** Time between shots. */
-	private int BOBM_INTERVAL = 1000;
+	private int BOMB_INTERVAL = 1000;
 	/** Speed of the bullets shot by the ship. */
-	private int BULLET_SPEED = -6;
+	private int BULLET_SPEED = -15;
 
 	/** Movement of the ship for each unit of time. */
 	private float SPEED;
@@ -57,7 +57,7 @@ public class Ship extends Entity {
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.destructionCooldown = Core.getCooldown(destructCool);
 		this.SPEED = 10;
-		this.bombCooldown = Core.getCooldown(BOBM_INTERVAL);
+		this.bombCooldown = Core.getCooldown(BOMB_INTERVAL);
 	}
 
 	/**
@@ -80,12 +80,17 @@ public class Ship extends Entity {
 	 * Moves the ship speed units Up, or until the Up screen border is
 	 * reached.
 	 */
-	public final void moveUp() {this.positionY -= SPEED;}
+	public final void moveUp() {
+		this.positionY -= SPEED;
+	}
+
 	/**
 	 * Moves the ship speed units Down, or until the Down screen border is
 	 * reached.
 	 */
-	public final void moveDown() {this.positionY += SPEED;}
+	public final void moveDown() {
+		this.positionY += SPEED;
+	}
 
 	/**
 	 * Shoots a bullet upwards.
@@ -99,6 +104,10 @@ public class Ship extends Entity {
 			new Sound().bulletsound();
 			this.shootingCooldown.reset();
 			bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+			bullets.add(new Bullet(positionX + this.width / 2 - 7, positionY, 0, BULLET_SPEED));
+			bullets.add(new Bullet(positionX + this.width / 2 - 14, positionY, 0, BULLET_SPEED));
+			bullets.add(new Bullet(positionX + this.width / 2 + 7, positionY, 0, BULLET_SPEED));
+			bullets.add(new Bullet(positionX + this.width / 2 + 14, positionY, 0, BULLET_SPEED));
 			// bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY,
 			// BULLET_SPEED, 0));
 			return true;

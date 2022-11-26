@@ -82,7 +82,7 @@ public class GameScreen extends Screen {
 
 	private float originSpeed;
 
-	private final int itemcolborder = 500;
+	private final int itemcolborder = 300;
 
 	private boolean bordercrossed = false;
 
@@ -191,7 +191,8 @@ public class GameScreen extends Screen {
 		boolean moveDown = inputManager.isKeyDown(KeyEvent.VK_DOWN);
 		boolean moveSlow = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
 		boolean openfire = (inputManager.isKeyDown(KeyEvent.VK_SPACE) || inputManager.isKeyDown(KeyEvent.VK_Z));
-		boolean bomb = inputManager.isKeyDown(KeyEvent.VK_C);
+		//사실 키가 눌리는 순간(rising edge)만 필요함...
+		boolean bomb = (inputManager.isKeyDown(KeyEvent.VK_C) || inputManager.isKeyDown(KeyEvent.VK_X));
 
 		boolean isRightBorder_ship = this.ship.getPositionX()
 				+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
@@ -227,6 +228,8 @@ public class GameScreen extends Screen {
 					if (bombNumber > 0 && !e.isDestroyed()) {
 						e.destroy();
 						score += e.getPointValue();
+						if (e.droptype != null)
+							items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
 					}
 				}
 				bombNumber--;
@@ -270,7 +273,7 @@ public class GameScreen extends Screen {
 		if (ship.getPositionY() < itemcolborder && !bordercrossed) {
 			bordercrossed = true;
 			for (Item itm : this.items) {
-				itm.hometgt=ship;
+				itm.hometgt = ship;
 			}
 		}
 		if (ship.getPositionY() > itemcolborder && bordercrossed) {

@@ -1,13 +1,11 @@
 package engine;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Scanner;
 
 import entity.Ship;
 import screen.*;
@@ -16,8 +14,6 @@ import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import javax.sound.sampled.Clip;
-
-import engine.Inventory.InventoryEntry;
 
 /**
  * Implements core game logic.

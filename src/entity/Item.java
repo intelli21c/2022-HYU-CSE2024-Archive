@@ -58,7 +58,7 @@ public class Item extends Entity {
 	 */
 	public final void update() {
 		if (hometgt != null) {
-			this.speed = 12;
+			this.speed = 20;
 			int dx = (hometgt.getCPositionX() - positionX);
 			int dy = (hometgt.getCPositionY() - positionY);
 			double l = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
