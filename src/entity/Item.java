@@ -20,10 +20,10 @@ public class Item extends Entity {
 	public Entity hometgt;
 
 	public enum itemtype {
-		point, power
+		score, power, bomb
 	}
 
-	public itemtype tpye;
+	public static itemtype type;
 
 	/**
 	 * Constructor, establishes the item's properties.
@@ -38,7 +38,7 @@ public class Item extends Entity {
 	 */
 	public Item(final int positionX, final int positionY, final int speed, itemtype type) {
 		super(positionX, positionY, 3 * 2, 5 * 2, Color.WHITE);
-		this.tpye = type;
+		this.type = type;
 		this.speed = speed;
 		setSprite();
 	}
@@ -65,6 +65,10 @@ public class Item extends Entity {
 			this.moverel((int) (speed * dx / l), (int) (speed * dy / l));
 		} else
 			this.positionY += this.speed;
+	}
+
+	public final itemtype getItemType() {
+		return this.type;
 	}
 
 	/**

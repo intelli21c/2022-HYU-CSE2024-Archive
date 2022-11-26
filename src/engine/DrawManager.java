@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
+import entity.Item;
 import screen.*;
 import screen.Screen;
 import screen.ShopScreen.shopstates;
@@ -166,6 +167,7 @@ public final class DrawManager {
 		Item,
 		/** Current Ship Lives */
 		ShipLive;
+
 	};
 
 	/**
@@ -215,9 +217,9 @@ public final class DrawManager {
 			imagemap.put("shipr", fileManager.loadImage("shipred.png"));
 			imagemap.put("shipg", fileManager.loadImage("shipgreen.png"));
 			imagemap.put("shipb", fileManager.loadImage("shipblue.png"));
-			imagemap.put("tempf", fileManager.loadImage("ship0-0.png"));
-			imagemap.put("tempr", fileManager.loadImage("ship0-1.png"));
-			imagemap.put("templ", fileManager.loadImage("ship0-2.png"));
+			imagemap.put("tempf", fileManager.loadImage("Ship.png"));
+			imagemap.put("tempr", fileManager.loadImage("Ship3.png"));
+			imagemap.put("templ", fileManager.loadImage("Ship2.png"));
 			imagemap.put("bgm1", fileManager.loadImage("bgm_1.png"));
 			imagemap.put("bgm2", fileManager.loadImage("bgm_2.png"));
 			imagemap.put("bgm3", fileManager.loadImage("bgm_3.png"));
@@ -235,6 +237,16 @@ public final class DrawManager {
 			imagemap.put("bombIcon",fileManager.loadImage("bombIcon.png"));
 			imagemap.put("powerItem",fileManager.loadImage("powerItem.png"));
 			imagemap.put("bombItem",fileManager.loadImage("bombItem.png"));
+			imagemap.put("scoreItem",fileManager.loadImage("scoreItem.png"));
+			imagemap.put("Stage2Bossf", fileManager.loadImage("Stage2Boss.png"));
+			imagemap.put("Stage2Bossl", fileManager.loadImage("Stage2Boss2.png"));
+			imagemap.put("Stage2Bossr", fileManager.loadImage("Stage2Boss3.png"));
+			imagemap.put("Stage4Bossf", fileManager.loadImage("Stage4Boss.png"));
+			imagemap.put("Stage4Bossl", fileManager.loadImage("Stage4Boss2.png"));
+			imagemap.put("Stage4Bossr", fileManager.loadImage("Stage4Boss3.png"));
+			imagemap.put("LastBoss", fileManager.loadImage("LastBoss.png"));
+			imagemap.put("LastBoss2", fileManager.loadImage("LastBoss2.png"));
+
 
 		} catch (IOException e) {
 			logger.warning("Loading failed.");
@@ -333,6 +345,33 @@ public final class DrawManager {
 				if (image[i][j])
 					backBufferGraphics.drawRect(positionX + i * 2, positionY
 							+ j * 2, 1, 1);
+	}
+
+	public void drawBullet(final Entity entity, final int positionX,
+						   final int positionY) {
+		switch (entity.getSpriteType()) {
+			case Bullet -> drawimg("playerBullet", positionX, positionY, 12, 14);
+			case EnemyBullet -> drawimg("enemyBullet", positionX, positionY, 16, 16);
+		}
+	}
+
+	public void drawEnemy(final Entity entity, final int positionX,
+						  final int positionY) {
+		switch (entity.getSpriteType()) {
+			case EnemyShipA1, EnemyShipA2 -> drawimg("RedLunar", positionX, positionY, 60, 97);
+			case EnemyShipB1, EnemyShipB2 -> drawimg("GreenHeart", positionX, positionY, 62, 62);
+			case EnemyShipC1, EnemyShipC2 -> drawimg("BlueStar", positionX, positionY, 60, 58);
+			case EnemyShipSpecial -> drawimg("PinkDoll", positionX, positionY, 25, 27);
+		}
+	}
+
+	public void drawItem(final Entity entity, final int positionX,
+						 final int positionY) {
+		switch (Item.type) {
+			case power -> drawimg("powerItem", positionX, positionY, 12, 12);
+			case bomb -> drawimg("bombItem", positionX, positionY, 12, 12);
+			case score -> drawimg("scoreItem", positionX, positionY, 12, 12);
+		}
 	}
 
 	public void drawimg(String name, int positionX, int positionY, int sizex, int sizey) {

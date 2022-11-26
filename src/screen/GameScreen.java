@@ -351,18 +351,18 @@ public class GameScreen extends Screen {
 			drawManager.drawimg(shn, ship.getPositionX() - 20, ship.getPositionY() - 20 - 20, ship.getWidth() + 40,
 					ship.getHeight() + 40);
 		for (Bullet bullet : context.bullets) {
-			drawManager.drawEntity(bullet, bullet.getPositionX(), bullet.getPositionY());
+			drawManager.drawBullet(bullet, bullet.getPositionX(), bullet.getPositionY());
 		}
 
 		for (EnemyShip e : context.enemys) {
-			drawManager.drawEntity(e, e.getPositionX(), e.getPositionY());
+			drawManager.drawEnemy(e, e.getPositionX(), e.getPositionY());
 		}
 		for (Bullet bullet : this.bullets)
-			drawManager.drawEntity(bullet, bullet.getPositionX(),
+			drawManager.drawBullet(bullet, bullet.getPositionX(),
 					bullet.getPositionY());
 
 		for (entity.Item item : this.items)
-			drawManager.drawEntity(item, item.getPositionX(),
+			drawManager.drawItem(item, item.getPositionX(),
 					item.getPositionY());
 
 		// Interface.
@@ -434,6 +434,7 @@ public class GameScreen extends Screen {
 				if (!e.isDestroyed() && checkCollision(bullet, e)) {
 					score += e.getPointValue();
 					e.destroy();
+
 					if (e.droptype != null)
 						items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
 
