@@ -25,6 +25,8 @@ public class Ship extends Entity {
 
 	/** Movement of the ship for each unit of time. */
 	private float SPEED;
+	public boolean slowp = false;
+
 	public int animctr = 1;
 
 	/** Minimum time between shots. */
@@ -47,11 +49,8 @@ public class Ship extends Entity {
 	private Color baseColor = Color.green;
 
 	public Ship(final int positionX, final int positionY, Color color) {
-		super(positionX, positionY, 13 * 2, 8 * 2, color);
+		super(positionX, positionY, 10, 10, color);
 		this.spriteType = SpriteType.Ship;
-		if (positionY == 0) {
-			this.spriteType = SpriteType.ShipLive;
-		}
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.destructionCooldown = Core.getCooldown(destructCool);
 		this.SPEED = 10;
@@ -103,15 +102,13 @@ public class Ship extends Entity {
 				new Sound().bulletsound();
 				this.shootingCooldown.reset();
 				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
-			}
-			else if (BULLET_POWER < 24) {
+			} else if (BULLET_POWER < 24) {
 				new Sound().bulletsound();
 				this.shootingCooldown.reset();
 				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
 				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
 				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
-			}
-			else if (BULLET_POWER < 48) {
+			} else if (BULLET_POWER < 48) {
 				new Sound().bulletsound();
 				this.shootingCooldown.reset();
 				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
@@ -119,8 +116,7 @@ public class Ship extends Entity {
 				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED));
 				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
 				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
-			}
-			else if (BULLET_POWER < 80) {
+			} else if (BULLET_POWER < 80) {
 				new Sound().bulletsound();
 				this.shootingCooldown.reset();
 				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
@@ -134,8 +130,7 @@ public class Ship extends Entity {
 				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0.5, BULLET_SPEED));
 				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
 				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
-			}
-			else if (BULLET_POWER == 128) {
+			} else if (BULLET_POWER >= 80) {
 				new Sound().bulletsound();
 				this.shootingCooldown.reset();
 				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));

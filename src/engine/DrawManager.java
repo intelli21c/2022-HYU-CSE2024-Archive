@@ -17,7 +17,8 @@ import entity.Item;
 import screen.*;
 import screen.Screen;
 import screen.ShopScreen.shopstates;
-
+import entity.Bullet;
+import entity.EnemyShip;
 import entity.Entity;
 import entity.Ship;
 
@@ -231,13 +232,13 @@ public final class DrawManager {
 			imagemap.put("BlueStar", fileManager.loadImage("BlueStar.png"));
 			imagemap.put("GreenHeart", fileManager.loadImage("GreenHeart.png"));
 			imagemap.put("RedLunar", fileManager.loadImage("RedLunar.png"));
-			imagemap.put("PinkDoll",fileManager.loadImage("PinkDoll.png"));
-			imagemap.put("playerBullet",fileManager.loadImage("playerBullet.png"));
-			imagemap.put("enemyBullet",fileManager.loadImage("enemyBullet.png"));
-			imagemap.put("bombIcon",fileManager.loadImage("bombIcon.png"));
-			imagemap.put("powerItem",fileManager.loadImage("powerItem.png"));
-			imagemap.put("bombItem",fileManager.loadImage("bombItem.png"));
-			imagemap.put("scoreItem",fileManager.loadImage("scoreItem.png"));
+			imagemap.put("PinkDoll", fileManager.loadImage("PinkDoll.png"));
+			imagemap.put("playerBullet", fileManager.loadImage("playerBullet.png"));
+			imagemap.put("enemyBullet", fileManager.loadImage("enemyBullet.png"));
+			imagemap.put("bombIcon", fileManager.loadImage("bombIcon.png"));
+			imagemap.put("powerItem", fileManager.loadImage("powerItem.png"));
+			imagemap.put("bombItem", fileManager.loadImage("bombItem.png"));
+			imagemap.put("scoreItem", fileManager.loadImage("scoreItem.png"));
 			imagemap.put("Stage2Bossf", fileManager.loadImage("Stage2Boss.png"));
 			imagemap.put("Stage2Bossl", fileManager.loadImage("Stage2Boss2.png"));
 			imagemap.put("Stage2Bossr", fileManager.loadImage("Stage2Boss3.png"));
@@ -246,7 +247,6 @@ public final class DrawManager {
 			imagemap.put("Stage4Bossr", fileManager.loadImage("Stage4Boss3.png"));
 			imagemap.put("LastBoss", fileManager.loadImage("LastBoss.png"));
 			imagemap.put("LastBoss2", fileManager.loadImage("LastBoss2.png"));
-
 
 		} catch (IOException e) {
 			logger.warning("Loading failed.");
@@ -283,7 +283,9 @@ public final class DrawManager {
 	public void backgroundDrawing(Screen screen) {
 		int width = screen.getWidth();
 		int height = screen.getHeight();
-		backBufferGraphics.clearRect(0, 0, width, height);
+		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
+		backBufferGraphics = backBuffer.getGraphics();
 		if (position1 > -height) {
 			drawimg("background1", 0, position1, width, height * 3);
 			drawimg("background2", 0, position1 + height, width, height * 3);
@@ -347,17 +349,17 @@ public final class DrawManager {
 							+ j * 2, 1, 1);
 	}
 
-	public void drawBullet(final Entity entity, final int positionX,
-						   final int positionY) {
-		switch (entity.getSpriteType()) {
+	public void drawBullet(final Bullet b, final int positionX,
+			final int positionY) {
+		switch (b.getSpriteType()) {
 			case Bullet -> drawimg("playerBullet", positionX, positionY, 20, 20);
 			case EnemyBullet -> drawimg("enemyBullet", positionX, positionY, 20, 20);
 		}
 	}
 
-	public void drawEnemy(final Entity entity, final int positionX,
-						  final int positionY) {
-		switch (entity.getSpriteType()) {
+	public void drawEnemy(final EnemyShip enemy, final int positionX,
+			final int positionY) {
+		switch (enemy.getSpriteType()) {
 			case EnemyShipA1, EnemyShipA2 -> drawimg("RedLunar", positionX, positionY, 60, 97);
 			case EnemyShipB1, EnemyShipB2 -> drawimg("GreenHeart", positionX, positionY, 62, 62);
 			case EnemyShipC1, EnemyShipC2 -> drawimg("BlueStar", positionX, positionY, 60, 58);
@@ -365,9 +367,9 @@ public final class DrawManager {
 		}
 	}
 
-	public void drawItem(final Entity entity, final int positionX,
-						 final int positionY) {
-		switch (Item.type) {
+	public void drawItem(final Item item, final int positionX,
+			final int positionY) {
+		switch (item.type) {
 			case power -> drawimg("powerItem", positionX, positionY, 20, 20);
 			case bomb -> drawimg("bombItem", positionX, positionY, 20, 20);
 			case score -> drawimg("scoreItem", positionX, positionY, 20, 20);
@@ -469,14 +471,6 @@ public final class DrawManager {
 		if (score < pass_score.get(((GameScreen) screen).level))
 			backBufferGraphics.setColor(Color.RED);
 		backBufferGraphics.drawString(scoreString, screen.getWidth() - 167, 25);
-	}
-
-	public void drawCoin(final Screen screen, final int coin) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.WHITE);
-		String coinString = String.format("%04d", coin);
-		drawimg("coin", screen.getWidth() - 260, 8, 22, 22);
-		backBufferGraphics.drawString(coinString, screen.getWidth() - 232, 25);
 	}
 
 	/**
@@ -1132,143 +1126,6 @@ public final class DrawManager {
 		// assumed grid size
 	}
 
-	public void drawshop(Screen screen, int curr, int curc, ShopScreen.shopstates state) {
-		int x = 0, y = 0;
-		// draw top bar
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.WHITE);
-		if (state == shopstates.SHOP_RET)
-			backBufferGraphics.setColor(Color.GREEN);
-		backBufferGraphics.drawString("SELECT: SPACE", 10, 25);
-		backBufferGraphics.drawString("RETURN: ESCAPE", 10, 45);
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredBigString(screen, "Shop", 40);
-		backBufferGraphics.setColor(Color.WHITE);
-		drawimg("coin", screen.getWidth() - 100, 15, 30, 30);
-		backBufferGraphics.drawString(String.valueOf(Coin.balance), screen.getWidth() - 55, 40);
-		backBufferGraphics.drawLine(0, 60, backBuffer.getWidth(), 60);
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 2; j++) {
-				if (curr == i && curc == j && state == shopstates.SHOP_INVEN) {
-					backBufferGraphics.setColor(Color.GREEN);
-					backBufferGraphics.drawRect(getshopgridcoordx(i), getshopgridcoordy(j), 70, 70);
-					backBufferGraphics.setColor(Color.WHITE);
-					continue;
-				}
-				backBufferGraphics.drawRect(getshopgridcoordx(i), getshopgridcoordy(j), 70, 70);
-			}
-		}
-
-		backBufferGraphics.drawString("SHIP", 31, 120);
-		drawimg("shipg", getshopgridcoordx(0) + 11, getshopgridcoordy(0) + 9, 50, 50);
-		drawimg("shipr", getshopgridcoordx(1) + 11, getshopgridcoordy(0) + 9, 50, 50);
-		drawimg("shipb", getshopgridcoordx(2) + 11, getshopgridcoordy(0) + 9, 50, 50);
-		drawimg("coin", screen.getWidth() - 100, 15, 30, 30);
-		backBufferGraphics.drawString("BGM", 31, 250);
-		drawimg("bgm1", getshopgridcoordx(0) + 8, getshopgridcoordy(1) + 11, 50, 50);
-		drawimg("bgm2", getshopgridcoordx(1) + 8, getshopgridcoordy(1) + 11, 50, 50);
-		drawimg("bgm3", getshopgridcoordx(2) + 8, getshopgridcoordy(1) + 11, 50, 50);
-		backBufferGraphics.setColor(Color.WHITE);
-		int leftbuf = (backBuffer.getWidth() - (50 * 5 + 30 * 4)) / 2;
-		backBufferGraphics.drawRect(31, 370, backBuffer.getWidth() - 62, backBuffer.getHeight() - 415);
-
-		String shipinfo_1 = new String(
-				"<GREEN SHIP>\n: THIS SHIP IS GREEN \n>>> DEFAULT");
-		String shipinfo_2 = new String(
-				"<RED SHIP>\n: THIS SHIP IS RED\n>>> 100 COIN");
-		String shipinfo_3 = new String(
-				"<BLUE SHIP>\n: THIS SHIP IS BLUE\n>>> 1000 COIN");
-		String bgminfo_1 = new String(
-				"<BGM 1>\n: THIS IS DEFAULT MUSIC\n>>> DEFAULT");
-		String bgminfo_2 = new String(
-				"<BGM 2>\n: GOOD MUSIC\n>>> 100 COIN");
-		String bgminfo_3 = new String(
-				"<BGM 3>\n: AWESOME MUSIC\n>>> 1000 COIN");
-		/*
-		 * if (selecteditem().itemid == 1000)
-		 * drawmultiline(screen, shipinfo_1, 45, 390, 3);
-		 * else if (selecteditem().itemid == 1001)
-		 * drawmultiline(screen, shipinfo_2, 45, 390, 3);
-		 * else if (selecteditem().itemid == 1002)
-		 * drawmultiline(screen, shipinfo_3, 45, 390, 3);
-		 * else if (selecteditem().itemid == 2000)
-		 * drawmultiline(screen, bgminfo_1, 45, 390, 3);
-		 * else if (selecteditem().itemid == 2001)
-		 * drawmultiline(screen, bgminfo_2, 45, 390, 3);
-		 * else if (selecteditem().itemid == 2002)
-		 * drawmultiline(screen, bgminfo_3, 45, 390, 3);
-		 * /**
-		 * for (int i = 0; i < Inventory.inventory.size(); i++) {
-		 * backBufferGraphics.drawString(Item.itemregistry.get(i).name,
-		 * x, y);
-		 * }
-		 */
-
-	}
-
-	// like MessageBox
-	public enum shopmodaltype {
-		SM_YESNO, SM_OK
-	}
-
-	public void drawShopModal(Screen screen, String item_name, String item_price, engine.DrawManager.shopmodaltype mode,
-			int modaloption) {
-		int winw = backBuffer.getWidth() * 8 / 10;
-		int winh = backBuffer.getHeight() * 8 / 10;
-		int winxbase = (backBuffer.getWidth() - winw) / 2;
-		int winybase = (backBuffer.getHeight() - winh) / 2;
-		backBufferGraphics.setColor(Color.BLACK);
-		backBufferGraphics.drawRect(winxbase, winybase, winw, winh);
-		backBufferGraphics.fillRect(winxbase, winybase, winw, winh);
-		backBufferGraphics.setColor((Color.WHITE));
-		backBufferGraphics.drawRect(winxbase, winybase, winw, winh);
-		backBufferGraphics.drawRect(winxbase + 5, winybase + 5, winw - 10, winh - 10);
-		drawCenteredBigString(screen, item_name, winxbase + 50);
-		if (selecteditem().itemid == 1001) {
-			drawimg("shipr", screen.getWidth() / 2 - 40, screen.getHeight() / 2 - 60, 80, 80);
-		}
-		if (selecteditem().itemid == 1002) {
-			drawimg("shipb", screen.getWidth() / 2 - 40, screen.getHeight() / 2 - 60, 80, 80);
-		}
-		if (selecteditem().itemid == 2001) {
-			drawimg("bgm2", screen.getWidth() / 2 - 40, screen.getHeight() / 2 - 60, 80, 80);
-		}
-		if (selecteditem().itemid == 2002) {
-			drawimg("bgm3", screen.getWidth() / 2 - 40, screen.getHeight() / 2 - 60, 80, 80);
-		}
-		drawCenteredRegularString(screen, "Price :" + item_price, winxbase + 80);
-		drawCenteredBigString(screen, "Purchase?", winybase * 7);
-		if (modaloption == 0)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("YES", winxbase + (winw / 4) - fontRegularMetrics.stringWidth("YES") / 2,
-				winybase * 8);
-		if (modaloption == 1)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("NO", winxbase + (winw / 10) * 7 - fontRegularMetrics.stringWidth("NO") / 2,
-				winybase * 8);
-	}
-
-	public void drawShopCheck(Screen screen, String text) {
-		int winw = backBuffer.getWidth() * 8 / 10;
-		int winh = backBuffer.getHeight() * 4 / 10;
-		int winxbase = (backBuffer.getWidth() - winw) / 2;
-		int winybase = (backBuffer.getHeight() - winh) / 2;
-		backBufferGraphics.setColor(Color.BLACK);
-		backBufferGraphics.drawRect(winxbase, winybase, winw, winh);
-		backBufferGraphics.fillRect(winxbase, winybase, winw, winh);
-		backBufferGraphics.setColor((Color.WHITE));
-		backBufferGraphics.drawRect(winxbase, winybase, winw, winh);
-		backBufferGraphics.drawRect(winxbase + 5, winybase + 5, winw - 10, winh - 10);
-		drawCenteredBigString(screen, text, winybase * 3 / 2);
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredRegularString(screen, "OK", winybase * 2);
-		;
-	}
-
 	public void drawSelectIcon_ship(Screen screen, int x, int y) {
 		backBufferGraphics.drawImage(imagemap.get("sel"), x, y, null, observer);
 	}
@@ -1363,5 +1220,10 @@ public final class DrawManager {
 		backBufferGraphics.drawString(stage4, 330, 340);
 		backBufferGraphics.drawString(stage5, 390, 340);
 
+	}
+
+	public void drawsquare(int x, int y, int w, int h, java.awt.Color c) {
+		this.backBufferGraphics.setColor(c);
+		this.backBufferGraphics.fillRect(x, y, w, h);
 	}
 }

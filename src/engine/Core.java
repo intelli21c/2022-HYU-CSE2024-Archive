@@ -90,7 +90,6 @@ public final class Core {
 	private static final Item Test5 = new Item(2001, "Store BGM 1", 100);
 	private static final Item Test6 = new Item(2002, "Store BGM 2", 1000);
 
-
 	public static ArrayList<Integer> pass_score;
 
 	/**
@@ -120,6 +119,10 @@ public final class Core {
 		WIDTH = (int) screenSize.getWidth();
 		HEIGHT = (int) screenSize.getHeight();
 		frame = new Frame(WIDTH, HEIGHT);
+		try {
+			frame.setIconImage(FileManager.getInstance().loadImage("midori-dot.png"));
+		} catch (Exception e) {
+		}
 		// frame.setExtendedState(frame.getExtendedState() |
 		// javax.swing.JFrame.MAXIMIZED_BOTH);
 		// frame.setUndecorated(true);
@@ -212,7 +215,7 @@ public final class Core {
 					} while (gameState.getLivesRemaining() > 0
 							&& gameState.getLevel() % NUM_LEVELS != 0
 							&& ((GameScreen) currentScreen).accumulated_score >= pass_score
-									.get(((GameScreen) currentScreen).level-1));
+									.get(((GameScreen) currentScreen).level - 1));
 
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "

@@ -40,26 +40,15 @@ public class Bullet extends Entity {
 		super(positionX, positionY, 3 * 2, 5 * 3, Color.RED);
 		this.speedx = 0;
 		this.speedy = speed;
-		setSprite();
 	}
 
 	public Bullet(final int positionX, final int positionY, double spdx, double spdy) {
 		super(positionX, positionY, 3 * 2, 5 * 3, Color.RED);
-		this.accuposX=positionX;
-		this.accuposY=positionY;
+		this.accuposX = positionX;
+		this.accuposY = positionY;
 		this.speedx = spdx;
 		this.speedy = spdy;
-		setSprite();
-	}
-
-	/**
-	 * Sets correct sprite for the bullet, based on speed.
-	 */
-	public final void setSprite() {
-		if (speedy < 0)
-			this.spriteType = SpriteType.Bullet;
-		else
-			this.spriteType = SpriteType.EnemyBullet;
+		this.spriteType = SpriteType.EnemyBullet;
 	}
 
 	public void moverel(double vx, double vy) {

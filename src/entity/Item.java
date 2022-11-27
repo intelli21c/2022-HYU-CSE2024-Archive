@@ -23,7 +23,7 @@ public class Item extends Entity {
 		score, power, bomb
 	}
 
-	public static itemtype type;
+	public itemtype type;
 
 	/**
 	 * Constructor, establishes the item's properties.
@@ -37,7 +37,7 @@ public class Item extends Entity {
 	 *                  direction - positive is down.
 	 */
 	public Item(final int positionX, final int positionY, final int speed, itemtype type) {
-		super(positionX, positionY, 3 * 2, 5 * 2, Color.WHITE);
+		super(positionX, positionY, 40, 40, Color.WHITE);
 		this.type = type;
 		this.speed = speed;
 		setSprite();
@@ -75,7 +75,10 @@ public class Item extends Entity {
 	 *
 	 * @return
 	 */
-	public final int getScore() {return 50;}
+	public final int getScore() {
+		return 50;
+	}
+
 	/**
 	 * Setter of the speed of the item.
 	 * 
