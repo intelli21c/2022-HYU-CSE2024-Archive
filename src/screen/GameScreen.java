@@ -295,14 +295,14 @@ public class GameScreen extends Screen {
 			drawManager.drawsquare(ship.getPositionX(), ship.getPositionY(), ship.getWidth(), ship.getHeight(),
 					java.awt.Color.WHITE);
 		for (Bullet bullet : context.bullets) {
-			drawManager.drawBullet(bullet, bullet.getPositionX(), bullet.getPositionY());
+			drawManager.drawEBullet(bullet, bullet.getPositionX(), bullet.getPositionY());
 		}
 
 		for (EnemyShip e : context.enemys) {
 			drawManager.drawEnemy(e, e.getPositionX(), e.getPositionY());
 		}
 		for (Bullet bullet : this.bullets)
-			drawManager.drawBullet(bullet, bullet.getPositionX(),
+			drawManager.drawPBullet(bullet, bullet.getPositionX(),
 					bullet.getPositionY());
 
 		for (entity.Item item : this.items)

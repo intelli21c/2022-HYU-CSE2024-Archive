@@ -105,7 +105,7 @@ public final class Core {
 		HEIGHT = (int) screenSize.getHeight();
 		frame = new Frame(WIDTH, HEIGHT);
 		try {
-			frame.setIconImage(FileManager.getInstance().loadImage("midori-dot.png"));
+			frame.setIconImage(FileManager.getInstance().loadImage("icon.png"));
 		} catch (Exception e) {
 		}
 		// frame.setExtendedState(frame.getExtendedState() |

@@ -209,7 +209,8 @@ public final class DrawManager {
 			// Images Loading
 			imagemap = new LinkedHashMap<String, BufferedImage>();
 			imagemap.put("macarona", fileManager.loadImage("macarona.png"));
-			imagemap.put("midoriport", fileManager.loadImage("midori-dot.png"));
+			imagemap.put("midoriport", fileManager.loadImage("midoridotport.png"));
+			imagemap.put("mikaport", fileManager.loadImage("mikaport.png"));
 			imagemap.put("coin", fileManager.loadImage("coin.png"));
 			imagemap.put("sel", fileManager.loadImage("selected.png"));
 			imagemap.put("shipr", fileManager.loadImage("shipred.png"));
@@ -346,12 +347,17 @@ public final class DrawManager {
 							+ j * 2, 1, 1);
 	}
 
-	public void drawBullet(final Bullet b, final int positionX,
+	public void drawEBullet(final Bullet b, final int positionX,
 			final int positionY) {
 		switch (b.getSpriteType()) {
 			case Bullet -> drawimg("playerBullet", positionX, positionY, 20, 20);
-			case EnemyBullet -> drawimg("enemyBullet", positionX, positionY, 20, 20);
+			case EnemyBullet -> drawimg("enemyBullet", positionX - 10, positionY - 10, 20, 20);
 		}
+	}
+
+	public void drawPBullet(final Bullet b, final int positionX,
+			final int positionY) {
+		drawimg("playerBullet", positionX - 10, positionY - 10, 20, 20);
 	}
 
 	public void drawEnemy(final EnemyShip enemy, final int positionX,
@@ -1218,21 +1224,33 @@ public final class DrawManager {
 		String cstr = "";
 		String lstr = "";
 		String rstr = "";
+		String cstri = "";
+		String lstri = "";
+		String rstri = "";
 		switch (sel) {
 			case 0:
 				cstr = "char1";
 				lstr = "char3";
 				rstr = "char2";
+				cstri = "mikaport";
+				lstri = "macarona";
+				rstri = "midoriport";
 				break;
 			case 1:
 				cstr = "char2";
 				lstr = "char1";
 				rstr = "char3";
+				lstri = "mikaport";
+				rstri = "macarona";
+				cstri = "midoriport";
 				break;
 			case 2:
 				cstr = "char3";
 				lstr = "char2";
 				rstr = "char1";
+				rstri = "mikaport";
+				cstri = "macarona";
+				lstri = "midoriport";
 				break;
 		}
 		int twtoffset = fontBigMetrics.stringWidth("12345678901234567890") / 4;
@@ -1247,9 +1265,9 @@ public final class DrawManager {
 		drawmultiline("This character is so fucking strong\npower level over 9000",
 				frame.getWidth() / 2 - twtoffset, 670, 20, 5);
 
-		drawimg("midoriport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
-		drawimgtrans("midoriport", 50 - 400 / 2, 50, 400, 400, 0.5f);
-		drawimgtrans("midoriport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
+		drawimg(cstri, frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
+		drawimgtrans(lstri, 50 - 400 / 2, 50, 400, 400, 0.5f);
+		drawimgtrans(rstri, frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
 	}
 
 	public void drawsquare(int x, int y, int w, int h, java.awt.Color c) {
