@@ -38,15 +38,6 @@ public final class Core {
 	 * Max fps of current screen.
 	 */
 	private static final int FPS = 60;
-
-	/**
-	 * Max lives.
-	 */
-	private static final int MAX_LIVES = 3;
-	/**
-	 * Levels between extra life.
-	 */
-	private static final int EXTRA_LIFE_FRECUENCY = 3;
 	/**
 	 * Total number of levels.
 	 */
@@ -83,12 +74,6 @@ public final class Core {
 	 * Ship skin itemid is start 1000 ~
 	 * Bgm itemid is start 2000 ~
 	 */
-	private static final Item Test1 = new Item(1000, "Default Ship", 0, false);
-	private static final Item Test2 = new Item(1001, "Store Ship 1", 100, false);
-	private static final Item Test3 = new Item(1002, "Store Ship 2", 1000, false);
-	private static final Item Test4 = new Item(2000, "Default BGM", 0);
-	private static final Item Test5 = new Item(2001, "Store BGM 1", 100);
-	private static final Item Test6 = new Item(2002, "Store BGM 2", 1000);
 
 	public static ArrayList<Integer> pass_score;
 
@@ -132,31 +117,19 @@ public final class Core {
 		int width = frame.getWidth();
 		int height = frame.getHeight();
 
-		/**
-		 * Test only !!
-		 * You can add item max 15
-		 * If you have fewer than 15 items to add, refer to DrawManager's drawshop
-		 * method
-		 */
-		Inventory.inventory_ship = new ArrayList<Item>();
-		Inventory.inventory_bgm = new ArrayList<Item>();
-		Inventory.inventory_ship.add(Test1);
-		Inventory.inventory_bgm.add(Test4);
-		Inventory.inventory_ship.get(0).appliedp = true;
-		Item.itemregistry_ship = new ArrayList<Item>();
-		Item.itemregistry_bgm = new ArrayList<Item>();
-		Item.itemregistry_ship.add(Test1);
-		Item.itemregistry_ship.add(Test2);
-		Item.itemregistry_ship.add(Test3);
-		Item.itemregistry_bgm.add(Test4);
-		Item.itemregistry_bgm.add(Test5);
-		Item.itemregistry_bgm.add(Test6);
+		pass_score = new ArrayList<Integer>();
+		pass_score.add(200);
+		pass_score.add(400);
+		pass_score.add(600);
+		pass_score.add(800);
+		pass_score.add(1000);
+		pass_score.add(1200);
 
 		GameState gameState;
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, 50, 0, 0, Coin.balance, 3, 0);
+			gameState = new GameState(1, 0, 50, 0, 0, 3, 0, 1, 1);
 
 			switch (returnCode) {
 
@@ -168,34 +141,19 @@ public final class Core {
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing title screen.");
 					break;
-				case 3:
-					// level
-					currentScreen = new LevelScreen(width, height, FPS);
-					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-							+ " setting screen at " + FPS + " fps.");
-					returnCode = frame.setScreen(currentScreen);
-					LOGGER.info("Closing setting screen.");
-					break;
-
 				case 2:
+					currentScreen = new LevelScreen(width, height, FPS);
+					returnCode = frame.setScreen(currentScreen);
+					gameState = new GameState(1, 0, 50, 0, 0, 3, 0, ((LevelScreen) currentScreen).character,
+							((LevelScreen) currentScreen).difficulty);
+					break;
+				case 3:
 					// Game & score
-					pass_score = new ArrayList<Integer>();
-					pass_score.add(200);
-					pass_score.add(400);
-					pass_score.add(600);
-					pass_score.add(800);
-					pass_score.add(1000);
-					pass_score.add(1200);
-
 					do {
 						new Sound().backroundmusic();
 						// One extra live every few levels.
-						boolean bonusLife = gameState.getLevel()
-								% EXTRA_LIFE_FRECUENCY == 0
-								&& gameState.getLivesRemaining() < MAX_LIVES;
-
 						currentScreen = new GameScreen(gameState,
-								bonusLife, width, height, FPS);
+								width, height, FPS);
 						LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 								+ " game screen at " + FPS + " fps.");
 						frame.setScreen(currentScreen);
@@ -208,9 +166,10 @@ public final class Core {
 								gameState.getLivesRemaining(),
 								gameState.getBulletsShot(),
 								gameState.getShipsDestroyed(),
-								gameState.getCoin(),
 								gameState.getBombNumber(),
-								gameState.getPower());
+								gameState.getPower(),
+								gameState.getch(),
+								gameState.getdiff());
 
 					} while (gameState.getLivesRemaining() > 0
 							&& gameState.getLevel() % NUM_LEVELS != 0
@@ -245,15 +204,6 @@ public final class Core {
 					returnCode = frame.setScreen(currentScreen);
 					LOGGER.info("Closing setting screen.");
 					break;
-				case 6:
-					// Store.
-					currentScreen = new ShopScreen(width, height, FPS, 1);
-					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-							+ " store screen at " + FPS + " fps.");
-					returnCode = frame.setScreen(currentScreen);
-					LOGGER.info("Closing store screen.");
-					break;
-
 				case 7:
 					// HUDSettingScreen.
 					currentScreen = new HUDSettingScreen(width, height, FPS);

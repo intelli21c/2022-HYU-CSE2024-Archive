@@ -49,7 +49,8 @@ public class GameScreen extends Screen {
 	/** Current score. */
 	private int score;
 	/** Current coin. */
-	private int coin;
+	private int difficulty;
+	private int character;
 	/** Current Number of bomb. */
 	private int bombNumber;
 	/** Current power */
@@ -68,10 +69,6 @@ public class GameScreen extends Screen {
 	 * Moment the game starts.
 	 */
 	private long gameStartTime;
-	/**
-	 * Checks if a bonus life is received.
-	 */
-	private boolean bonusLife;
 
 	public int enemyLives;
 	/**
@@ -109,20 +106,17 @@ public class GameScreen extends Screen {
 	 * @param fps
 	 *                     Frames per second, frame rate at which the game is run.
 	 */
-	public GameScreen(final GameState gameState, final boolean bonusLife,
-			final int width, final int height, final int fps) {
+	public GameScreen(final GameState gameState, final int width, final int height, final int fps) {
 		super(width, height, fps);
-		this.bonusLife = bonusLife;
 		this.level = gameState.getLevel();
 		this.score = gameState.getScore();
 		this.lives = gameState.getLivesRemaining();
-		this.coin = gameState.getCoin();
-		if (this.bonusLife)
-			this.lives++;
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
 		this.bombNumber = gameState.getBombNumber();
 		this.power = gameState.getPower();
+		this.character = gameState.getch();
+		this.difficulty = gameState.getdiff();
 	}
 
 	/**
@@ -148,6 +142,7 @@ public class GameScreen extends Screen {
 		this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
 		ship.BULLET_POWER = power;
 		context.player = ship;
+		context.difficulty = difficulty;
 		// Appears each 10-30 seconds.
 		this.bullets = new HashSet<Bullet>();
 		this.items = new ArrayList<entity.Item>();
@@ -325,8 +320,7 @@ public class GameScreen extends Screen {
 			// - (System.currentTimeMillis()
 			// - this.gameStartTime))
 			// / 1000);
-			drawManager.drawCountDown(this, this.level, 4,
-					this.bonusLife);
+			drawManager.drawCountDown(this, this.level, 4);
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
 					/ 12);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
@@ -410,9 +404,12 @@ public class GameScreen extends Screen {
 	 *
 	 * @return Current game state.
 	 */
-	public final GameState getGameState() {
-		return new GameState(this.level, this.score, this.lives,
-				this.bulletsShot, this.shipsDestroyed, this.coin, this.bombNumber, ship.BULLET_POWER);
+	public GameState getGameState() {
+		var gs = new GameState(this.level, this.score, this.lives,
+				this.bulletsShot, this.shipsDestroyed, this.bombNumber, ship.BULLET_POWER, this.character,
+				this.difficulty);
+		gs.cleartime.set(this.level, System.currentTimeMillis() - gameStartTime);
+		return gs;
 	}
 
 	/**

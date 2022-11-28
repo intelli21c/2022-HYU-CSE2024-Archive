@@ -1,8 +1,6 @@
 package engine;
 
 import java.awt.*;
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -16,14 +14,12 @@ import java.util.ArrayList;
 import entity.Item;
 import screen.*;
 import screen.Screen;
-import screen.ShopScreen.shopstates;
 import entity.Bullet;
 import entity.EnemyShip;
 import entity.Entity;
 import entity.Ship;
 
 import static engine.Core.pass_score;
-import static screen.ShopScreen.selecteditem;
 
 /**
  * Manages screen drawing.
@@ -213,6 +209,7 @@ public final class DrawManager {
 			// Images Loading
 			imagemap = new LinkedHashMap<String, BufferedImage>();
 			imagemap.put("macarona", fileManager.loadImage("macarona.png"));
+			imagemap.put("midoriport", fileManager.loadImage("midori-dot.png"));
 			imagemap.put("coin", fileManager.loadImage("coin.png"));
 			imagemap.put("sel", fileManager.loadImage("selected.png"));
 			imagemap.put("shipr", fileManager.loadImage("shipred.png"));
@@ -482,22 +479,12 @@ public final class DrawManager {
 	public void drawLives(final Screen screen, final int lives) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
+		Entity dummy = new Entity(0, 0, 0, 0, Color.GREEN);
+		dummy.setSpriteType(SpriteType.ShipLive);
+		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
+		for (int i = 0; i < lives; i++)
+			drawEntity(dummy, 40 + 35 * i, 10);
 
-		Ship dummyShip = null;
-		switch (Inventory.getcurrentship()) {
-			case 1000 -> dummyShip = new Ship(0, 0, Color.GREEN);
-			case 1001 -> dummyShip = new Ship(0, 0, Color.RED);
-			case 1002 -> dummyShip = new Ship(0, 0, Color.BLUE);
-		}
-
-		if (lives == -99) {
-			backBufferGraphics.drawString("Infin.", 20, 25);
-			drawEntity(dummyShip, 40 + 35, 10);
-		} else {
-			backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
-			for (int i = 0; i < lives; i++)
-				drawEntity(dummyShip, 40 + 35 * i, 10);
-		}
 	}
 
 	/**
@@ -949,23 +936,6 @@ public final class DrawManager {
 		}
 	}
 
-	/**
-	 * Draws settings screen title and instructions.
-	 *
-	 * @param screen Screen to draw on.
-	 */
-
-	public void drawStoreMenu(final Screen screen) {
-		String storeString = "Store";
-		String instructionsString = "Store";
-
-		backBufferGraphics.setColor(HUDSettingScreen.getScreenColor());
-		drawCenteredBigString(screen, storeString, screen.getHeight() / 8);
-
-		backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, instructionsString, screen.getHeight() / 5);
-	}
-
 	public void drawHUDSettingMenu(final Screen screen, final int option) {
 		String HUDString = "HUD Setting";
 		String instructionsString = "Press Space to return";
@@ -1090,7 +1060,7 @@ public final class DrawManager {
 	 * @param bonusLife Checks if a bonus life is received.
 	 */
 	public void drawCountDown(final Screen screen, final int level,
-			final int number, final boolean bonusLife) {
+			final int number) {
 		int rectWidth = screen.getWidth();
 		int rectHeight = screen.getHeight() / 6;
 		backBufferGraphics.setColor(Color.BLACK);
@@ -1098,16 +1068,9 @@ public final class DrawManager {
 				rectWidth, rectHeight);
 		backBufferGraphics.setColor(HUDSettingScreen.getScreenColor());
 		if (number >= 4)
-			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3);
-			} else {
-				drawCenteredBigString(screen, "Level " + level
-						+ " - Bonus life!",
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3);
-			}
+			drawCenteredBigString(screen, "Level " + level,
+					screen.getHeight() / 2
+							+ fontBigMetrics.getHeight() / 3);
 		else if (number != 0)
 			drawCenteredBigString(screen, Integer.toString(number),
 					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
@@ -1134,8 +1097,7 @@ public final class DrawManager {
 		backBufferGraphics.drawImage(imagemap.get("sel"), x, y, null, observer);
 	}
 
-	private java.util.ArrayList<String> formatstr(String input) {
-		int linelen = 44;
+	private java.util.ArrayList<String> formatstr(String input, int linelen) {
 		int frontdelim = 0;
 		int backdelim = 0;
 		var x = new ArrayList<String>();
@@ -1154,16 +1116,15 @@ public final class DrawManager {
 		return x;
 	}
 
-	@SuppressWarnings("unused")
-	private void drawmultiline(Screen scr, String input, int x, int y, int maxlines) {
+	private void drawmultiline(String input, int x, int y, int linelen, int maxlines) {
 		int offset = 0;
 		int c = 1;
-		for (String istr : formatstr(input)) {
+		for (String istr : formatstr(input, 15)) {
 			if (c++ > maxlines)
 				return;
 			backBufferGraphics.setColor((Color.WHITE));
 			backBufferGraphics.setFont(fontRegular);
-			backBufferGraphics.drawString((String) istr, 45, c * 20 + 356);
+			backBufferGraphics.drawString((String) istr, x, offset + y);
 			offset += fontRegularMetrics.getHeight();
 		}
 	}
@@ -1220,6 +1181,75 @@ public final class DrawManager {
 		backBufferGraphics.drawString(stage4, 330, 340);
 		backBufferGraphics.drawString(stage5, 390, 340);
 
+	}
+
+	public void drawleveldiff(int sel) {
+		int tenoffset = fontBigMetrics.stringWidth("123456789012345") / 4;
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.setFont(fontBig);
+		backBufferGraphics.drawString("easy", frame.getWidth() / 2 - 200 - fontBigMetrics.stringWidth("easy") / 2, 350);
+		backBufferGraphics.drawString("normal", frame.getWidth() / 2 - fontBigMetrics.stringWidth("normal") / 2, 350);
+		backBufferGraphics.drawString("hard", frame.getWidth() / 2 + 200 - fontBigMetrics.stringWidth("hard") / 2, 350);
+		drawmultiline("easy is easy difficulty, do you need any more description?",
+				frame.getWidth() / 2 - 200 - tenoffset, 370, 15, 5);
+		drawmultiline("normal is normal difficulty, do you need any more description?",
+				frame.getWidth() / 2 - tenoffset, 370, 15, 5);
+		drawmultiline("hard is hard difficulty, do you need any more description?",
+				frame.getWidth() / 2 + 200 - tenoffset, 370, 15, 5);
+		backBufferGraphics.setColor(Color.GREEN);
+		backBufferGraphics.setFont(fontBig);
+		switch (sel) {
+			case 0:
+				backBufferGraphics.drawString("easy",
+						frame.getWidth() / 2 - 200 - fontBigMetrics.stringWidth("easy") / 2, 350);
+				break;
+			case 1:
+				backBufferGraphics.drawString("normal", frame.getWidth() / 2 - fontBigMetrics.stringWidth("normal") / 2,
+						350);
+				break;
+			case 2:
+				backBufferGraphics.drawString("hard",
+						frame.getWidth() / 2 + 200 - fontBigMetrics.stringWidth("hard") / 2, 350);
+				break;
+		}
+	}
+
+	public void drawlevelchar(int sel) {
+		String cstr = "";
+		String lstr = "";
+		String rstr = "";
+		switch (sel) {
+			case 0:
+				cstr = "char1";
+				lstr = "char3";
+				rstr = "char2";
+				break;
+			case 1:
+				cstr = "char2";
+				lstr = "char1";
+				rstr = "char3";
+				break;
+			case 2:
+				cstr = "char3";
+				lstr = "char2";
+				rstr = "char1";
+				break;
+		}
+		int twtoffset = fontBigMetrics.stringWidth("12345678901234567890") / 4;
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.setFont(fontBig);
+		backBufferGraphics.drawString(lstr, 0 + 125 - (fontBigMetrics.stringWidth(lstr) / 2), 550);
+		backBufferGraphics.drawString(rstr, frame.getWidth() - 125 - (fontBigMetrics.stringWidth(rstr) / 2), 550);
+
+		backBufferGraphics.setColor(Color.GREEN);
+		backBufferGraphics.setFont(fontBig);
+		backBufferGraphics.drawString(cstr, frame.getWidth() / 2 - (fontBigMetrics.stringWidth(cstr) / 2), 600);
+		drawmultiline("This character is so fucking strong\npower level over 9000",
+				frame.getWidth() / 2 - twtoffset, 670, 20, 5);
+
+		drawimg("midoriport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
+		drawimgtrans("midoriport", 50 - 400 / 2, 50, 400, 400, 0.5f);
+		drawimgtrans("midoriport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
 	}
 
 	public void drawsquare(int x, int y, int w, int h, java.awt.Color c) {

@@ -5,25 +5,29 @@ import java.awt.event.KeyEvent;
 import engine.Cooldown;
 import engine.Core;
 
-
 /**
  * Implements the HUD setting screen, it shows setting menu about HUD.
  */
 
 public class LevelScreen extends Screen {
     /**
-     * Screen change parameter
-     */
-    public static int colorchange;
-    /**
      * Milliseconds between changes in user selection.
      */
-    private static final int SELECTION_TIME = 200;
+    private static final int SELECTION_TIME = 300;
 
     /**
      * Time between changes in user selection.
      */
     private Cooldown selectionCooldown;
+
+    private enum states {
+        diffsel, charsel
+    };
+
+    states state = states.diffsel;
+
+    public int difficulty;
+    public int character;
 
     /**
      * Constructor, establishes the properties of the screen.
@@ -56,67 +60,77 @@ public class LevelScreen extends Screen {
     protected final void update() {
         super.update();
 
-        draw();
+        if (this.selectionCooldown.checkFinished()) {
+            if (inputManager.isKeyDown(KeyEvent.VK_LEFT)
+                    || inputManager.isKeyDown(KeyEvent.VK_A)) {
 
-        if (this.selectionCooldown.checkFinished()
-                && this.inputDelay.checkFinished()) {
+                if (state == states.diffsel) {
+                    difficulty--;
+                    if (difficulty < 0)
+                        difficulty = 2;
+                }
 
-            if (inputManager.isKeyDown(KeyEvent.VK_UP)
-                    || inputManager.isKeyDown(KeyEvent.VK_W)) {
-                previouslevel();
+                if (state == states.charsel) {
+                    character--;
+                    if (character < 0)
+                        character = 2;
+                }
                 this.selectionCooldown.reset();
             }
-            if (inputManager.isKeyDown(KeyEvent.VK_DOWN)
-                    || inputManager.isKeyDown(KeyEvent.VK_S)) {
-                nextlevel();
+            if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)
+                    || inputManager.isKeyDown(KeyEvent.VK_D)) {
+                if (state == states.diffsel) {
+                    difficulty = (difficulty + 1) % 3;
+                }
+
+                if (state == states.charsel) {
+                    character = (character + 1) % 3;
+
+                }
                 this.selectionCooldown.reset();
             }
-            if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
-                this.isRunning = false;
+            if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
+                if (state == states.diffsel) {
+                    this.returnCode = 1;
+                    this.isRunning = false;
+                }
+
+                if (state == states.charsel)
+                    this.state = states.diffsel;
+                this.selectionCooldown.reset();
+            }
+
+            if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
+                if (state == states.diffsel) {
+                    this.state = states.charsel;
+                } else if (state == states.charsel) {
+                    this.returnCode = 3;
+                    this.isRunning = false;
+                }
+
+                this.selectionCooldown.reset();
+            }
 
         }
-    }
 
-    private void nextlevel() {
-        if (this.returnCode == 1)
-            this.returnCode = 4;
-        else if (this.returnCode == 0)
-            this.returnCode = 2;
-        else if (this.returnCode == 4)
-            this.returnCode = 0;
-        else if (this.returnCode == 2)
-            this.returnCode = 5;
-        else if (this.returnCode == 5)
-            this.returnCode = 3;
-        else
-            this.returnCode++;
+        draw();
     }
-
-    /**
-     * Shifts the focus to the previous menu item.
-     */
-    private void previouslevel() {
-        if (this.returnCode == 0)
-            this.returnCode = 4;
-        else if (this.returnCode == 2)
-            this.returnCode = 0;
-        else if (this.returnCode == 4)
-            this.returnCode = 3;
-        else if (this.returnCode == 3)
-            this.returnCode = 5;
-        else if (this.returnCode == 5)
-            this.returnCode = 2;
-        else
-            this.returnCode--;
-    }
-
 
     /**
      * Draws the elements associated with the screen.
      */
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawLevelMenu(this, this.returnCode);
+        switch (state) {
+            case diffsel:
+                drawManager.drawleveldiff(difficulty);
+                break;
+            case charsel:
+                drawManager.drawlevelchar(character);
+                break;
+            default:
+                break;
+        }
         drawManager.completeDrawing(this);
     }
 }

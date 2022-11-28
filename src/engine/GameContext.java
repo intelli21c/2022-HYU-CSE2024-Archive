@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class GameContext {
+    public int difficulty;
     public Ship player;
     public ArrayList<EnemyShip> enemys;
     public ArrayList<Bullet> bullets;
