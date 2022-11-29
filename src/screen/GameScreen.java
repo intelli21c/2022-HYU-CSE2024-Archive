@@ -385,7 +385,6 @@ public class GameScreen extends Screen {
 			bullet.update();
 			if (checkCollision(this.ship, bullet) && !this.ship.isDestroyed()) {
 				this.lives--;
-				new Sound().destorySound();
 				ship.destroy();
 			}
 		}
@@ -394,7 +393,6 @@ public class GameScreen extends Screen {
 			if (checkCollision(e, this.ship))
 				if (!this.ship.isDestroyed()) {
 					this.ship.destroy();
-					new Sound().destorySound();
 					this.lives--;
 				}
 		}
