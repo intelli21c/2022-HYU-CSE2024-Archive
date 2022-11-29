@@ -124,7 +124,6 @@ public class GameScreen extends Screen {
 	 */
 	public final void initialize() {
 		super.initialize();
-
 		this.context = new GameContext();
 
 		switch (this.level) {
@@ -146,7 +145,6 @@ public class GameScreen extends Screen {
 		// Appears each 10-30 seconds.
 		this.bullets = new HashSet<Bullet>();
 		this.items = new ArrayList<entity.Item>();
-
 		// Special input delay / countdown.
 		this.gameStartTime = System.currentTimeMillis();
 		this.inputDelay = Core.getCooldown(INPUT_DELAY);
@@ -269,16 +267,29 @@ public class GameScreen extends Screen {
 		drawManager.backgroundDrawing(this);
 		// TODO this is temporary!!!
 		String shn = "";
-		switch (ship.animctr) {
-			case 1:
-				shn = "tempf";
-				break;
-			case 2:
-				shn = "templ";
-				break;
-			case 3:
-				shn = "tempr";
-				break;
+		if (character == 0) {
+			shn = switch (ship.animctr) {
+				case 1 -> "MidoriBackSprite";
+				case 2 -> "MidoriBackSpriteLeft";
+				case 3 -> "MidoriBackSpriteRight";
+				default -> shn;
+			};
+		}
+		if (character == 1) {
+			shn = switch (ship.animctr) {
+				case 1 -> "UzBackSprite";
+				case 2 -> "UzBackSpriteLeft";
+				case 3 -> "UzBackSpriteRight";
+				default -> shn;
+			};
+		}
+		if (character == 2) {
+			shn = switch (ship.animctr) {
+				case 1 -> "ArisBackSprite";
+				case 2 -> "ArisBackSpriteLeft";
+				case 3 -> "ArisBackSpriteRight";
+				default -> shn;
+			};
 		}
 		if (ship.isDestroyed()) {
 			if (tempblinkinner.checkFinished()) {
@@ -289,7 +300,6 @@ public class GameScreen extends Screen {
 			}
 		} else {
 			drawManager.drawimg(shn, ship.getCPositionX() - 30, ship.getCPositionY() - 30, 60, 60);
-
 		}
 		if (ship.getSpeed() == 4)
 			drawManager.drawsquare(ship.getPositionX(), ship.getPositionY(), ship.getWidth(), ship.getHeight(),
@@ -297,7 +307,9 @@ public class GameScreen extends Screen {
 		for (Bullet bullet : context.bullets) {
 			drawManager.drawBullet(bullet, bullet.getPositionX(), bullet.getPositionY());
 		}
-
+		if (bombNumber > 0 && inputManager.isKeyDown(KeyEvent.VK_C) || inputManager.isKeyDown(KeyEvent.VK_X)) {
+			drawManager.drawBombEffect(this, this.width / 2 - 500, this.height / 2 - 500);
+		}
 		for (EnemyShip e : context.enemys) {
 			drawManager.drawEnemy(e, e.getPositionX(), e.getPositionY());
 		}
@@ -373,6 +385,7 @@ public class GameScreen extends Screen {
 			bullet.update();
 			if (checkCollision(this.ship, bullet) && !this.ship.isDestroyed()) {
 				this.lives--;
+				new Sound().destorySound();
 				ship.destroy();
 			}
 		}
@@ -381,6 +394,7 @@ public class GameScreen extends Screen {
 			if (checkCollision(e, this.ship))
 				if (!this.ship.isDestroyed()) {
 					this.ship.destroy();
+					new Sound().destorySound();
 					this.lives--;
 				}
 		}

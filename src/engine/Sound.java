@@ -56,4 +56,15 @@ public class Sound {
         }
 
     }
+    public void destorySound() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem
+                    .getAudioInputStream(FileManager.class.getClassLoader().getResourceAsStream("Destory.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
