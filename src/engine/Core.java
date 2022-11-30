@@ -1,19 +1,10 @@
 package engine;
 
-import java.util.ArrayList;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import entity.Ship;
 import screen.*;
 
-import java.awt.Color;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import javax.sound.sampled.Clip;
+import java.util.ArrayList;
+import java.util.logging.*;
 
 /**
  * Implements core game logic.
@@ -118,12 +109,13 @@ public final class Core {
 		int height = frame.getHeight();
 
 		pass_score = new ArrayList<Integer>();
-		pass_score.add(200);
+		pass_score.add(0);
 		pass_score.add(400);
-		pass_score.add(600);
-		pass_score.add(800);
-		pass_score.add(1000);
 		pass_score.add(1200);
+		pass_score.add(2000);
+		pass_score.add(2800);
+		pass_score.add(3600);
+		pass_score.add(4400);
 
 		GameState gameState;
 

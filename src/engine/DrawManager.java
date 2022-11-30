@@ -1,26 +1,23 @@
 package engine;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.ArrayList;
-
-import entity.Item;
-import screen.*;
-import screen.Screen;
 import entity.Bullet;
 import entity.EnemyShip;
 import entity.Entity;
-import entity.Ship;
+import entity.Item;
+import screen.GameScreen;
+import screen.HUDSettingScreen;
+import screen.Screen;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.IOException;
+import java.util.List;
+import java.util.*;
+import java.util.logging.Logger;
 
 import static engine.Core.pass_score;
+import static engine.Countdown.countDown;
 
 /**
  * Manages screen drawing.
@@ -444,6 +441,13 @@ public final class DrawManager {
 	 * @param screen Screen to draw on.
 	 * @param score  Current score.
 	 */
+
+	public void drawTimer(final Screen screen, final int max_count) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+
+		backBufferGraphics.drawString("Timer : " + String.valueOf(countDown(99)), 1600, 25);
+	}
 	public void drawScore(final Screen screen, final int score) {
 		/*
 		 * backBufferGraphics.setFont(fontRegular);
@@ -494,7 +498,7 @@ public final class DrawManager {
 		dummy.setSpriteType(SpriteType.ShipLive);
 		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
 		for (int i = 0; i < lives; i++)
-			drawEntity(dummy, 40 + 35 * i, 10);
+			drawEntity(dummy, 50 + 25 * i, 12);
 
 	}
 
