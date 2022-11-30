@@ -173,4 +173,36 @@ public class Entity {
 	public final int getHeight() {
 		return this.height;
 	}
+
+	public static boolean checkCollision(final Entity a, final Entity b) {
+		// Calculate center point of the entities in both axis.
+		int centerAX = a.getPositionX() + a.getWidth() / 2;
+		int centerAY = a.getPositionY() + a.getHeight() / 2;
+		int centerBX = b.getPositionX() + b.getWidth() / 2;
+		int centerBY = b.getPositionY() + b.getHeight() / 2;
+		// Calculate maximum distance without collision.
+		int maxDistanceX = a.getWidth() / 2 + b.getWidth() / 2;
+		int maxDistanceY = a.getHeight() / 2 + b.getHeight() / 2;
+		// Calculates distance.
+		int distanceX = Math.abs(centerAX - centerBX);
+		int distanceY = Math.abs(centerAY - centerBY);
+
+		return distanceX < maxDistanceX && distanceY < maxDistanceY;
+	}
+
+	public boolean checkCollision(final Entity b) {
+		// Calculate center point of the entities in both axis.
+		int centerAX = this.getPositionX() + this.getWidth() / 2;
+		int centerAY = this.getPositionY() + this.getHeight() / 2;
+		int centerBX = b.getPositionX() + b.getWidth() / 2;
+		int centerBY = b.getPositionY() + b.getHeight() / 2;
+		// Calculate maximum distance without collision.
+		int maxDistanceX = this.getWidth() / 2 + b.getWidth() / 2;
+		int maxDistanceY = this.getHeight() / 2 + b.getHeight() / 2;
+		// Calculates distance.
+		int distanceX = Math.abs(centerAX - centerBX);
+		int distanceY = Math.abs(centerAY - centerBY);
+
+		return distanceX < maxDistanceX && distanceY < maxDistanceY;
+	}
 }

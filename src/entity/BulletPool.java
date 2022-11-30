@@ -3,6 +3,8 @@ package entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import engine.DrawManager.SpriteType;
+
 /**
  * Implements a pool of recyclable bullets.
  * 
@@ -44,7 +46,7 @@ public final class BulletPool {
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);
 			bullet.setPositionY(positionY);
 			bullet.setSpeed(speed);
-			bullet.setSprite();
+			bullet.spriteType=SpriteType.Bullet;
 		} else {
 			bullet = new Bullet(positionX, positionY, speed, movingPattern);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);

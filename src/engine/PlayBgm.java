@@ -2,7 +2,6 @@ package engine;
 
 import screen.GameScreen;
 import screen.Screen;
-import screen.ShopScreen;
 
 import java.io.File;
 import javax.sound.sampled.AudioFormat;
@@ -10,7 +9,6 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
-
 
 public class PlayBgm {
     static Clip clip_hollow;
@@ -38,60 +36,23 @@ public class PlayBgm {
     static Clip clip_item;
 
     public static void play() {
+        bgm = new File("Bgm\\Dummy-data-bgm.wav");
+        try {
 
-        switch (ShopScreen.getApply_bgm()) {
-            case 0:
-                bgm = new File("Bgm\\Dummy-data-bgm.wav");
+            stream = AudioSystem.getAudioInputStream(bgm);
+            format = stream.getFormat();
+            info = new DataLine.Info(Clip.class, format);
+            clip = (Clip) AudioSystem.getLine(info);
+            clip.open(stream);
+            clip.start();
 
-                try {
-
-                    stream = AudioSystem.getAudioInputStream(bgm);
-                    format = stream.getFormat();
-                    info = new DataLine.Info(Clip.class, format);
-                    clip = (Clip) AudioSystem.getLine(info);
-                    clip.open(stream);
-                    clip.start();
-
-                } catch (Exception e) {
-                    System.out.println("err : " + e);
-                }
-                break;
-            case 1:
-                bgm2 = new File("Bgm\\Dummy-data-bgm2.wav");
-                try {
-
-                    stream2 = AudioSystem.getAudioInputStream(bgm2);
-                    format2 = stream2.getFormat();
-                    info2 = new DataLine.Info(Clip.class, format2);
-                    clip2 = (Clip) AudioSystem.getLine(info2);
-                    clip2.open(stream2);
-                    clip2.start();
-
-                }  catch(Exception e){
-                    System.out.println("err : " + e);
-                }
-                break;
-            case 2:
-                bgm3 = new File("Bgm\\Dummy-data-bgm3.wav");
-                try {
-                    stream3 = AudioSystem.getAudioInputStream(bgm3);
-                    format3 = stream3.getFormat();
-                    info3 = new DataLine.Info(Clip.class, format3);
-                    clip3 = (Clip) AudioSystem.getLine(info3);
-                    clip3.open(stream3);
-                    clip3.start();
-
-                }  catch(Exception e){
-                    System.out.println("err : " + e);
-                }
-                break;
+        } catch (Exception e) {
+            System.out.println("err : " + e);
         }
-
-
 
     }
 
-    public static void playSound(String s){
+    public static void playSound(String s) {
         bgm_item = new File(s);
         try {
             AudioInputStream stream_itemEffect = AudioSystem.getAudioInputStream(bgm_item);
@@ -99,24 +60,13 @@ public class PlayBgm {
             clip_item.open(stream_itemEffect);
             clip_item.start();
 
-        } catch (Exception e) {System.out.println("err : " + e);}
+        } catch (Exception e) {
+            System.out.println("err : " + e);
+        }
     }
 
     public static void BgmStop(Clip clip) {
         clip.stop();
     }
 
-    public static Clip getClip() {
-        if (ShopScreen.getApply_bgm() == 0) {
-            return clip;
-        }
-        else if (ShopScreen.getApply_bgm() == 1) {
-            return clip2;
-        }
-        else if (ShopScreen.getApply_bgm() == 2) {
-            return clip3;
-        }
-
-        return clip_hollow;
-    }
 }

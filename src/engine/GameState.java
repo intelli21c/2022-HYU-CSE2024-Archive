@@ -1,5 +1,7 @@
 package engine;
 
+import java.util.ArrayList;
+
 /**
  * Implements an object that stores the state of the game between levels.
  * 
@@ -14,36 +16,55 @@ public class GameState {
 	private int score;
 	/** Lives currently remaining. */
 	private int livesRemaining;
+	/** clear times */
+	public ArrayList<Long> cleartime;
 	/** Bullets shot until now. */
 	private int bulletsShot;
 	/** Ships destroyed until now. */
 	private int shipsDestroyed;
 	/** Current coin. */
 	private int coin;
+	/** Current number of bomb. */
+	private int bombNumber;
+	/** Current power */
+	private int power;
+	private int character;
+	private int difficulty;
+
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param level
-	 *            Current game level.
+	 *                       Current game level.
 	 * @param score
-	 *            Current score.
+	 *                       Current score.
 	 * @param livesRemaining
-	 *            Lives currently remaining.
+	 *                       Lives currently remaining.
 	 * @param bulletsShot
-	 *            Bullets shot until now.
+	 *                       Bullets shot until now.
 	 * @param shipsDestroyed
-	 *            Ships destroyed until now.
+	 *                       Ships destroyed until now.
 	 */
 	public GameState(final int level, final int score,
 			final int livesRemaining, final int bulletsShot,
-			final int shipsDestroyed, final int coin) {
+			final int shipsDestroyed, final int bombNumber, final int power, int character, int difficulty) {
 		this.level = level;
 		this.score = score;
 		this.livesRemaining = livesRemaining;
 		this.bulletsShot = bulletsShot;
 		this.shipsDestroyed = shipsDestroyed;
-		this.coin = coin;
+		this.bombNumber = bombNumber;
+		this.power = power;
+		this.character=character;
+		this.difficulty=difficulty;
+		this.cleartime = new ArrayList<Long>();
+		cleartime.add(0L);
+		cleartime.add(0L);
+		cleartime.add(0L);
+		cleartime.add(0L);
+		cleartime.add(0L);
+		cleartime.add(0L);
 	}
 
 	/**
@@ -84,6 +105,28 @@ public class GameState {
 	/**
 	 * @return the coin
 	 */
-	public final int getCoin() { return coin;}
+	public final int getCoin() {
+		return coin;
+	}
 
+	/**
+	 * @return the number of bomb
+	 */
+	public final int getBombNumber() {
+		return bombNumber;
+	}
+
+	/**
+	 * @return the power
+	 */
+	public final int getPower() {
+		return power;
+	}
+
+	public final int getdiff() {
+		return difficulty;
+	}
+	public final int getch() {
+		return character;
+	}
 }

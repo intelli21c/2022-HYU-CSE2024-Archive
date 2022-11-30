@@ -4,11 +4,8 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.Set;
 
-import engine.Cooldown;
-import engine.Core;
-import engine.Inventory;
+import engine.*;
 import engine.DrawManager.SpriteType;
-import engine.Sound;
 
 /**
  * Implements a ship, to be controlled by the player.
@@ -19,16 +16,23 @@ import engine.Sound;
 public class Ship extends Entity {
 
 	/** Time between shots. */
-	private int SHOOTING_INTERVAL = 750;
+	private int SHOOTING_INTERVAL = 200;
+	/** Time between shots. */
+	private int BOMB_INTERVAL = 1000;
 	/** Speed of the bullets shot by the ship. */
-	private int BULLET_SPEED = -6;
+	private int BULLET_SPEED = -15;
+	public int BULLET_POWER = 0;
 
 	/** Movement of the ship for each unit of time. */
 	private float SPEED;
+	public boolean slowp = false;
+
 	public int animctr = 1;
 
 	/** Minimum time between shots. */
-	private Cooldown shootingCooldown;
+	public Cooldown shootingCooldown;
+	/** Minimum time between shots. */
+	private Cooldown bombCooldown;
 	/** Time spent inactive between hits. */
 	private Cooldown destructionCooldown;
 	/** Movement of the ship for each unit of time. */
@@ -45,14 +49,12 @@ public class Ship extends Entity {
 	private Color baseColor = Color.green;
 
 	public Ship(final int positionX, final int positionY, Color color) {
-		super(positionX, positionY, 13 * 2, 8 * 2, color);
+		super(positionX, positionY, 10, 10, color);
 		this.spriteType = SpriteType.Ship;
-		if (positionY == 0) {
-			this.spriteType = SpriteType.ShipLive;
-		}
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.destructionCooldown = Core.getCooldown(destructCool);
 		this.SPEED = 10;
+		this.bombCooldown = Core.getCooldown(BOMB_INTERVAL);
 	}
 
 	/**
@@ -75,12 +77,17 @@ public class Ship extends Entity {
 	 * Moves the ship speed units Up, or until the Up screen border is
 	 * reached.
 	 */
-	public final void moveUp() {this.positionY -= SPEED;}
+	public final void moveUp() {
+		this.positionY -= SPEED;
+	}
+
 	/**
 	 * Moves the ship speed units Down, or until the Down screen border is
 	 * reached.
 	 */
-	public final void moveDown() {this.positionY += SPEED;}
+	public final void moveDown() {
+		this.positionY += SPEED;
+	}
 
 	/**
 	 * Shoots a bullet upwards.
@@ -91,11 +98,66 @@ public class Ship extends Entity {
 	 */
 	public final boolean shoot(final Set<Bullet> bullets) {
 		if (this.shootingCooldown.checkFinished()) {
-			new Sound().bulletsound();
-			this.shootingCooldown.reset();
-			bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+			if (BULLET_POWER < 8) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+			} else if (BULLET_POWER < 24) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
+			} else if (BULLET_POWER < 48) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
+			} else if (BULLET_POWER < 80) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
+			} else if (BULLET_POWER >= 80) {
+				new Sound().bulletsound();
+				this.shootingCooldown.reset();
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, -0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0.5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -3, BULLET_SPEED));
+				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 3, BULLET_SPEED));
+			}
 			// bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY,
 			// BULLET_SPEED, 0));
+			return true;
+		}
+		return false;
+	}
+
+	public final boolean bomb() {
+		if (this.bombCooldown.checkFinished()) {
+			new Sound().bombSound();
+			this.bombCooldown.reset();
 			return true;
 		}
 		return false;
@@ -116,10 +178,10 @@ public class Ship extends Entity {
 	 * Switches the ship to its destroyed state.
 	 */
 	public final void destroy() {
-		new Sound().explosionsound();
+		new Sound().destroySound();
 		this.destructionCooldown.reset();
 
-		new Sound().explosionsound();
+		new Sound().destroySound();
 	}
 
 	/**
