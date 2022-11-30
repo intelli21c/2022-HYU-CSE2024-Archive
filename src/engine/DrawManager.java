@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
@@ -209,16 +210,20 @@ public final class DrawManager {
 			// Images Loading
 			imagemap = new LinkedHashMap<String, BufferedImage>();
 			imagemap.put("macarona", fileManager.loadImage("macarona.png"));
-			imagemap.put("midoriport", fileManager.loadImage("midoridotport.png"));
-			imagemap.put("mikaport", fileManager.loadImage("mikaport.png"));
+			imagemap.put("midoriport", fileManager.loadImage("midori-dot.png"));
+			imagemap.put("arisport", fileManager.loadImage("ArisDot.png"));
+			imagemap.put("uzport", fileManager.loadImage("UzDot.png"));
+			imagemap.put("MidoriBackSprite", fileManager.loadImage("MidoriBackSprite.png"));
+			imagemap.put("MidoriBackSpriteLeft", fileManager.loadImage("MidoriBackSpriteLeft.png"));
+			imagemap.put("MidoriBackSpriteRight", fileManager.loadImage("MidoriBackSpriteRight.png"));
+			imagemap.put("UzBackSprite", fileManager.loadImage("UzBackSprite.png"));
+			imagemap.put("UzBackSpriteLeft", fileManager.loadImage("UzBackSpriteLeft.png"));
+			imagemap.put("UzBackSpriteRight", fileManager.loadImage("UzBackSpriteRight.png"));
+			imagemap.put("ArisBackSprite", fileManager.loadImage("ArisBackSprite.png"));
+			imagemap.put("ArisBackSpriteLeft", fileManager.loadImage("ArisBackSpriteLeft.png"));
+			imagemap.put("ArisBackSpriteRight", fileManager.loadImage("ArisBackSpriteRight.png"));
 			imagemap.put("coin", fileManager.loadImage("coin.png"));
 			imagemap.put("sel", fileManager.loadImage("selected.png"));
-			imagemap.put("shipr", fileManager.loadImage("shipred.png"));
-			imagemap.put("shipg", fileManager.loadImage("shipgreen.png"));
-			imagemap.put("shipb", fileManager.loadImage("shipblue.png"));
-			imagemap.put("tempf", fileManager.loadImage("Ship.png"));
-			imagemap.put("tempr", fileManager.loadImage("Ship3.png"));
-			imagemap.put("templ", fileManager.loadImage("Ship2.png"));
 			imagemap.put("bgm1", fileManager.loadImage("bgm_1.png"));
 			imagemap.put("bgm2", fileManager.loadImage("bgm_2.png"));
 			imagemap.put("bgm3", fileManager.loadImage("bgm_3.png"));
@@ -245,6 +250,7 @@ public final class DrawManager {
 			imagemap.put("Stage4Bossr", fileManager.loadImage("Stage4Boss3.png"));
 			imagemap.put("LastBoss", fileManager.loadImage("LastBoss.png"));
 			imagemap.put("LastBoss2", fileManager.loadImage("LastBoss2.png"));
+			imagemap.put("BombEffect", fileManager.loadImage("BombEffect.png"));
 
 		} catch (IOException e) {
 			logger.warning("Loading failed.");
@@ -358,6 +364,10 @@ public final class DrawManager {
 	public void drawPBullet(final Bullet b, final int positionX,
 			final int positionY) {
 		drawimg("playerBullet", positionX - 10, positionY - 10, 20, 20);
+	}
+
+	public void drawBombEffect(Screen screen, final int positionX, final int positionY) {
+		drawimg("BombEffect", positionX, positionY, 1000, 1000);
 	}
 
 	public void drawEnemy(final EnemyShip enemy, final int positionX,
@@ -1229,28 +1239,28 @@ public final class DrawManager {
 		String rstri = "";
 		switch (sel) {
 			case 0:
-				cstr = "char1";
-				lstr = "char3";
-				rstr = "char2";
-				cstri = "mikaport";
-				lstri = "macarona";
-				rstri = "midoriport";
+				cstr = "Midori";
+				lstr = "Aris";
+				rstr = "Uz";
+				drawimg("midoriport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
+				drawimgtrans("arisport", 50 - 400 / 2, 50, 400, 400, 0.5f);
+				drawimgtrans("uzport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
 				break;
 			case 1:
-				cstr = "char2";
-				lstr = "char1";
-				rstr = "char3";
-				lstri = "mikaport";
-				rstri = "macarona";
-				cstri = "midoriport";
+				cstr = "Uz";
+				lstr = "Midori";
+				rstr = "Aris";
+				drawimg("uzport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
+				drawimgtrans("midoriport", 50 - 400 / 2, 50, 400, 400, 0.5f);
+				drawimgtrans("arisport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
 				break;
 			case 2:
-				cstr = "char3";
-				lstr = "char2";
-				rstr = "char1";
-				rstri = "mikaport";
-				cstri = "macarona";
-				lstri = "midoriport";
+				cstr = "Aris";
+				lstr = "Uz";
+				rstr = "Midori";
+				drawimg("arisport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
+				drawimgtrans("uzport", 50 - 400 / 2, 50, 400, 400, 0.5f);
+				drawimgtrans("midoriport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
 				break;
 		}
 		int twtoffset = fontBigMetrics.stringWidth("12345678901234567890") / 4;
@@ -1264,10 +1274,6 @@ public final class DrawManager {
 		backBufferGraphics.drawString(cstr, frame.getWidth() / 2 - (fontBigMetrics.stringWidth(cstr) / 2), 600);
 		drawmultiline("This character is so fucking strong\npower level over 9000",
 				frame.getWidth() / 2 - twtoffset, 670, 20, 5);
-
-		drawimg(cstri, frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
-		drawimgtrans(lstri, 50 - 400 / 2, 50, 400, 400, 0.5f);
-		drawimgtrans(rstri, frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
 	}
 
 	public void drawsquare(int x, int y, int w, int h, java.awt.Color c) {

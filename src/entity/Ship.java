@@ -178,10 +178,10 @@ public class Ship extends Entity {
 	 * Switches the ship to its destroyed state.
 	 */
 	public final void destroy() {
-		new Sound().explosionsound();
+		new Sound().destroySound();
 		this.destructionCooldown.reset();
 
-		new Sound().explosionsound();
+		new Sound().destroySound();
 	}
 
 	/**

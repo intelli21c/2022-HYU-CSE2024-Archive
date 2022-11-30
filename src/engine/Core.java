@@ -129,10 +129,9 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, 50, 0, 0, 3, 0, 1, 1);
+			gameState = new GameState(1, 0, 50, 0, 0, 3, 0, 0, 1);
 
 			switch (returnCode) {
-
 				case 1:
 					// Main menu.
 					currentScreen = new TitleScreen(width, height, FPS);

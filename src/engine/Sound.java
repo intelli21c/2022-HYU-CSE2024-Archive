@@ -31,18 +31,6 @@ public class Sound {
         }
     }
 
-    public void explosionsound() {
-        try {
-            AudioInputStream audioInputStream = AudioSystem
-                    .getAudioInputStream(FileManager.class.getClassLoader().getResourceAsStream("explosion.wav"));
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public void bombSound() {
         try {
@@ -55,5 +43,16 @@ public class Sound {
             e.printStackTrace();
         }
 
+    }
+    public void destroySound() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem
+                    .getAudioInputStream(FileManager.class.getClassLoader().getResourceAsStream("Destroy.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
