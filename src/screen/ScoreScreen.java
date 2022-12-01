@@ -86,9 +86,8 @@ public class ScoreScreen extends Screen {
 					|| highScores.get(highScores.size() - 1).getScore() < this.score)
 				this.isNewRecord = true;
 
-		} catch (IOException e) {
-			logger.warning("Couldn't load high scores!");
 		}
+		catch(Exception e){}
 	}
 
 	/**
