@@ -210,7 +210,7 @@ public final class DrawManager {
 			// Images Loading
 			imagemap = new LinkedHashMap<String, BufferedImage>();
 			imagemap.put("macarona", fileManager.loadImage("macarona.png"));
-			imagemap.put("midoriport", fileManager.loadImage("midori-dot.png"));
+			imagemap.put("midoriport", fileManager.loadImage("midoridotport.png"));
 			imagemap.put("arisport", fileManager.loadImage("ArisDot.png"));
 			imagemap.put("uzport", fileManager.loadImage("UzDot.png"));
 			imagemap.put("MidoriBackSprite", fileManager.loadImage("MidoriBackSprite.png"));
@@ -1234,9 +1234,7 @@ public final class DrawManager {
 		String cstr = "";
 		String lstr = "";
 		String rstr = "";
-		String cstri = "";
-		String lstri = "";
-		String rstri = "";
+		int twtoffset = fontBigMetrics.stringWidth("12345678901234567890") / 4;
 		switch (sel) {
 			case 0:
 				cstr = "Midori";
@@ -1245,6 +1243,8 @@ public final class DrawManager {
 				drawimg("midoriport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
 				drawimgtrans("arisport", 50 - 400 / 2, 50, 400, 400, 0.5f);
 				drawimgtrans("uzport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
+				drawmultiline("This character is so fucking strong\npower level over 9000",
+						frame.getWidth() / 2 - twtoffset, 670, 20, 5);
 				break;
 			case 1:
 				cstr = "Uz";
@@ -1253,6 +1253,8 @@ public final class DrawManager {
 				drawimg("uzport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
 				drawimgtrans("midoriport", 50 - 400 / 2, 50, 400, 400, 0.5f);
 				drawimgtrans("arisport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
+				drawmultiline("This character is so fucking strong\npower level over 9000",
+						frame.getWidth() / 2 - twtoffset, 670, 20, 5);
 				break;
 			case 2:
 				cstr = "Aris";
@@ -1261,9 +1263,10 @@ public final class DrawManager {
 				drawimg("arisport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
 				drawimgtrans("uzport", 50 - 400 / 2, 50, 400, 400, 0.5f);
 				drawimgtrans("midoriport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
+				drawmultiline("This character is so fucking strong\npower level over 9000",
+						frame.getWidth() / 2 - twtoffset, 670, 20, 5);
 				break;
 		}
-		int twtoffset = fontBigMetrics.stringWidth("12345678901234567890") / 4;
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.setFont(fontBig);
 		backBufferGraphics.drawString(lstr, 0 + 125 - (fontBigMetrics.stringWidth(lstr) / 2), 550);
@@ -1272,8 +1275,6 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GREEN);
 		backBufferGraphics.setFont(fontBig);
 		backBufferGraphics.drawString(cstr, frame.getWidth() / 2 - (fontBigMetrics.stringWidth(cstr) / 2), 600);
-		drawmultiline("This character is so fucking strong\npower level over 9000",
-				frame.getWidth() / 2 - twtoffset, 670, 20, 5);
 	}
 
 	public void drawsquare(int x, int y, int w, int h, java.awt.Color c) {

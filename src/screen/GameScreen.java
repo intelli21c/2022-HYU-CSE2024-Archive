@@ -8,7 +8,6 @@ import java.util.Set;
 
 import engine.*;
 import entity.*;
-import entity.Item;
 import scripts.*;
 
 /**
@@ -138,7 +137,10 @@ public class GameScreen extends Screen {
 				break;
 		}
 		stage.prep(null);
-		this.ship = new Ship(this.width / 2, this.height - 30, Color.GREEN);
+		this.ship = switch (character) {
+			case 0 -> new Aris(this.width / 2, this.height - 30);
+			default -> new Ship(this.width / 2, this.height - 30, Color.GREEN);
+		};
 		ship.BULLET_POWER = power;
 		context.player = ship;
 		context.difficulty = difficulty;

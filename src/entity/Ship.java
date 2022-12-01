@@ -16,15 +16,15 @@ import engine.DrawManager.SpriteType;
 public class Ship extends Entity {
 
 	/** Time between shots. */
-	private int SHOOTING_INTERVAL = 200;
+	protected int SHOOTING_INTERVAL = 200;
 	/** Time between shots. */
-	private int BOMB_INTERVAL = 1000;
+	protected int BOMB_INTERVAL = 1000;
 	/** Speed of the bullets shot by the ship. */
-	private int BULLET_SPEED = -15;
+	protected int BULLET_SPEED = -15;
 	public int BULLET_POWER = 0;
 
 	/** Movement of the ship for each unit of time. */
-	private float SPEED;
+	public float SPEED;
 	public boolean slowp = false;
 
 	public int animctr = 1;
@@ -32,11 +32,11 @@ public class Ship extends Entity {
 	/** Minimum time between shots. */
 	public Cooldown shootingCooldown;
 	/** Minimum time between shots. */
-	private Cooldown bombCooldown;
+	protected Cooldown bombCooldown;
 	/** Time spent inactive between hits. */
-	private Cooldown destructionCooldown;
+	protected Cooldown destructionCooldown;
 	/** Movement of the ship for each unit of time. */
-	private int destructCool = 500;
+	protected int destructCool = 500;
 	/**
 	 * Constructor, establishes the ship's properties.
 	 *
@@ -96,7 +96,7 @@ public class Ship extends Entity {
 	 *                List of bullets on screen, to add the new bullet.
 	 * @return Checks if the bullet was shot correctly.
 	 */
-	public final boolean shoot(final Set<Bullet> bullets) {
+	public boolean shoot(final Set<Bullet> bullets) {
 		if (this.shootingCooldown.checkFinished()) {
 			if (BULLET_POWER < 8) {
 				new Sound().bulletsound();
@@ -154,7 +154,7 @@ public class Ship extends Entity {
 		return false;
 	}
 
-	public final boolean bomb() {
+	public boolean bomb() {
 		if (this.bombCooldown.checkFinished()) {
 			new Sound().bombSound();
 			this.bombCooldown.reset();
@@ -166,7 +166,7 @@ public class Ship extends Entity {
 	/**
 	 * Updates status of the ship.
 	 */
-	public final void update() {
+	public void update() {
 		if (this.isDestroyed()) {
 			if (this.destructionCooldown.checkFinished()) {
 				this.spriteType = SpriteType.Ship;
@@ -177,7 +177,7 @@ public class Ship extends Entity {
 	/**
 	 * Switches the ship to its destroyed state.
 	 */
-	public final void destroy() {
+	public void destroy() {
 		new Sound().destroySound();
 		this.destructionCooldown.reset();
 

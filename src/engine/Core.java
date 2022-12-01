@@ -125,12 +125,10 @@ public final class Core {
 		pass_score.add(1000);
 		pass_score.add(1200);
 
-		GameState gameState;
-
+		GameState gameState = new GameState(1, 0, 50, 0, 0, 3, 0, 0, 1);
 		int returnCode = 1;
-		do {
-			gameState = new GameState(1, 0, 50, 0, 0, 3, 0, 0, 1);
 
+		do {
 			switch (returnCode) {
 				case 1:
 					// Main menu.
