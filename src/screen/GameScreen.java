@@ -143,7 +143,9 @@ public class GameScreen extends Screen {
 		}
 		stage.prep(null);
 		this.ship = switch (character) {
-			case 0 -> new Aris(this.width / 2, this.height - 30);
+			case 0 -> new Midori(this.width / 2, this.height - 30);
+			case 1 -> new Aris(this.width / 2, this.height - 30);
+			case 2 -> new Uz(this.width / 2, this.height - 30);
 			default -> new Ship(this.width / 2, this.height - 30, Color.GREEN);
 		};
 		ship.BULLET_POWER = power;
@@ -328,8 +330,7 @@ public class GameScreen extends Screen {
 			drawManager.drawEnemy(e, e.getPositionX(), e.getPositionY());
 		}
 		for (Bullet bullet : this.bullets)
-			drawManager.drawPBullet(bullet, bullet.getPositionX(),
-					bullet.getPositionY());
+			drawManager.drawPBullet(bullet, bullet.getPositionX(), bullet.getPositionY(), character);
 
 		for (entity.Item item : this.items)
 			drawManager.drawItem(item, item.getPositionX(),

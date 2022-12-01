@@ -233,7 +233,9 @@ public final class DrawManager {
 			imagemap.put("GreenHeart", fileManager.loadImage("GreenHeart.png"));
 			imagemap.put("RedLunar", fileManager.loadImage("RedLunar.png"));
 			imagemap.put("PinkDoll", fileManager.loadImage("PinkDoll.png"));
-			imagemap.put("playerBullet", fileManager.loadImage("playerBullet.png"));
+			imagemap.put("UzBullet", fileManager.loadImage("UzBullet.png"));
+			imagemap.put("ArisBullet", fileManager.loadImage("ArisBullet.png"));
+			imagemap.put("MidoriBullet", fileManager.loadImage("MidoriBullet.png"));
 			imagemap.put("enemyBullet", fileManager.loadImage("enemyBullet.png"));
 			imagemap.put("bombIcon", fileManager.loadImage("bombIcon.png"));
 			imagemap.put("powerItem", fileManager.loadImage("powerItem.png"));
@@ -353,14 +355,21 @@ public final class DrawManager {
 	public void drawEBullet(final Bullet b, final int positionX,
 			final int positionY) {
 		switch (b.getSpriteType()) {
-			case Bullet -> drawimg("playerBullet", positionX, positionY, 20, 20);
+			case Bullet -> drawimg("UzBullet", positionX, positionY, 20, 20);
 			case EnemyBullet -> drawimg("enemyBullet", positionX - 10, positionY - 10, 20, 20);
 		}
 	}
 
 	public void drawPBullet(final Bullet b, final int positionX,
-			final int positionY) {
-		drawimg("playerBullet", positionX - 10, positionY - 10, 20, 20);
+			final int positionY, final int ch) {
+		switch (ch) {
+			//Midori
+			case 0 -> drawimg("MidoriBullet", positionX - 10, positionY - 10, 20, 20);
+			//Uz
+			case 1 -> drawimg("UzBullet", positionX - 10, positionY - 10, 20, 20);
+			//Aris
+			case 2 -> drawimg("ArisBullet", positionX - 10, positionY - 10, 20, 20);
+		}
 	}
 
 	public void drawBombEffect(Screen screen, final int positionX, final int positionY) {

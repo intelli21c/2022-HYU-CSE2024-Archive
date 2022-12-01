@@ -1,13 +1,13 @@
 package entity;
 
-import engine.Cooldown;
 import engine.Sound;
+import screen.GameScreen;
 
 import java.util.Set;
 import java.util.ArrayList;
 
-public class Aris extends Ship {
-    public Aris(int positionX, int positionY) {
+public class Uz extends Ship{
+    public Uz(int positionX, int positionY) {
         super(positionX, positionY, null);
     }
 
@@ -19,5 +19,10 @@ public class Aris extends Ship {
             bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
         }
         return true;
+    }
+
+    @Override
+    public boolean checkCollision(Entity b) {
+        return super.checkCollision(b);
     }
 }

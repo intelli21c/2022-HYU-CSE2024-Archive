@@ -1,13 +1,13 @@
 package entity;
 
-import engine.Cooldown;
 import engine.Sound;
 
 import java.util.Set;
 import java.util.ArrayList;
 
-public class Aris extends Ship {
-    public Aris(int positionX, int positionY) {
+public class Midori extends Ship{
+
+    public Midori(int positionX, int positionY) {
         super(positionX, positionY, null);
     }
 
