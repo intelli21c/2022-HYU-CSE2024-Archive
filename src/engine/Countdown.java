@@ -18,8 +18,11 @@ public class Countdown {
         TimerTask m_task = new TimerTask() {
             public void run() {
                 if (count > 0) {
+                    spinlock=false;
                     count--;
                 } else {
+                    spinlock=false;
+                    endp=true;
                     m_timer.cancel();
                 }
             }
