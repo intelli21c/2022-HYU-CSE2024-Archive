@@ -81,7 +81,7 @@ public class ScoreScreen extends Screen {
 		highScores = new java.util.ArrayList<Score>();
 		highScores.add(dummy);
 		try {
-			this.highScores = Core.getFileManager().loadHighScores();
+			//this.highScores = Core.getFileManager().loadHighScores();
 			if (highScores.size() < MAX_HIGH_SCORE_NUM
 					|| highScores.get(highScores.size() - 1).getScore() < this.score)
 				this.isNewRecord = true;
