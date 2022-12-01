@@ -78,7 +78,7 @@ public final class Core {
 		try {
 			LOGGER.setUseParentHandlers(false);
 
-			fileHandler = new FileHandler("log");
+			fileHandler = new FileHandler("engine/log");
 			fileHandler.setFormatter(new MinimalFormatter());
 
 			consoleHandler = new ConsoleHandler();

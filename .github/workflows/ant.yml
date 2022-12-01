@@ -42,7 +42,7 @@ jobs:
     - name: Build with Ant
       run: ant -noinput -buildfile build.xml
 
-test:
+  test:
 
     runs-on: ubuntu-latest
 
