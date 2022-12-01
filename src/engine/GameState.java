@@ -31,7 +31,6 @@ public class GameState {
 	private int character;
 	private int difficulty;
 
-
 	/**
 	 * Constructor.
 	 * 

@@ -1,6 +1,11 @@
 package screen;
 
-import java.awt.Color;
+import engine.*;
+import entity.*;
+import scripts.stage1;
+import scripts.stage2;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -325,6 +330,7 @@ public class GameScreen extends Screen {
 
 		// Interface.
 		drawManager.drawScore(this, this.score);
+		drawManager.drawTimer(this, 99);
 		drawManager.drawLives(this, this.lives);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
 
