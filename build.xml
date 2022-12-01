@@ -14,7 +14,7 @@
         <pathelement location="${classes.dir}" />
     </path>
 
-    <property name="tests.dir" value="test" />
+    <property name="tests.dir" value="tests" />
 
     <property name="main-class" value="engine.Core" />
 
