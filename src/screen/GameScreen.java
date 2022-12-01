@@ -157,6 +157,7 @@ public class GameScreen extends Screen {
 		this.inputDelay = Core.getCooldown(INPUT_DELAY);
 		this.inputDelay.reset();
 		originSpeed = this.ship.getSpeed();
+		engine.Countdown.countDown(120);
 	}
 
 	/**
@@ -254,15 +255,21 @@ public class GameScreen extends Screen {
 		for (EnemyShip e : context.enemys) {
 			e.update();
 		}
+		Countdown.update();
 		this.ship.update();
 		manageCollisions();
 		manageCollisionsItem();
 		cleanBullets();
-		draw();
+		if (Countdown.endp) {
+			this.isRunning = false;
+			return;
+		}
+
 		if (this.lives <= 0) {
 			this.isRunning = false;
 			return;
 		}
+		draw();
 	}
 
 	Cooldown tempblinkinner = Core.getCooldown(100);
@@ -330,7 +337,7 @@ public class GameScreen extends Screen {
 
 		// Interface.
 		drawManager.drawScore(this, this.score);
-		drawManager.drawTimer(this, 99);
+		drawManager.drawTimer(this, engine.Countdown.count);
 		drawManager.drawLives(this, this.lives);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
 
