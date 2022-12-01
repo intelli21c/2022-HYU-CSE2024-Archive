@@ -49,25 +49,26 @@ public class ScoreScreen extends Screen {
 	private float accuracy;
 	/** last stage before dead */
 	private int stage;
+
 	/**
 	 * Constructor, establishes the properties of the screen.
 	 *
 	 * @param width
-	 *            Screen width.
+	 *                  Screen width.
 	 * @param height
-	 *            Screen height.
+	 *                  Screen height.
 	 * @param fps
-	 *            Frames per second, frame rate at which the game is run.
+	 *                  Frames per second, frame rate at which the game is run.
 	 * @param gameState
-	 *            Current game state.
+	 *                  Current game state.
 	 */
 	public ScoreScreen(final int width, final int height, final int fps,
-					   final GameState gameState) {
+			final GameState gameState) {
 		super(width, height, fps);
 
 		this.score = gameState.getScore();
 		this.stage = gameState.getLevel();
-		this.accuracy = Math.round((float)gameState.getShipsDestroyed()/gameState.getBulletsShot()*100);
+		this.accuracy = Math.round((float) gameState.getShipsDestroyed() / gameState.getBulletsShot() * 100);
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
@@ -76,12 +77,13 @@ public class ScoreScreen extends Screen {
 		this.nameCharSelected = 0;
 		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
 		this.selectionCooldown.reset();
-
+		Score dummy = new Score("RMH", 5230);
+		highScores = new java.util.ArrayList<Score>();
+		highScores.add(dummy);
 		try {
 			this.highScores = Core.getFileManager().loadHighScores();
 			if (highScores.size() < MAX_HIGH_SCORE_NUM
-					|| highScores.get(highScores.size() - 1).getScore()
-					< this.score)
+					|| highScores.get(highScores.size() - 1).getScore() < this.score)
 				this.isNewRecord = true;
 
 		} catch (IOException e) {
@@ -134,17 +136,15 @@ public class ScoreScreen extends Screen {
 					this.selectionCooldown.reset();
 				}
 				if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
-					this.name[this.nameCharSelected] =
-							(char) (this.name[this.nameCharSelected]
-									== LAST_CHAR ? FIRST_CHAR
-									: this.name[this.nameCharSelected] + 1);
+					this.name[this.nameCharSelected] = (char) (this.name[this.nameCharSelected] == LAST_CHAR
+							? FIRST_CHAR
+							: this.name[this.nameCharSelected] + 1);
 					this.selectionCooldown.reset();
 				}
 				if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
-					this.name[this.nameCharSelected] =
-							(char) (this.name[this.nameCharSelected]
-									== FIRST_CHAR ? LAST_CHAR
-									: this.name[this.nameCharSelected] - 1);
+					this.name[this.nameCharSelected] = (char) (this.name[this.nameCharSelected] == FIRST_CHAR
+							? LAST_CHAR
+							: this.name[this.nameCharSelected] - 1);
 					this.selectionCooldown.reset();
 				}
 			}
@@ -156,7 +156,8 @@ public class ScoreScreen extends Screen {
 	 * Saves the score as a high score.
 	 */
 	private void saveScore() {
-		highScores.add(new Score(new String(this.name), score, this.stage, this.shipsDestroyed, this.bulletsShot, this.accuracy));
+		highScores.add(new Score(new String(this.name), score, this.stage, this.shipsDestroyed, this.bulletsShot,
+				this.accuracy));
 		Collections.sort(highScores);
 		if (highScores.size() > MAX_HIGH_SCORE_NUM)
 			highScores.remove(highScores.size() - 1);
@@ -178,7 +179,8 @@ public class ScoreScreen extends Screen {
 				this.isNewRecord);
 		drawManager.drawResults(this, this.score, this.livesRemaining,
 				this.shipsDestroyed, (float) this.shipsDestroyed
-						/ this.bulletsShot, this.isNewRecord);
+						/ this.bulletsShot,
+				this.isNewRecord);
 
 		if (this.isNewRecord)
 			drawManager.drawNameInput(this, this.name, this.nameCharSelected);
