@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import engine.*;
-import entity.*;
-import scripts.*;
-
 /**
  * Implements the game screen, where the action happens.
  * 
@@ -159,7 +155,7 @@ public class GameScreen extends Screen {
 		this.inputDelay = Core.getCooldown(INPUT_DELAY);
 		this.inputDelay.reset();
 		originSpeed = this.ship.getSpeed();
-		engine.Countdown.countDown(120);
+		engine.Countdown.countDown(5);
 	}
 
 	/**

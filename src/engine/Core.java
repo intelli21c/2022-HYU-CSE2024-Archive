@@ -163,7 +163,7 @@ public final class Core {
 					} while (gameState.getLivesRemaining() > 0
 							&& gameState.getLevel() % NUM_LEVELS != 0
 							&& ((GameScreen) currentScreen).accumulated_score >= pass_score
-									.get(((GameScreen) currentScreen).level - 1));
+									.get(((GameScreen) currentScreen).level - 1) && !Countdown.endp);
 
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "
