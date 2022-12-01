@@ -208,11 +208,9 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,linux,intellij+all,java,git
 #
 # Cusotmized by Hansae Ju
-log
 log.*
 /bin/
 .classpath
 .project
-scores
 log.1
 log.1
