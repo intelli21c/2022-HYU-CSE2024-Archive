@@ -155,7 +155,7 @@ public class GameScreen extends Screen {
 		this.inputDelay = Core.getCooldown(INPUT_DELAY);
 		this.inputDelay.reset();
 		originSpeed = this.ship.getSpeed();
-		engine.Countdown.countDown(5);
+		engine.Countdown.countDown(99);
 	}
 
 	/**
