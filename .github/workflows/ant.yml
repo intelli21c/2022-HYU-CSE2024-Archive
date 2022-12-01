@@ -37,8 +37,6 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: Compute code metrics
-      run: java -jar ck071.jar .
     - name: Build with Ant
       run: ant -noinput -buildfile build.xml
 
@@ -53,5 +51,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: Test aaa
+    - name: Build with Ant
+      run: ant -noinput -buildfile build.xml
+    - name: Test with Ant and JUnit
       run: ant -noinput -buildfile build.xml

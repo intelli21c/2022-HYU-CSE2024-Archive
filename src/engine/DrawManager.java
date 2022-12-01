@@ -447,12 +447,13 @@ public final class DrawManager {
 	 * @param score  Current score.
 	 */
 
-	public void drawTimer(final Screen screen, final int max_count) {
+	public void drawTimer(final Screen screen, final int count) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
-
-		backBufferGraphics.drawString("Timer : " + String.valueOf(countDown(99)), 1600, 25);
+		int l=fontRegularMetrics.stringWidth("aaaaaaaaaaaa");
+		backBufferGraphics.drawString("Timer : " + String.valueOf(count), screen.getWidth()-167-l, 25);
 	}
+
 	public void drawScore(final Screen screen, final int score) {
 		/*
 		 * backBufferGraphics.setFont(fontRegular);
