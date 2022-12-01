@@ -10,6 +10,22 @@ on:
     branches: [ "main" ]
 
 jobs:
+
+  checkquality:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Compute code metrics
+      run: java -jar ck071.jar .
+
+
   build:
 
     runs-on: ubuntu-latest
@@ -24,4 +40,18 @@ jobs:
     - name: Compute code metrics
       run: java -jar ck071.jar .
     - name: Build with Ant
+      run: ant -noinput -buildfile build.xml
+
+test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Test aaa
       run: ant -noinput -buildfile build.xml
