@@ -25,7 +25,7 @@
 
     <target name="compile">
         <mkdir dir="${classes.dir}" />
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" />
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" encoding="utf-8"/>
         <copy todir="${classes.dir}">
             <fileset dir="${res.dir}" />
         </copy>
@@ -33,7 +33,7 @@
 
     <target name="compile-tests">
         <mkdir dir="${testbuild.dir}" />
-        <javac srcdir="${tests.dir}" destdir="${testbuild.dir}" includeantruntime="false">
+        <javac srcdir="${tests.dir}" destdir="${testbuild.dir}" includeantruntime="false" encoding="utf-8">
             <classpath refid="classpath.test" />
         </javac>
     </target>
@@ -54,7 +54,7 @@
         <junit printsummary="on" haltonfailure="yes" fork="true">
             <classpath>
                 <path refid="classpath.test" />
-                <pathelement location="${test.build.dir}" />
+                <pathelement location="${testbuild.dir}" />
             </classpath>
             <formatter type="brief" usefile="false" />
             <batchtest>

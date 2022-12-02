@@ -209,6 +209,7 @@ $RECYCLE.BIN/
 #
 # Cusotmized by Hansae Ju
 /bin/
+build/
 .classpath
 .project
 score
