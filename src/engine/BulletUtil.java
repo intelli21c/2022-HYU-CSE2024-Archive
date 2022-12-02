@@ -2,6 +2,7 @@ package engine;
 
 import java.util.ArrayList;
 import entity.Bullet;
+import entity.Ship;
 
 public class BulletUtil {
     public static BulletUtil BUTIL;
@@ -62,7 +63,7 @@ public class BulletUtil {
             for (int i = 0; i < count; i++) {
                 x = posx + (int) (initr * Math.cos(offset * i));
                 y = posy + (int) (initr * Math.sin(offset * i));
-                Bullet b = new Bullet(x, y, 0, 0);
+                Bullet b = new Bullet(x, y, 0, 0, 0);
                 b.auto = false;
                 list.add(b);
             }
@@ -106,7 +107,7 @@ public class BulletUtil {
             int posy = positionY + (int) (radius * Math.sin(theta));
             double velx = (v * Math.cos(theta));
             double vely = (v * Math.sin(theta));
-            Bullet a = new Bullet(posx, posy, velx, vely);
+            Bullet a = new Bullet(posx, posy, velx, vely, 0);
             b.add(a);
             theta += intv;
         }
@@ -119,7 +120,7 @@ public class BulletUtil {
         double l = Math.sqrt(Math.pow(velx, 2) + Math.pow(vely, 2)) / speed;
         velx = velx / l;
         vely = vely / l;
-        Bullet b = new Bullet(PositionX, positionY, velx, vely);
+        Bullet b = new Bullet(PositionX, positionY, velx, vely, 0);
         return b;
     }
 }

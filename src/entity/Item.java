@@ -72,14 +72,6 @@ public class Item extends Entity {
 	}
 
 	/**
-	 *
-	 * @return
-	 */
-	public final int getScore() {
-		return 50;
-	}
-
-	/**
 	 * Setter of the speed of the item.
 	 * 
 	 * @param speed

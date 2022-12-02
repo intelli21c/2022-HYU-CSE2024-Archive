@@ -3,6 +3,7 @@ package entity;
 import java.awt.Color;
 
 import engine.DrawManager.SpriteType;
+import screen.GameScreen;
 
 /**
  * Implements a bullet that moves vertically up or down.
@@ -21,6 +22,7 @@ public class Bullet extends Entity {
 	public Boolean auto = true;
 	public Boolean deleteoob = true;
 	public int shooter;
+	public int Damage;
 
 	public double speedx;
 	public double speedy;
@@ -42,13 +44,14 @@ public class Bullet extends Entity {
 		this.speedy = speed;
 	}
 
-	public Bullet(final int positionX, final int positionY, double spdx, double spdy) {
+	public Bullet(final int positionX, final int positionY, double spdx, double spdy, final int damage) {
 		super(positionX, positionY, 3 * 2, 5 * 3, Color.RED);
 		this.accuposX = positionX;
 		this.accuposY = positionY;
 		this.speedx = spdx;
 		this.speedy = spdy;
 		this.spriteType = SpriteType.EnemyBullet;
+		this.Damage = damage;
 	}
 
 	public void moverel(double vx, double vy) {

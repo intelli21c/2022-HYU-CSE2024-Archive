@@ -48,7 +48,7 @@ public final class BulletPool {
 			bullet.setSpeed(speed);
 			bullet.spriteType=SpriteType.Bullet;
 		} else {
-			bullet = new Bullet(positionX, positionY, speed, movingPattern);
+			bullet = new Bullet(positionX, positionY, speed, movingPattern, Ship.BULLET_POWER);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);
 		}
 		return bullet;

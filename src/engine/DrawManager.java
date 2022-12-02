@@ -241,12 +241,6 @@ public final class DrawManager {
 			imagemap.put("powerItem", fileManager.loadImage("powerItem.png"));
 			imagemap.put("bombItem", fileManager.loadImage("bombItem.png"));
 			imagemap.put("scoreItem", fileManager.loadImage("scoreItem.png"));
-			imagemap.put("Stage2Bossf", fileManager.loadImage("Stage2Boss.png"));
-			imagemap.put("Stage2Bossl", fileManager.loadImage("Stage2Boss2.png"));
-			imagemap.put("Stage2Bossr", fileManager.loadImage("Stage2Boss3.png"));
-			imagemap.put("Stage4Bossf", fileManager.loadImage("Stage4Boss.png"));
-			imagemap.put("Stage4Bossl", fileManager.loadImage("Stage4Boss2.png"));
-			imagemap.put("Stage4Bossr", fileManager.loadImage("Stage4Boss3.png"));
 			imagemap.put("LastBoss", fileManager.loadImage("LastBoss.png"));
 			imagemap.put("LastBoss2", fileManager.loadImage("LastBoss2.png"));
 			imagemap.put("BombEffect", fileManager.loadImage("BombEffect.png"));
@@ -379,7 +373,7 @@ public final class DrawManager {
 	public void drawEnemy(final EnemyShip enemy, final int positionX,
 			final int positionY) {
 		switch (enemy.getSpriteType()) {
-			case EnemyShipA1, EnemyShipA2 -> drawimg("RedLunar", positionX, positionY, 60, 97);
+			case EnemyShipA1, EnemyShipA2 -> drawimg("RedLunar", positionX, positionY, 62, 62);
 			case EnemyShipB1, EnemyShipB2 -> drawimg("GreenHeart", positionX, positionY, 62, 62);
 			case EnemyShipC1, EnemyShipC2 -> drawimg("BlueStar", positionX, positionY, 60, 58);
 			case EnemyShipSpecial -> drawimg("PinkDoll", positionX, positionY, 25, 27);
@@ -529,6 +523,13 @@ public final class DrawManager {
 		backBufferGraphics.drawLine(0, positionY + 1, screen.getWidth(),
 				positionY + 1);
 	}
+
+	public void drawBomb(final Screen screen, final int BombNumber) {
+		drawimg("bombIcon", 1330, 5, 30, 30);
+		backBufferGraphics.drawString("X", 1380, 25);
+		backBufferGraphics.drawString(String.valueOf(BombNumber), 1405, 25);
+	}
+
 
 	/**
 	 * Draws game title.

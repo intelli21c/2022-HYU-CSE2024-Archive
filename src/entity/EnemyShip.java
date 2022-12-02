@@ -30,6 +30,7 @@ public class EnemyShip extends Entity {
 	private boolean isDestroyed;
 	/** Values of the ship, in points, when destroyed. */
 	private int pointValue;
+	public int Hp;
 	public itemtype droptype;
 
 	/** lives of the enemyship. */
@@ -56,18 +57,25 @@ public class EnemyShip extends Entity {
 			case EnemyShipA1:
 			case EnemyShipA2:
 				this.pointValue = A_TYPE_POINTS;
+				this.Hp = 0;
 				break;
 			case EnemyShipB1:
 			case EnemyShipB2:
 				this.pointValue = B_TYPE_POINTS;
+				this.Hp = 0;
 				break;
 			case EnemyShipC1:
 			case EnemyShipC2:
+				this.pointValue = C_TYPE_POINTS;
+				this.Hp = 0;
+				break;
 			case EnemyShipSpecial:
 				this.pointValue = C_TYPE_POINTS;
+				this.Hp = 1000;
 				break;
 			default:
 				this.pointValue = 0;
+				this.Hp = 0;
 				break;
 		}
 	}
@@ -82,6 +90,7 @@ public class EnemyShip extends Entity {
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
 		this.pointValue = BONUS_TYPE_POINTS;
+		this.Hp = 1000;
 	}
 
 	/**
@@ -167,4 +176,5 @@ public class EnemyShip extends Entity {
 	public final boolean isDestroyed() {
 		return this.isDestroyed;
 	}
+
 }

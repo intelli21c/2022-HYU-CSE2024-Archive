@@ -8,7 +8,10 @@ import java.util.ArrayList;
 
 public class Uz extends Ship{
     public Uz(int positionX, int positionY) {
+
         super(positionX, positionY, null);
+        // This character very fast but scoring is very good.
+        this.SPEED = 15;
     }
 
     @Override
@@ -16,13 +19,10 @@ public class Uz extends Ship{
         if (this.shootingCooldown.checkFinished()) {
             new Sound().bulletsound();
             this.shootingCooldown.reset();
-            bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED));
+            bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED, BULLET_POWER));
+            return true;
         }
-        return true;
+        return false;
     }
 
-    @Override
-    public boolean checkCollision(Entity b) {
-        return super.checkCollision(b);
-    }
 }

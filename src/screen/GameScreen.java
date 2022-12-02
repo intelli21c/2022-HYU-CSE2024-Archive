@@ -140,11 +140,11 @@ public class GameScreen extends Screen {
 		stage.prep(null);
 		this.ship = switch (character) {
 			case 0 -> new Midori(this.width / 2, this.height - 30);
-			case 1 -> new Aris(this.width / 2, this.height - 30);
-			case 2 -> new Uz(this.width / 2, this.height - 30);
+			case 1 -> new Uz(this.width / 2, this.height - 30);
+			case 2 -> new Aris(this.width / 2, this.height - 30);
 			default -> new Ship(this.width / 2, this.height - 30, Color.GREEN);
 		};
-		ship.BULLET_POWER = power;
+		Ship.BULLET_POWER = power;
 		context.player = ship;
 		context.difficulty = difficulty;
 		// Appears each 10-30 seconds.
@@ -219,7 +219,10 @@ public class GameScreen extends Screen {
 			this.ship.moveDown();
 		}
 		if (moveSlow) {
-			this.ship.setSPEED(4);
+			if (character == 1)
+				this.ship.setSPEED(8);
+			else
+				this.ship.setSPEED(4);
 		}
 		if (!moveSlow) {
 			this.ship.setSPEED(originSpeed);
@@ -227,15 +230,31 @@ public class GameScreen extends Screen {
 		}
 		if (bomb) {
 			if (this.ship.bomb()) {
-				for (EnemyShip e : context.enemys) {
-					if (bombNumber > 0 && !e.isDestroyed()) {
-						e.destroy();
-						score += e.getPointValue();
-						if (e.droptype != null)
-							items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
+				if (bombNumber > 0) {
+					bombNumber--;
+					if (character == 0) {
+						lives++;
+						for (EnemyShip e : context.enemys) {
+							if (!e.isDestroyed()) {
+								e.destroy();
+								score += e.getPointValue();
+								if (e.droptype != null)
+									items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
+							}
+						}
 					}
-				}
-				bombNumber--;
+					else {
+						for (EnemyShip e : context.enemys) {
+							if (!e.isDestroyed()) {
+								e.destroy();
+								score += e.getPointValue();
+								if (e.droptype != null)
+									items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
+							}
+						}
+					}
+				} else
+					bombNumber = 0;
 			}
 		}
 
@@ -335,6 +354,7 @@ public class GameScreen extends Screen {
 		// Interface.
 		drawManager.drawScore(this, this.score);
 		drawManager.drawTimer(this, engine.Countdown.count);
+		drawManager.drawBomb(this, this.bombNumber);
 		drawManager.drawLives(this, this.lives);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
 
@@ -411,10 +431,15 @@ public class GameScreen extends Screen {
 		for (Bullet bullet : this.bullets) {
 			for (EnemyShip e : context.enemys) {
 				if (!e.isDestroyed() && checkCollision(bullet, e)) {
-					score += e.getPointValue();
-					e.destroy();
-					if (e.droptype != null)
-						items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
+					if (e.Hp> 0) {
+						e.Hp -= Ship.BULLET_POWER;
+					}
+					else {
+						score += e.getPointValue();
+						e.destroy();
+						if (e.droptype != null)
+							items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
+					}
 
 				}
 			}
@@ -441,9 +466,23 @@ public class GameScreen extends Screen {
 	 */
 	private void manageCollisionsItem() {
 		if (ship.getPositionY() < itemcolborder && !bordercrossed) {
-			bordercrossed = true;
-			for (Item itm : this.items) {
-				itm.hometgt = ship;
+			switch (character) {
+				case 0, 1 -> {
+					if (ship.BULLET_POWER == 128) {
+						bordercrossed = true;
+						for (Item itm : this.items) {
+							itm.hometgt = ship;
+						}
+					}
+				}
+				case 2 -> {
+					if (ship.BULLET_POWER == 192) {
+						bordercrossed = true;
+						for (Item itm : this.items) {
+							itm.hometgt = ship;
+						}
+					}
+				}
 			}
 		}
 		if (ship.getPositionY() > itemcolborder && bordercrossed) {
@@ -457,10 +496,18 @@ public class GameScreen extends Screen {
 			if (checkCollision(ship, itm)) {
 				switch (itm.getItemType()) {
 					case power -> {
-						if (ship.BULLET_POWER == 128)
-							score += 30;
-						else {
-							ship.BULLET_POWER += 10;
+						if (character == 0 || character == 2) {
+							if (ship.BULLET_POWER == 128)
+								score += 30;
+							else {
+								ship.BULLET_POWER += 10;
+							}
+						} else {
+							if (ship.BULLET_POWER == 192)
+								score += 30;
+							else {
+								ship.BULLET_POWER += 10;
+							}
 						}
 					}
 					case bomb -> {
@@ -469,7 +516,12 @@ public class GameScreen extends Screen {
 						} else
 							bombNumber++;
 					}
-					case score -> score += itm.getScore();
+					case score -> {
+						if (character == 1) {
+							score += ship.getHeight() * 50;
+						}else
+							score += 50;
+					}
 				}
 				itm.use();
 				delitm.add(itm);
