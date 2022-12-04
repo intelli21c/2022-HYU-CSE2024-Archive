@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Color;
+import java.util.Vector;
 
 import engine.DrawManager.SpriteType;
 import screen.GameScreen;

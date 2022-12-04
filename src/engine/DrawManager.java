@@ -142,6 +142,7 @@ public final class DrawManager {
 		 * Bonus ship.
 		 */
 		EnemyShipSpecial,
+		Boss,
 		/** Destroyed enemy ship - first form. */
 		Explosion,
 		/** Destroyed enemy ship - second form. */
@@ -385,6 +386,7 @@ public final class DrawManager {
 			case EnemyShipB1, EnemyShipB2 -> drawimg("GreenHeart", positionX, positionY, 62, 62);
 			case EnemyShipC1, EnemyShipC2 -> drawimg("BlueStar", positionX, positionY, 60, 58);
 			case EnemyShipSpecial -> drawimg("PinkDoll", positionX, positionY, 25, 27);
+			case Boss -> drawimg("LastBoss", positionX, positionY, 500, 500);
 		}
 	}
 

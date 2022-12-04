@@ -73,6 +73,9 @@ public class EnemyShip extends Entity {
 				this.pointValue = C_TYPE_POINTS;
 				this.Hp = 100000;
 				break;
+			case Boss:
+				this.pointValue = 500000000;
+				this.Hp = 1000000000;
 			default:
 				this.pointValue = 0;
 				this.Hp = 0;
