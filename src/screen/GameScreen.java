@@ -4,6 +4,7 @@ import engine.*;
 import entity.*;
 import scripts.stage1;
 import scripts.stage2;
+import scripts.stage3;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -85,6 +86,7 @@ public class GameScreen extends Screen {
 	private final int itemcolborder = 300;
 
 	private boolean bordercrossed = false;
+	private boolean slowp = false;
 
 	/**
 	 * Currently loaded script
@@ -129,15 +131,21 @@ public class GameScreen extends Screen {
 
 		switch (this.level) {
 			case 1:
-				this.stage = new stage2();
+				this.stage = new stage1();
 				break;
 			case 2:
 				this.stage = new stage2();
+				break;
+			case 3:
+				this.stage = new stage3();
 				break;
 			default:
 				this.stage = new stage1();
 				break;
 		}
+
+		this.stage = new stage3();
+
 		stage.prep(null);
 		this.ship = switch (character) {
 			case 0 -> new Midori(this.width / 2, this.height - 30);
@@ -244,8 +252,7 @@ public class GameScreen extends Screen {
 									items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
 							}
 						}
-					}
-					else {
+					} else {
 						for (EnemyShip e : context.enemys) {
 							if (!e.isDestroyed()) {
 								e.destroy();
@@ -272,13 +279,14 @@ public class GameScreen extends Screen {
 			}
 		}
 
-
 		if (moveLeft)
 			ship.animctr = 2;
 		else if (moveRight)
 			ship.animctr = 3;
 		else
 			ship.animctr = 1;
+
+		this.slowp = moveSlow;
 		for (EnemyShip e : context.enemys) {
 			e.update();
 		}
@@ -343,7 +351,7 @@ public class GameScreen extends Screen {
 		} else {
 			drawManager.drawimg(shn, ship.getCPositionX() - 30, ship.getCPositionY() - 30, 60, 60);
 		}
-		if (ship.getSpeed() == 4)
+		if (slowp)
 			drawManager.drawsquare(ship.getPositionX(), ship.getPositionY(), ship.getWidth(), ship.getHeight(),
 					java.awt.Color.WHITE);
 		for (Bullet bullet : context.bullets) {
@@ -412,6 +420,7 @@ public class GameScreen extends Screen {
 		this.bullets.removeAll(recyclable);
 		BulletPool.recycle(recyclable);
 	}
+
 	/**
 	 * Cleans bullets that go off screen.
 	 */
@@ -433,19 +442,6 @@ public class GameScreen extends Screen {
 		this.uzBullets.removeAll(recyclable);
 		UzBulletPool.recycle(recyclable);
 	}
-
-	/*
-	 * private void cleanItems() {
-	 * Set<entity.Item> recyclable = new HashSet<entity.Item>();
-	 * for (entity.Item item : this.items) {
-	 * item.update();
-	 * if (item.getPositionY() > this.height)
-	 * recyclable.add(item);
-	 * }
-	 * this.items.removeAll(recyclable);
-	 * ItemPool.recycle(recyclable);
-	 * }
-	 */
 
 	/**
 	 * Manages collisions between bullets and ships.
@@ -469,10 +465,9 @@ public class GameScreen extends Screen {
 		for (Bullet bullet : this.bullets) {
 			for (EnemyShip e : context.enemys) {
 				if (!e.isDestroyed() && checkCollision(bullet, e)) {
-					if (e.Hp> 0) {
+					if (e.Hp > 0) {
 						e.Hp -= Ship.BULLET_POWER;
-					}
-					else {
+					} else {
 						score += e.getPointValue();
 						e.destroy();
 						if (e.droptype != null)
@@ -486,10 +481,9 @@ public class GameScreen extends Screen {
 			for (EnemyShip e : context.enemys) {
 				uzBullet.hometgt = e;
 				if (!e.isDestroyed() && checkCollision(uzBullet, e)) {
-					if (e.Hp> 0) {
+					if (e.Hp > 0) {
 						e.Hp -= Ship.BULLET_POWER;
-					}
-					else {
+					} else {
 						score += e.getPointValue();
 						e.destroy();
 						if (e.droptype != null)
@@ -540,7 +534,7 @@ public class GameScreen extends Screen {
 				}
 			}
 		}
-		if (ship.getPositionY() > itemcolborder && bordercrossed) {
+		if ((ship.getPositionY() > itemcolborder) && bordercrossed) {
 			bordercrossed = false;
 		}
 		ArrayList<Item> delitm = new ArrayList<Item>();
@@ -574,7 +568,7 @@ public class GameScreen extends Screen {
 					case score -> {
 						if (character == 1) {
 							score += ship.getHeight() * 50;
-						}else
+						} else
 							score += 50;
 					}
 				}

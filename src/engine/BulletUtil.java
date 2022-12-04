@@ -88,6 +88,20 @@ public class BulletUtil {
         }
     }
 
+    public class SemiStaticRadial extends BulletController {
+        double v;
+
+        public SemiStaticRadial(int n, double d, double lo, double w, int x, int y, Double v) {
+            this.list = new ArrayList<Bullet>();
+
+            for (int i = 0; i < n; i++) {
+                list.addAll(circularadial(x, y, (int) (n * d), (int) (2 * Math.PI / lo), w * n, v));
+            }
+            this.v = v;
+        }
+
+    }
+
     public static ArrayList<Bullet> varyingspeedline(int positionX, int positionY, int destX, int destY, int count,
             int variance, int basespd) {
         ArrayList<Bullet> b = new ArrayList<Bullet>();

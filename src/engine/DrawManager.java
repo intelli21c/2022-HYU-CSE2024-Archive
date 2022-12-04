@@ -243,6 +243,7 @@ public final class DrawManager {
 			imagemap.put("scoreItem", fileManager.loadImage("scoreItem.png"));
 			imagemap.put("LastBoss", fileManager.loadImage("LastBoss.png"));
 			imagemap.put("LastBoss2", fileManager.loadImage("LastBoss2.png"));
+			imagemap.put("orin1", fileManager.loadImage("Stage2Boss.png"));
 			imagemap.put("BombEffect", fileManager.loadImage("BombEffect.png"));
 
 		} catch (IOException e) {
@@ -357,14 +358,15 @@ public final class DrawManager {
 	public void drawPBullet(final Bullet b, final int positionX,
 			final int positionY, final int ch) {
 		switch (ch) {
-			//Midori
+			// Midori
 			case 0 -> drawimg("MidoriBullet", positionX - 10, positionY - 10, 20, 20);
-			//Uz
+			// Uz
 			case 1 -> drawimg("UzBullet", positionX - 10, positionY - 10, 20, 20);
-			//Aris
+			// Aris
 			case 2 -> drawimg("ArisBullet", positionX - 10, positionY - 10, 20, 20);
 		}
 	}
+
 	public void drawUBullet(final UzBullet u, final int positionX, final int positionY) {
 		drawimg("UzSubBullet", positionX - 10, positionY - 10, 15, 15);
 	}
@@ -382,11 +384,11 @@ public final class DrawManager {
 	public void drawEnemy(final EnemyShip enemy, final int positionX,
 			final int positionY) {
 		switch (enemy.getSpriteType()) {
-			case EnemyShipA1, EnemyShipA2 -> drawimg("RedLunar", positionX, positionY, 62, 62);
-			case EnemyShipB1, EnemyShipB2 -> drawimg("GreenHeart", positionX, positionY, 62, 62);
-			case EnemyShipC1, EnemyShipC2 -> drawimg("BlueStar", positionX, positionY, 60, 58);
-			case EnemyShipSpecial -> drawimg("PinkDoll", positionX, positionY, 25, 27);
-			case Boss -> drawimg("LastBoss", positionX, positionY, 500, 500);
+			case EnemyShipA1, EnemyShipA2 -> drawimg("RedLunar", positionX - 31, positionY - 31, 62, 62);
+			case EnemyShipB1, EnemyShipB2 -> drawimg("GreenHeart", positionX - 31, positionY - 31, 62, 62);
+			case EnemyShipC1, EnemyShipC2 -> drawimg("BlueStar", positionX - 30, positionY - 29, 60, 58);
+			case EnemyShipSpecial -> drawimg("PinkDoll", positionX - 12, positionY - 13, 25, 27);
+			case Boss -> drawimg("orin1", positionX - 50, positionY - 50, 100, 100);
 		}
 	}
 
@@ -463,8 +465,8 @@ public final class DrawManager {
 	public void drawTimer(final Screen screen, final int count) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
-		int l=fontRegularMetrics.stringWidth("aaaaaaaaaaaa");
-		backBufferGraphics.drawString("Timer : " + String.valueOf(count), screen.getWidth()-167-l, 25);
+		int l = fontRegularMetrics.stringWidth("aaaaaaaaaaaa");
+		backBufferGraphics.drawString("Timer : " + String.valueOf(count), screen.getWidth() - 167 - l, 25);
 	}
 
 	public void drawScore(final Screen screen, final int score) {
@@ -474,6 +476,8 @@ public final class DrawManager {
 		 * String scoreString = String.format("%04d", score);
 		 * backBufferGraphics.drawString(scoreString, screen.getWidth() - 60, 25);
 		 */
+		backBufferGraphics.setColor(Color.BLACK);
+		backBufferGraphics.drawRect(0, 0, screen.getWidth(), 41);
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 
@@ -539,7 +543,6 @@ public final class DrawManager {
 		backBufferGraphics.drawString("X", 1380, 25);
 		backBufferGraphics.drawString(String.valueOf(BombNumber), 1405, 25);
 	}
-
 
 	/**
 	 * Draws game title.

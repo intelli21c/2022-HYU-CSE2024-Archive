@@ -32,7 +32,7 @@ public final class Core {
 	/**
 	 * Total number of levels.
 	 */
-	private static final int NUM_LEVELS = 6;
+	private static final int NUM_LEVELS = 3;
 
 	/**
 	 * Frame to draw the screen on.
@@ -163,7 +163,8 @@ public final class Core {
 					} while (gameState.getLivesRemaining() > 0
 							&& gameState.getLevel() % NUM_LEVELS != 0
 							&& ((GameScreen) currentScreen).accumulated_score >= pass_score
-									.get(((GameScreen) currentScreen).level - 1) && !Countdown.endp);
+									.get(((GameScreen) currentScreen).level - 1)
+							&& !Countdown.endp);
 
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " score screen at " + FPS + " fps, with a score of "

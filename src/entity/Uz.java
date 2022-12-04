@@ -6,7 +6,7 @@ import screen.GameScreen;
 import java.util.Set;
 import java.util.ArrayList;
 
-public class Uz extends Ship{
+public class Uz extends Ship {
     public Uz(int positionX, int positionY) {
         super(positionX, positionY, null);
         // This character very fast but scoring is very good.
