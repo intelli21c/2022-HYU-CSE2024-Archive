@@ -22,6 +22,7 @@ public class Ship extends Entity {
 	/** Speed of the bullets shot by the ship. */
 	protected int BULLET_SPEED = -15;
 	public static int BULLET_POWER = 1;
+	public static int SUB_BULLET_POWER = 50;
 
 	/** Movement of the ship for each unit of time. */
 	public float SPEED;
@@ -31,6 +32,7 @@ public class Ship extends Entity {
 
 	/** Minimum time between shots. */
 	public Cooldown shootingCooldown;
+	public Cooldown uzshootingCooldown;
 	/** Minimum time between shots. */
 	protected Cooldown bombCooldown;
 	/** Time spent inactive between hits. */
@@ -52,6 +54,7 @@ public class Ship extends Entity {
 		super(positionX, positionY, 10, 10, color);
 		this.spriteType = SpriteType.Ship;
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
+		this.uzshootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.destructionCooldown = Core.getCooldown(destructCool);
 		this.SPEED = 10;
 		this.bombCooldown = Core.getCooldown(BOMB_INTERVAL);
@@ -97,63 +100,11 @@ public class Ship extends Entity {
 	 * @return Checks if the bullet was shot correctly.
 	 */
 	public boolean shoot(final Set<Bullet> bullets) {
-
-		if (this.shootingCooldown.checkFinished()) {
-			if (BULLET_POWER < 8) {
-				new Sound().bulletsound();
-				this.shootingCooldown.reset();
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED, BULLET_POWER));
-			} else if (BULLET_POWER < 24) {
-				new Sound().bulletsound();
-				this.shootingCooldown.reset();
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED, BULLET_POWER));
-			} else if (BULLET_POWER < 48) {
-				new Sound().bulletsound();
-				this.shootingCooldown.reset();
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED, BULLET_POWER));
-			} else if (BULLET_POWER < 80) {
-				new Sound().bulletsound();
-				this.shootingCooldown.reset();
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, -0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, -0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED, BULLET_POWER));
-			} else if (BULLET_POWER >= 80) {
-				new Sound().bulletsound();
-				this.shootingCooldown.reset();
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, -0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, -0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, -0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2, positionY, 0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 3, positionY, 0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 6, positionY, 0.5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 5, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 - 10, positionY - 5, -3, BULLET_SPEED, BULLET_POWER));
-				bullets.add(new Bullet(positionX + this.width / 2 + 10, positionY - 5, 3, BULLET_SPEED, BULLET_POWER));
-			}
-			// bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY,
-			// BULLET_SPEED, 0));
-			return true;
-		}
 		return false;
 	}
+
+	public boolean UzShoot(final Set<UzBullet> uzBullets) {
+		return false;}
 
 	public boolean bomb() {
 		if (this.bombCooldown.checkFinished()) {

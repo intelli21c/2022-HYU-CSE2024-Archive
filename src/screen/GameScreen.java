@@ -45,6 +45,7 @@ public class GameScreen extends Screen {
 	 * Set of all bullets fired by on screen ships.
 	 */
 	private Set<Bullet> bullets;
+	private Set<UzBullet> uzBullets;
 
 	/** Current score. */
 	private int score;
@@ -149,6 +150,7 @@ public class GameScreen extends Screen {
 		context.difficulty = difficulty;
 		// Appears each 10-30 seconds.
 		this.bullets = new HashSet<Bullet>();
+		this.uzBullets = new HashSet<UzBullet>();
 		this.items = new ArrayList<entity.Item>();
 		// Special input delay / countdown.
 		this.gameStartTime = System.currentTimeMillis();
@@ -258,10 +260,18 @@ public class GameScreen extends Screen {
 			}
 		}
 
-		if (openfire)
-			if (this.ship.shoot(this.bullets)) {
-				this.bulletsShot++;
+		if (openfire) {
+			if (character == 1) {
+				if (this.ship.shoot(this.bullets) && this.ship.UzShoot(this.uzBullets)) {
+					this.bulletsShot++;
+				}
+			} else {
+				if (this.ship.shoot(this.bullets)) {
+					this.bulletsShot++;
+				}
 			}
+		}
+
 
 		if (moveLeft)
 			ship.animctr = 2;
@@ -277,6 +287,7 @@ public class GameScreen extends Screen {
 		manageCollisions();
 		manageCollisionsItem();
 		cleanBullets();
+		cleanUzBullets();
 		if (Countdown.endp) {
 			this.isRunning = false;
 			return;
@@ -344,9 +355,14 @@ public class GameScreen extends Screen {
 		for (EnemyShip e : context.enemys) {
 			drawManager.drawEnemy(e, e.getPositionX(), e.getPositionY());
 		}
-		for (Bullet bullet : this.bullets)
+		for (Bullet bullet : this.bullets) {
 			drawManager.drawPBullet(bullet, bullet.getPositionX(), bullet.getPositionY(), character);
-
+		}
+		if (character == 1) {
+			for (UzBullet uzBullet : this.uzBullets) {
+				drawManager.drawUBullet(uzBullet, uzBullet.getPositionX(), uzBullet.getPositionY());
+			}
+		}
 		for (entity.Item item : this.items)
 			drawManager.drawItem(item, item.getPositionX(),
 					item.getPositionY());
@@ -356,6 +372,7 @@ public class GameScreen extends Screen {
 		drawManager.drawTimer(this, engine.Countdown.count);
 		drawManager.drawBomb(this, this.bombNumber);
 		drawManager.drawLives(this, this.lives);
+		drawManager.drawPower(this, Ship.BULLET_POWER);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
 
 		// Countdown to game start.
@@ -394,6 +411,27 @@ public class GameScreen extends Screen {
 		}
 		this.bullets.removeAll(recyclable);
 		BulletPool.recycle(recyclable);
+	}
+	/**
+	 * Cleans bullets that go off screen.
+	 */
+	private void cleanUzBullets() {
+		ArrayList<UzBullet> oobs = new ArrayList<UzBullet>();
+		for (UzBullet uzBullet : context.uzBullets) {
+			if (uzBullet.checkoob(this.getWidth(), this.getHeight()) && uzBullet.deleteoob) {
+				oobs.add(uzBullet);
+			}
+		}
+		context.uzBullets.removeAll(oobs);
+		Set<UzBullet> recyclable = new HashSet<UzBullet>();
+		for (UzBullet uzBullet : this.uzBullets) {
+			uzBullet.update();
+			if (uzBullet.getPositionY() < SEPARATION_LINE_HEIGHT
+					|| uzBullet.getPositionY() > this.height)
+				recyclable.add(uzBullet);
+		}
+		this.uzBullets.removeAll(recyclable);
+		UzBulletPool.recycle(recyclable);
 	}
 
 	/*
@@ -444,6 +482,23 @@ public class GameScreen extends Screen {
 				}
 			}
 		}
+		for (UzBullet uzBullet : this.uzBullets) {
+			for (EnemyShip e : context.enemys) {
+				uzBullet.hometgt = e;
+				if (!e.isDestroyed() && checkCollision(uzBullet, e)) {
+					if (e.Hp> 0) {
+						e.Hp -= Ship.BULLET_POWER;
+					}
+					else {
+						score += e.getPointValue();
+						e.destroy();
+						if (e.droptype != null)
+							items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
+					}
+
+				}
+			}
+		}
 		this.bullets.removeAll(recyclable);
 		BulletPool.recycle(recyclable);
 	}
@@ -455,7 +510,7 @@ public class GameScreen extends Screen {
 	 */
 	public GameState getGameState() {
 		var gs = new GameState(this.level, this.score, this.lives,
-				this.bulletsShot, this.shipsDestroyed, this.bombNumber, ship.BULLET_POWER, this.character,
+				this.bulletsShot, this.shipsDestroyed, this.bombNumber, Ship.BULLET_POWER, this.character,
 				this.difficulty);
 		gs.cleartime.set(this.level, System.currentTimeMillis() - gameStartTime);
 		return gs;

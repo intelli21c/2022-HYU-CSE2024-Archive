@@ -71,7 +71,7 @@ public class EnemyShip extends Entity {
 				break;
 			case EnemyShipSpecial:
 				this.pointValue = C_TYPE_POINTS;
-				this.Hp = 1000;
+				this.Hp = 100000;
 				break;
 			default:
 				this.pointValue = 0;

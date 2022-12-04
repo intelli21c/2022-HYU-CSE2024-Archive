@@ -1,9 +1,6 @@
 package engine;
 
-import entity.Bullet;
-import entity.EnemyShip;
-import entity.Entity;
-import entity.Item;
+import entity.*;
 import screen.GameScreen;
 import screen.HUDSettingScreen;
 import screen.Screen;
@@ -114,6 +111,7 @@ public final class DrawManager {
 		 * Player bullet.
 		 */
 		Bullet,
+		uzBullet,
 		/** Enemy bullets. */
 		EnemyBullet,
 		EnemyBulletN,
@@ -234,6 +232,7 @@ public final class DrawManager {
 			imagemap.put("RedLunar", fileManager.loadImage("RedLunar.png"));
 			imagemap.put("PinkDoll", fileManager.loadImage("PinkDoll.png"));
 			imagemap.put("UzBullet", fileManager.loadImage("UzBullet.png"));
+			imagemap.put("UzSubBullet", fileManager.loadImage("UzSubBullet.png"));
 			imagemap.put("ArisBullet", fileManager.loadImage("ArisBullet.png"));
 			imagemap.put("MidoriBullet", fileManager.loadImage("MidoriBullet.png"));
 			imagemap.put("enemyBullet", fileManager.loadImage("enemyBullet.png"));
@@ -364,6 +363,15 @@ public final class DrawManager {
 			//Aris
 			case 2 -> drawimg("ArisBullet", positionX - 10, positionY - 10, 20, 20);
 		}
+	}
+	public void drawUBullet(final UzBullet u, final int positionX, final int positionY) {
+		drawimg("UzSubBullet", positionX - 10, positionY - 10, 15, 15);
+	}
+
+	public void drawPower(Screen screen, final int bulletpower) {
+		backBufferGraphics.drawString("Power", 1420, 25);
+		backBufferGraphics.drawString(String.valueOf(bulletpower), 1490, 25);
+
 	}
 
 	public void drawBombEffect(Screen screen, final int positionX, final int positionY) {
