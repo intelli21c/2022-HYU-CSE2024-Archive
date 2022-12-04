@@ -1262,7 +1262,7 @@ public final class DrawManager {
 		String cstr = "";
 		String lstr = "";
 		String rstr = "";
-		int twtoffset = fontBigMetrics.stringWidth("12345678901234567890") / 4;
+		int twtoffset = fontBigMetrics.stringWidth("1234567890123456789012345") / 4;
 		switch (sel) {
 			case 0:
 				cstr = "Midori";
@@ -1271,8 +1271,9 @@ public final class DrawManager {
 				drawimg("midoriport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
 				drawimgtrans("arisport", 50 - 400 / 2, 50, 400, 400, 0.5f);
 				drawimgtrans("uzport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
-				drawmultiline("This character is so fucking strong\npower level over 9000",
-						frame.getWidth() / 2 - twtoffset, 670, 20, 5);
+				drawmultiline(
+						"Using a bomb adds one life.\nRecommended for stable play or ones not familiar bullet hell genre.",
+						frame.getWidth() / 2 - twtoffset, 670, 25, 6);
 				break;
 			case 1:
 				cstr = "Uz";
@@ -1281,8 +1282,9 @@ public final class DrawManager {
 				drawimg("uzport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
 				drawimgtrans("midoriport", 50 - 400 / 2, 50, 400, 400, 0.5f);
 				drawimgtrans("arisport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
-				drawmultiline("This character is so fucking strong\npower level over 9000",
-						frame.getWidth() / 2 - twtoffset, 670, 20, 5);
+				drawmultiline(
+						"Least stable but fastest. Character with high risk and high return. Collects score and item at the top. For expreienced players.",
+						frame.getWidth() / 2 - twtoffset, 670, 25, 8);
 				break;
 			case 2:
 				cstr = "Aris";
@@ -1291,8 +1293,9 @@ public final class DrawManager {
 				drawimg("arisport", frame.getWidth() / 2 - 500 / 2, 50, 500, 500);
 				drawimgtrans("uzport", 50 - 400 / 2, 50, 400, 400, 0.5f);
 				drawimgtrans("midoriport", frame.getWidth() - 50 - 400 / 2, 50, 400, 400, 0.5f);
-				drawmultiline("This character is so fucking strong\npower level over 9000",
-						frame.getWidth() / 2 - twtoffset, 670, 20, 5);
+				drawmultiline(
+						"Strongest character, but bullets go straight.\nFor firepower lovers.",
+						frame.getWidth() / 2 - twtoffset, 670, 25, 6);
 				break;
 		}
 		backBufferGraphics.setColor(Color.WHITE);
