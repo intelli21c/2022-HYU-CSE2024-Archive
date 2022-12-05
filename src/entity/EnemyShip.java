@@ -101,7 +101,7 @@ public class EnemyShip extends Entity {
 	 * 
 	 * @return Value of the ship.
 	 */
-	public final int getPointValue() {
+	public int getPointValue() {
 		return this.pointValue;
 	}
 
@@ -118,7 +118,7 @@ public class EnemyShip extends Entity {
 	/**
 	 * Updates attributes, mainly used for animation purposes.
 	 */
-	public final void update() {
+	public void update() {
 		if (this.animationCooldown.checkFinished()) {
 			this.animationCooldown.reset();
 			if (this.isDestroyed) {
@@ -149,10 +149,19 @@ public class EnemyShip extends Entity {
 		}
 	}
 
+	public boolean attack(int dmg) {
+		if ((this.Hp - dmg) < 0) {
+			this.Hp = 0;
+			return true;
+		}
+		this.Hp -= dmg;
+		return false;
+	}
+
 	/**
 	 * Destroys the ship, causing an explosion.
 	 */
-	public final void destroy() {
+	public void destroy() {
 		this.isDestroyed = true;
 		int random = (int) (Math.random() * 4);
 		switch (random) {

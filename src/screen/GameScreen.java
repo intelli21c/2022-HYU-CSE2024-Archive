@@ -1,6 +1,7 @@
 package screen;
 
 import engine.*;
+import engine.DrawManager.SpriteType;
 import entity.*;
 import scripts.stage1;
 import scripts.stage2;
@@ -245,13 +246,14 @@ public class GameScreen extends Screen {
 					if (character == 0) {
 						lives++;
 						for (EnemyShip e : context.enemys) {
-							if (!e.isDestroyed()) {
+							if (!e.isDestroyed()&&e.getSpriteType()!=SpriteType.Boss) {
 								e.destroy();
 								score += e.getPointValue();
 								if (e.droptype != null)
 									items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
 							}
 						}
+						context.bullets=new ArrayList<Bullet>();
 					} else {
 						for (EnemyShip e : context.enemys) {
 							if (!e.isDestroyed()) {
@@ -465,15 +467,12 @@ public class GameScreen extends Screen {
 		for (Bullet bullet : this.bullets) {
 			for (EnemyShip e : context.enemys) {
 				if (!e.isDestroyed() && checkCollision(bullet, e)) {
-					if (e.Hp > 0) {
-						e.Hp -= Ship.BULLET_POWER;
-					} else {
+					if (e.attack(ship.BULLET_POWER)) {
 						score += e.getPointValue();
 						e.destroy();
 						if (e.droptype != null)
 							items.add(new Item(e.getCPositionX(), e.getCPositionY(), 2, e.droptype));
 					}
-
 				}
 			}
 		}
