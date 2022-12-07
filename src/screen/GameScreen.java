@@ -145,8 +145,6 @@ public class GameScreen extends Screen {
 				break;
 		}
 
-		this.stage = new stage3();
-
 		stage.prep(null);
 		this.ship = switch (character) {
 			case 0 -> new Midori(this.width / 2, this.height - 30);

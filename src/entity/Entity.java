@@ -205,4 +205,8 @@ public class Entity {
 
 		return distanceX < maxDistanceX && distanceY < maxDistanceY;
 	}
+
+	public int getdist(Entity e) {
+		return (int) (Math.sqrt(Math.pow(e.positionX - positionX, 2) + Math.pow(positionY - e.positionY, 2)));
+	}
 }

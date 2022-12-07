@@ -11,6 +11,8 @@ import entity.Bullet;
 import entity.EnemyShip;
 
 public class stage3 extends Script {
+    // confer to https://www.youtube.com/watch?v=XxWlCTPLnAw
+
     /**
      * Java really doesn't work well with higher order functions, so we use
      * switch-case instead.
@@ -67,6 +69,7 @@ public class stage3 extends Script {
         entrycount = Core.getCooldown(5000);
         entrycount.reset();
         boss = new EnemyShip(2000, 200, SpriteType.Boss);
+        clean = new ArrayList<Bullet>();
         context.enemys.add(boss);
         state = states.int1;
         return 0;
@@ -82,8 +85,8 @@ public class stage3 extends Script {
     int int1state = 0;
     ArrayList<Bullet> intholdccw;
     ArrayList<Bullet> intholdcw;
-    // Cooldown int1timeout = Core.getCooldown(20000);
-    Cooldown int1timeout = Core.getCooldown(2000);
+    ArrayList<Bullet> clean;
+    Cooldown int1timeout = Core.getCooldown(20000);
     Cooldown intshootintv = Core.getCooldown(1500);
     Cooldown intspawnintv = Core.getCooldown(500);
     double intcirclectr;
@@ -130,6 +133,11 @@ public class stage3 extends Script {
                     for (Bullet bullet : intholdccw) {
                         bullet.auto = false;
                     }
+                    for (Bullet bullet : intholdccw) {
+                        if (context.player.getdist(bullet) < 100)
+                            clean.add(bullet);
+                    }
+                    intholdccw.removeAll(clean);
                     context.bullets.addAll(intholdccw);
                     intshootintv.reset();
                     intspawnintv.reset();
@@ -162,6 +170,11 @@ public class stage3 extends Script {
                     for (Bullet bullet : intholdcw) {
                         bullet.auto = false;
                     }
+                    for (Bullet bullet : intholdcw) {
+                        if (context.player.getdist(bullet) < 100)
+                            clean.add(bullet);
+                    }
+                    intholdcw.removeAll(clean);
                     context.bullets.addAll(intholdcw);
                     intshootintv.reset();
                     intspawnintv.reset();
@@ -208,8 +221,7 @@ public class stage3 extends Script {
 
     double zfcirclectr = 0;
     Cooldown zfcirclefirecd = Core.getCooldown(25);
-    // Cooldown zftimeout = Core.getCooldown(30000);
-    Cooldown zftimeout = Core.getCooldown(3000);
+    Cooldown zftimeout = Core.getCooldown(30000);
     ArrayList<EnemyShip> zfenemys;
     int zfstate = 0;
 
@@ -220,7 +232,7 @@ public class stage3 extends Script {
             this.state = states.int2;
             intholdcw = new ArrayList<Bullet>();
             intholdccw = new ArrayList<Bullet>();
-            intshootintv=Core.getCooldown(700);
+            intshootintv = Core.getCooldown(700);
             intshootintv.reset();
             int2timeout.reset();
             return 0;
@@ -301,6 +313,11 @@ public class stage3 extends Script {
                 for (Bullet bullet : intholdccw) {
                     bullet.auto = false;
                 }
+                for (Bullet bullet : intholdccw) {
+                    if (context.player.getdist(bullet) < 100)
+                        clean.add(bullet);
+                }
+                intholdccw.removeAll(clean);
                 context.bullets.addAll(intholdccw);
                 intspawnintv.reset();
                 int2state = 0;
@@ -319,6 +336,11 @@ public class stage3 extends Script {
                 for (Bullet bullet : intholdcw) {
                     bullet.auto = false;
                 }
+                for (Bullet bullet : intholdcw) {
+                    if (context.player.getdist(bullet) < 100)
+                        clean.add(bullet);
+                }
+                intholdcw.removeAll(clean);
                 context.bullets.addAll(intholdcw);
                 int2state = 0;
                 int2tgtx = 1100;
